@@ -1,6 +1,40 @@
-[gd_scene load_steps=8 format=3 uid="uid://4adx6a62qfml"]
+[gd_scene load_steps=12 format=3 uid="uid://cx8q1cb0wger4"]
 
-[ext_resource type="SpriteFrames" uid="uid://defhw7jwsl3bp" path="res://Assets/Sprites/Player/Sprites/OverworldSprites/OverworldAnims.tres" id="1_egps4"]
+[ext_resource type="Script" path="res://Scripts/Player.gd" id="1_elbda"]
+[ext_resource type="SpriteFrames" uid="uid://defhw7jwsl3bp" path="res://Assets/Sprites/Player/OverworldSprites/MainCharAnims.tres" id="2_digek"]
+
+[sub_resource type="Animation" id="Animation_37pr0"]
+length = 0.333333
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Idle_Down"]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_phgiq"]
+_data = {
+"Idle_Down": SubResource("Animation_37pr0")
+}
 
 [sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_im73b"]
 
@@ -24,20 +58,32 @@ states/Walk/node = SubResource("AnimationNodeBlendSpace2D_rhqai")
 states/Walk/position = Vector2(555, 100)
 transitions = ["Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_t3t2y"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_emqws"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_2q632")]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6yrj5"]
+size = Vector2(128, 48)
+
 [node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_elbda")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
-position = Vector2(541, 329)
+position = Vector2(536, 320)
 scale = Vector2(2, 2)
-sprite_frames = ExtResource("1_egps4")
-animation = &"Idle_Down"
+sprite_frames = ExtResource("2_digek")
+animation = &"Walk_Up"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_phgiq")
+}
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeStateMachine_v1l10")
+anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/idle = false
 parameters/conditions/walking = false
-parameters/Idle/blend_position = Vector2(0, 0)
+parameters/Idle/blend_position = Vector2(-0.000825763, 0.556886)
 parameters/Walk/blend_position = Vector2(0, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(536, 360)
+shape = SubResource("RectangleShape2D_6yrj5")

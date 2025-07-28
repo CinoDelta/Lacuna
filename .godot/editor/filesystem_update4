@@ -1,1 +1,3 @@
-res://Scenes/Battle.tscn
+res://Scenes/Player.tscn
+res://Assets/Sprites/Player/OverworldSprites/MainCharAnims.tres
+res://Scripts/Player.gd
