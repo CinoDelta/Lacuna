@@ -1,0 +1,469 @@
+[gd_scene load_steps=6 format=3 uid="uid://dffw7ogio4hw6"]
+
+[ext_resource type="Texture2D" uid="uid://cutjvnelo2el8" path="res://Assets/Sprites/MiscSprites/PlaceholderSprite.png" id="1_thw3p"]
+[ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
+[ext_resource type="Theme" uid="uid://25nh0v5d7y1b" path="res://Assets/Themes/basicText.tres" id="3_7ko0y"]
+[ext_resource type="Texture2D" uid="uid://cniflqpycfgax" path="res://Assets/Sprites/Battle/StatusConditions/Poisoned.png" id="3_ev4bj"]
+[ext_resource type="Theme" uid="uid://byvtha8ricedj" path="res://Assets/Themes/transparentstuff.tres" id="4_6af57"]
+
+[node name="Battle" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -324.0
+offset_right = 576.0
+offset_bottom = 324.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+metadata/battleid = 0
+
+[node name="OptionsPanel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 621.0
+offset_bottom = 118.0
+
+[node name="OptionsContainer" type="HBoxContainer" parent="OptionsPanel"]
+texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_left = 160.0
+offset_top = 39.0
+offset_right = 459.0
+offset_bottom = 87.0
+scale = Vector2(2, 2)
+pivot_offset = Vector2(149, 27)
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="Attack" type="TextureRect" parent="OptionsPanel/OptionsContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture = ExtResource("1_thw3p")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Special" type="TextureRect" parent="OptionsPanel/OptionsContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture = ExtResource("1_thw3p")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Items" type="TextureRect" parent="OptionsPanel/OptionsContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture = ExtResource("1_thw3p")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Defend" type="TextureRect" parent="OptionsPanel/OptionsContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture = ExtResource("1_thw3p")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="SubMenu" type="Panel" parent="OptionsPanel"]
+visible = false
+layout_mode = 0
+offset_top = 120.0
+offset_right = 320.0
+offset_bottom = 320.0
+
+[node name="PlayerPanels" type="Panel" parent="."]
+layout_mode = 0
+offset_left = -3.0
+offset_top = 545.0
+offset_right = 1149.0
+offset_bottom = 652.0
+
+[node name="PlayerPanelsContainer" type="HBoxContainer" parent="PlayerPanels"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 0
+offset_left = 50.0
+offset_top = 15.0
+offset_right = 1102.0
+offset_bottom = 105.0
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="SampleMember" type="Panel" parent="PlayerPanels/PlayerPanelsContainer"]
+z_index = 1
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="MemberPortrait" type="TextureRect" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
+z_index = -1
+texture_filter = 1
+layout_mode = 0
+offset_left = 189.0
+offset_top = -49.0
+offset_right = 221.0
+offset_bottom = -17.0
+scale = Vector2(2, 2)
+texture = ExtResource("2_b0yqc")
+expand_mode = 1
+
+[node name="HP" type="ProgressBar" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 15.0
+offset_right = 247.0
+offset_bottom = 42.0
+value = 40.0
+rounded = true
+show_percentage = false
+
+[node name="AETHER" type="ProgressBar" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 55.0
+offset_right = 247.0
+offset_bottom = 82.0
+value = 60.0
+show_percentage = false
+
+[node name="HPDisplay" type="RichTextLabel" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = -8.0
+offset_right = 136.0
+offset_bottom = 15.0
+theme = ExtResource("3_7ko0y")
+text = "Health: 999/999
+"
+scroll_active = false
+
+[node name="ManaDisplay" type="RichTextLabel" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = 32.0
+offset_right = 128.0
+offset_bottom = 55.0
+theme = ExtResource("3_7ko0y")
+text = "Aether: 100%
+
+
+"
+scroll_active = false
+
+[node name="StatusContainer" type="HBoxContainer" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = -40.0
+offset_right = 127.0
+offset_bottom = -24.0
+scale = Vector2(2, 2)
+
+[node name="TextureRect" type="TextureRect" parent="PlayerPanels/PlayerPanelsContainer/SampleMember/StatusContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("3_ev4bj")
+
+[node name="SampleMember2" type="Panel" parent="PlayerPanels/PlayerPanelsContainer"]
+z_index = 1
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="MemberPortrait" type="TextureRect" parent="PlayerPanels/PlayerPanelsContainer/SampleMember2"]
+z_index = -1
+texture_filter = 1
+layout_mode = 0
+offset_left = 189.0
+offset_top = -49.0
+offset_right = 221.0
+offset_bottom = -17.0
+scale = Vector2(2, 2)
+texture = ExtResource("2_b0yqc")
+expand_mode = 1
+
+[node name="HP" type="ProgressBar" parent="PlayerPanels/PlayerPanelsContainer/SampleMember2"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 15.0
+offset_right = 247.0
+offset_bottom = 42.0
+value = 40.0
+rounded = true
+show_percentage = false
+
+[node name="AETHER" type="ProgressBar" parent="PlayerPanels/PlayerPanelsContainer/SampleMember2"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 55.0
+offset_right = 247.0
+offset_bottom = 82.0
+value = 60.0
+show_percentage = false
+
+[node name="HPDisplay" type="RichTextLabel" parent="PlayerPanels/PlayerPanelsContainer/SampleMember2"]
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = -8.0
+offset_right = 136.0
+offset_bottom = 15.0
+theme = ExtResource("3_7ko0y")
+text = "Health: 999/999
+"
+scroll_active = false
+
+[node name="ManaDisplay" type="RichTextLabel" parent="PlayerPanels/PlayerPanelsContainer/SampleMember2"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = 32.0
+offset_right = 128.0
+offset_bottom = 55.0
+theme = ExtResource("3_7ko0y")
+text = "Aether: 100%
+
+
+"
+scroll_active = false
+
+[node name="StatusContainer" type="HBoxContainer" parent="PlayerPanels/PlayerPanelsContainer/SampleMember2"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = -40.0
+offset_right = 127.0
+offset_bottom = -24.0
+scale = Vector2(2, 2)
+
+[node name="TextureRect" type="TextureRect" parent="PlayerPanels/PlayerPanelsContainer/SampleMember2/StatusContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("3_ev4bj")
+
+[node name="SampleMember3" type="Panel" parent="PlayerPanels/PlayerPanelsContainer"]
+z_index = 1
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="MemberPortrait" type="TextureRect" parent="PlayerPanels/PlayerPanelsContainer/SampleMember3"]
+z_index = -1
+texture_filter = 1
+layout_mode = 0
+offset_left = 189.0
+offset_top = -49.0
+offset_right = 221.0
+offset_bottom = -17.0
+scale = Vector2(2, 2)
+texture = ExtResource("2_b0yqc")
+expand_mode = 1
+
+[node name="HP" type="ProgressBar" parent="PlayerPanels/PlayerPanelsContainer/SampleMember3"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 15.0
+offset_right = 247.0
+offset_bottom = 42.0
+value = 40.0
+rounded = true
+show_percentage = false
+
+[node name="AETHER" type="ProgressBar" parent="PlayerPanels/PlayerPanelsContainer/SampleMember3"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 55.0
+offset_right = 247.0
+offset_bottom = 82.0
+value = 60.0
+show_percentage = false
+
+[node name="HPDisplay" type="RichTextLabel" parent="PlayerPanels/PlayerPanelsContainer/SampleMember3"]
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = -8.0
+offset_right = 136.0
+offset_bottom = 15.0
+theme = ExtResource("3_7ko0y")
+text = "Health: 999/999
+"
+scroll_active = false
+
+[node name="ManaDisplay" type="RichTextLabel" parent="PlayerPanels/PlayerPanelsContainer/SampleMember3"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = 32.0
+offset_right = 128.0
+offset_bottom = 55.0
+theme = ExtResource("3_7ko0y")
+text = "Aether: 100%
+
+
+"
+scroll_active = false
+
+[node name="StatusContainer" type="HBoxContainer" parent="PlayerPanels/PlayerPanelsContainer/SampleMember3"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = -40.0
+offset_right = 127.0
+offset_bottom = -24.0
+scale = Vector2(2, 2)
+
+[node name="TextureRect" type="TextureRect" parent="PlayerPanels/PlayerPanelsContainer/SampleMember3/StatusContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("3_ev4bj")
+
+[node name="SampleMember4" type="Panel" parent="PlayerPanels/PlayerPanelsContainer"]
+z_index = 1
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="MemberPortrait" type="TextureRect" parent="PlayerPanels/PlayerPanelsContainer/SampleMember4"]
+z_index = -1
+texture_filter = 1
+layout_mode = 0
+offset_left = 189.0
+offset_top = -49.0
+offset_right = 221.0
+offset_bottom = -17.0
+scale = Vector2(2, 2)
+texture = ExtResource("2_b0yqc")
+expand_mode = 1
+
+[node name="HP" type="ProgressBar" parent="PlayerPanels/PlayerPanelsContainer/SampleMember4"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 15.0
+offset_right = 247.0
+offset_bottom = 42.0
+value = 40.0
+rounded = true
+show_percentage = false
+
+[node name="AETHER" type="ProgressBar" parent="PlayerPanels/PlayerPanelsContainer/SampleMember4"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 55.0
+offset_right = 247.0
+offset_bottom = 82.0
+value = 60.0
+show_percentage = false
+
+[node name="HPDisplay" type="RichTextLabel" parent="PlayerPanels/PlayerPanelsContainer/SampleMember4"]
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = -8.0
+offset_right = 136.0
+offset_bottom = 15.0
+theme = ExtResource("3_7ko0y")
+text = "Health: 999/999
+"
+scroll_active = false
+
+[node name="ManaDisplay" type="RichTextLabel" parent="PlayerPanels/PlayerPanelsContainer/SampleMember4"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = 32.0
+offset_right = 128.0
+offset_bottom = 55.0
+theme = ExtResource("3_7ko0y")
+text = "Aether: 100%
+
+
+"
+scroll_active = false
+
+[node name="StatusContainer" type="HBoxContainer" parent="PlayerPanels/PlayerPanelsContainer/SampleMember4"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = -40.0
+offset_right = 127.0
+offset_bottom = -24.0
+scale = Vector2(2, 2)
+
+[node name="TextureRect" type="TextureRect" parent="PlayerPanels/PlayerPanelsContainer/SampleMember4/StatusContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("3_ev4bj")
+
+[node name="OrderPanel" type="Panel" parent="."]
+layout_mode = 0
+offset_top = 160.0
+offset_right = 80.0
+offset_bottom = 522.0
+
+[node name="Label" type="RichTextLabel" parent="OrderPanel"]
+texture_filter = 1
+layout_mode = 0
+offset_top = -40.0
+offset_right = 128.0
+theme = ExtResource("3_7ko0y")
+theme_override_font_sizes/normal_font_size = 28
+text = "NEXT UP:"
+
+[node name="SecondaryPanel" type="Panel" parent="OrderPanel"]
+clip_contents = true
+layout_mode = 0
+offset_right = 80.0
+offset_bottom = 362.0
+theme = ExtResource("4_6af57")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OrderPanel/SecondaryPanel"]
+clip_contents = true
+layout_mode = 0
+offset_left = 8.0
+offset_top = 16.0
+offset_right = 40.0
+offset_bottom = 184.0
+scale = Vector2(2, 2)
+
+[node name="TextureRect" type="TextureRect" parent="OrderPanel/SecondaryPanel/VBoxContainer"]
+z_index = 1
+texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("2_b0yqc")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="OrderPanel/SecondaryPanel/VBoxContainer"]
+z_index = 1
+texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("2_b0yqc")
+expand_mode = 1
+
+[node name="TextureRect3" type="TextureRect" parent="OrderPanel/SecondaryPanel/VBoxContainer"]
+z_index = 1
+texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("2_b0yqc")
+expand_mode = 1
+
+[node name="TextureRect4" type="TextureRect" parent="OrderPanel/SecondaryPanel/VBoxContainer"]
+z_index = 1
+texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("2_b0yqc")
+expand_mode = 1

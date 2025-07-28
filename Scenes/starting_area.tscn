@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxkh201peh7p3"]
+
+[ext_resource type="PackedScene" uid="uid://dffw7ogio4hw6" path="res://Scenes/Battle.tscn" id="1_s27aq"]
+[ext_resource type="PackedScene" uid="uid://4adx6a62qfml" path="res://Scenes/Player.tscn" id="1_vyou3"]
+
+[node name="StartingArea" type="Node2D"]
+
+[node name="Battle" parent="." instance=ExtResource("1_s27aq")]
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 5.0
+offset_top = 7.0
+offset_right = 1157.0
+offset_bottom = 655.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="Player" parent="." instance=ExtResource("1_vyou3")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(583, 331)

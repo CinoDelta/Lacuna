@@ -1,0 +1,43 @@
+[gd_scene load_steps=8 format=3 uid="uid://4adx6a62qfml"]
+
+[ext_resource type="SpriteFrames" uid="uid://defhw7jwsl3bp" path="res://Assets/Sprites/Player/Sprites/OverworldSprites/OverworldAnims.tres" id="1_egps4"]
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_im73b"]
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_rhqai"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_t3t2y"]
+advance_mode = 2
+advance_condition = &"walking"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_emqws"]
+advance_mode = 2
+advance_condition = &"idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2q632"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_v1l10"]
+states/Idle/node = SubResource("AnimationNodeBlendSpace2D_im73b")
+states/Idle/position = Vector2(370, 100)
+states/Walk/node = SubResource("AnimationNodeBlendSpace2D_rhqai")
+states/Walk/position = Vector2(555, 100)
+transitions = ["Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_t3t2y"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_emqws"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_2q632")]
+
+[node name="Player" type="CharacterBody2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(541, 329)
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("1_egps4")
+animation = &"Idle_Down"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_v1l10")
+parameters/conditions/idle = false
+parameters/conditions/walking = false
+parameters/Idle/blend_position = Vector2(0, 0)
+parameters/Walk/blend_position = Vector2(0, 0)

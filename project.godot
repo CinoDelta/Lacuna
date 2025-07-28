@@ -1,0 +1,28 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="ThePrototype"
+config/tags=PackedStringArray("realtimebattle")
+run/main_scene="res://Scenes/starting_area.tscn"
+config/features=PackedStringArray("4.1", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+Battle="*res://Scripts/Global/battle.gd"
+PartyStats="*res://Scripts/Global/PartyStats.gd"
+ItemDatabase="*res://Scripts/Global/item_database.gd"
+
+[editor]
+
+version_control/plugin_name="GitPlugin"
+version_control/autoload_on_startup=true

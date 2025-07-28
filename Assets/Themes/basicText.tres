@@ -1,0 +1,6 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://25nh0v5d7y1b"]
+
+[ext_resource type="FontFile" uid="uid://bqeob0dobcq1t" path="res://Assets/Fonts/Tiny5-Regular.ttf" id="1_3mdso"]
+
+[resource]
+RichTextLabel/fonts/normal_font = ExtResource("1_3mdso")

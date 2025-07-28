@@ -1,0 +1,6 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://byvtha8ricedj"]
+
+[ext_resource type="StyleBox" uid="uid://bwajrto7fby00" path="res://Assets/Themes/transparentStuffFlat.tres" id="1_052sd"]
+
+[resource]
+Panel/styles/panel = ExtResource("1_052sd")
