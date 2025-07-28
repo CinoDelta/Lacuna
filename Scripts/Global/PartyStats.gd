@@ -84,7 +84,7 @@ func calculateStatIncrease(growthRate, oldLevel, currentStat):
 	else: 
 		variety = randi_range(3, 6)
 		
-	return ((growthRate * oldLevel) - ((currentStat - 2) * 10)) * variety/48
+	return ((growthRate * oldLevel) - ((currentStat - 2) * 10)) * variety/50
 	
 var vitalityIncreases = []
 
@@ -108,10 +108,12 @@ func levelUp(memberName):
 				if increase * 13 > 20:
 					statMessages.insert(0, "Rock on! Vitality increased by " + str(increase) + "!")
 				elif (increase * 13) > 2:
-					partyDatabase[memberName]["HP"] = roundi(partyDatabase[memberName]["VITALITY"] * 13) 
-					statMessages.insert(0, "Vitality increased by " + str(increase) + "!")
+					if partyDatabase[memberName]["HP"] < roundi(partyDatabase[memberName]["VITALITY"] * 13):
+						partyDatabase[memberName]["HP"] = roundi(partyDatabase[memberName]["VITALITY"] * 13) 
+						if roundi(increase) > 0:
+							statMessages.insert(0, "Vitality increased by " + str(roundi(increase)) + "!")
 				else:
-					partyDatabase[memberName]["HP"] += randi_range(1, 3)
+					partyDatabase[memberName]["HP"] += randi_range(1, 2)
 				# Otherwise no message :((
 				
 				vitalityIncreases.insert(vitalityIncreases.size(), partyDatabase[memberName]["HP"]) #laggy, will be removed after data scraping
