@@ -48,6 +48,7 @@ layout_mode = 2
 texture = ExtResource("1_thw3p")
 expand_mode = 1
 stretch_mode = 4
+flip_h = true
 
 [node name="Special" type="TextureRect" parent="OptionsPanel/OptionsContainer"]
 clip_contents = true
