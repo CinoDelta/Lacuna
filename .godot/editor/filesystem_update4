@@ -1,3 +1,9 @@
 res://Scenes/Player.tscn
 res://Assets/Sprites/Player/OverworldSprites/MainCharAnims.tres
 res://Scripts/Player.gd
+res://Scripts/Global/battle.gd
+res://Scenes/Battle.tscn
+res://Scripts/Global/battle_database.gd
+res://Scripts/Global/enemy_database.gd
+res://Scripts/Global/PartyStats.gd
+res://Scenes/starting_area.tscn

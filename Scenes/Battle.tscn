@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://dffw7ogio4hw6"]
+[gd_scene load_steps=7 format=3 uid="uid://dffw7ogio4hw6"]
 
+[ext_resource type="Script" path="res://Scripts/Global/battle.gd" id="1_s088x"]
 [ext_resource type="Texture2D" uid="uid://cutjvnelo2el8" path="res://Assets/Sprites/MiscSprites/PlaceholderSprite.png" id="1_thw3p"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
 [ext_resource type="Theme" uid="uid://25nh0v5d7y1b" path="res://Assets/Themes/basicText.tres" id="3_7ko0y"]
@@ -21,6 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
+script = ExtResource("1_s088x")
 metadata/battleid = 0
 
 [node name="OptionsPanel" type="Panel" parent="."]

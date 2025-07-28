@@ -1,4 +1,4 @@
-extends Node
+extends Control
 
 # textbox
 signal textbox_continued
@@ -9,13 +9,13 @@ signal optionSelected
 signal participatorSelected
 
 # battle
-signal battleStart
 signal attackedEnded
 
 #built-in
 signal physics
 
 enum battlePhases {
+	Starting,
 	SelectingBasics,
 	SelectingSkills,
 	SelectingItems,
@@ -23,3 +23,11 @@ enum battlePhases {
 	SelectingEnemyParticipator,
 	ExecutingSelection,
 }
+
+var battlePhase = battlePhases.Starting
+
+func _ready():
+	PartyStats.battleStart.connect(battleStarted)
+
+func battleStarted(id):
+	pass

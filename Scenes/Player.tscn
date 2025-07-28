@@ -63,6 +63,7 @@ size = Vector2(128, 48)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_elbda")
+metadata/Cutscene = false
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1

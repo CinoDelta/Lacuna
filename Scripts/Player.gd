@@ -18,7 +18,7 @@ func _process(delta):
 #	$Player/CollisionShapeDetector.disabled = get_meta("Cutscene")
 	if get_meta("Cutscene") == false:
 		move(delta)
-	$AnimatedSprite2D.visible = not get_meta("SecondSprite")
+	#$AnimatedSprite2D.visible = not get_meta("SecondSprite")
 #	$SecondSprite.visible = get_meta("SecondSprite")
 #	$SecondSprite.play("Pinball")
 func get_input_axis():
@@ -76,7 +76,7 @@ func apply_movement(accel):
 func set_walking(bol):
 	#animation_tree.set("parameters/conditions/idle", not bol)
 	#animation_tree.set("parameters/conditions/is_walking",  bol)
-	animation_tree["parameters/conditions/is_walking"] = bol
+	animation_tree["parameters/conditions/walking"] = bol
 	animation_tree["parameters/conditions/idle"] = not bol
 	
 	
