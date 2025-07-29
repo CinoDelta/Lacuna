@@ -13,7 +13,7 @@ var partyDatabase = {
 		"MAX_HP" = 20,
 		"HP" = 20,
 		"VITALITY" = 2,
-		"ATTACK" = 20,
+		"ATTACK" = 15,
 		"DEFENSE" = 10,
 		"SPEED" = 20,
 		"MAGIC" = 20,
@@ -37,11 +37,26 @@ var partyDatabase = {
 #Average-High: 4-5
 #High: 6-7
 
+#Vitality
+#High 4
+#Average 3
+#Low 1.5
+
+#Attack
+#Low 16
+#Average 23
+#High 31
+
+#Defense:
+#High 25
+#Average 15
+#Low 10
+
 var levelUpStatDistribution = {
 	"Fighter" = {
 		"VITALITY" = 3,
-		"ATTACK" = 3,
-		"DEFENSE" = 3,
+		"ATTACK" = 31,
+		"DEFENSE" = 10,
 		"MAGIC" = 3,
 		"SPEED" = 3
 	}
@@ -86,7 +101,7 @@ func calculateStatIncrease(growthRate, oldLevel, currentStat):
 		
 	return ((growthRate * oldLevel) - ((currentStat - 2) * 10)) * variety/50
 	
-var vitalityIncreases = []
+var statIncreases = [] # debug
 
 func levelUp(memberName):
 	
@@ -100,13 +115,11 @@ func levelUp(memberName):
 			"VITALITY":
 				
 				var increase = calculateStatIncrease(statDistribution[stat], oldLevel, statVal)
-				
-				
-					
+
 				partyDatabase[memberName]["VITALITY"] += increase
 				#print(increase)
 				if increase * 13 > 20:
-					statMessages.insert(0, "Rock on! Vitality increased by " + str(increase) + "!")
+					statMessages.insert(0, "Rock on! Vitality increased by " + str(roundi(increase)) + "!")
 				elif (increase * 13) > 2:
 					if partyDatabase[memberName]["HP"] < roundi(partyDatabase[memberName]["VITALITY"] * 13):
 						partyDatabase[memberName]["HP"] = roundi(partyDatabase[memberName]["VITALITY"] * 13) 
@@ -116,12 +129,37 @@ func levelUp(memberName):
 					partyDatabase[memberName]["HP"] += randi_range(1, 2)
 				# Otherwise no message :((
 				
-				vitalityIncreases.insert(vitalityIncreases.size(), partyDatabase[memberName]["HP"]) #laggy, will be removed after data scraping
-
+				#vitalityIncreases.insert(vitalityIncreases.size(), partyDatabase[memberName]["HP"]) #laggy, will be removed after data scraping
+			"ATTACK":
+				var increase = calculateStatIncrease(statDistribution[stat], oldLevel, statVal)
+				
+				if roundi(increase) > 0:
+					partyDatabase[memberName]["ATTACK"] += roundi(increase)
+				#print(increase)
+				if increase > 3:
+					statMessages.insert(0, "Oh yeah! Attack increased by " + str(roundi(increase)) + "!")
+				elif increase > 0:
+					statMessages.insert(0, "Attack increased by " + str(roundi(increase)) + "!")
+						
+				
+				#statIncreases.insert(statIncreases.size(), partyDatabase[memberName]["DEFENSE"])
+			"DEFENSE":
+				var increase = calculateStatIncrease(statDistribution[stat], oldLevel, statVal)
+				
+				if roundi(increase) > 0:
+					partyDatabase[memberName]["DEFENSE"] += roundi(increase)
+				#print(increase)
+				if increase > 3:
+					statMessages.insert(0, "Oh yeah! Defense increased by " + str(roundi(increase)) + "!")
+				elif increase > 0:
+					statMessages.insert(0, "Defense increased by " + str(roundi(increase)) + "!")
+						
+						# partyDatabase[memberName]["ATTACK"]
+				statIncreases.insert(statIncreases.size(), partyDatabase[memberName]["DEFENSE"])
 	partyDatabase[memberName]["LEVEL"] += 1
 	if oldLevel == 99:
 		print(statMessages)
-		print(vitalityIncreases)
+		print(statIncreases)
 		print(range(1, 101))
 	
 # these are for SCENE SPECIFIC saves, not game saves. do not use as game saves.
