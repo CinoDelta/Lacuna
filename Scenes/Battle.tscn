@@ -1,11 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://dffw7ogio4hw6"]
+[gd_scene load_steps=10 format=3 uid="uid://dffw7ogio4hw6"]
 
 [ext_resource type="Script" path="res://Scripts/Global/battle.gd" id="1_s088x"]
-[ext_resource type="Texture2D" uid="uid://cutjvnelo2el8" path="res://Assets/Sprites/MiscSprites/PlaceholderSprite.png" id="1_thw3p"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
+[ext_resource type="Texture2D" uid="uid://b76ki6f43kau8" path="res://Assets/Sprites/MiscSprites/PlaceholderBox.png" id="2_jxn8f"]
 [ext_resource type="Theme" uid="uid://25nh0v5d7y1b" path="res://Assets/Themes/basicText.tres" id="3_7ko0y"]
 [ext_resource type="Texture2D" uid="uid://cniflqpycfgax" path="res://Assets/Sprites/Battle/StatusConditions/Poisoned.png" id="3_ev4bj"]
 [ext_resource type="Theme" uid="uid://byvtha8ricedj" path="res://Assets/Themes/transparentstuff.tres" id="4_6af57"]
+[ext_resource type="SpriteFrames" uid="uid://cfurixtwnp536" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/MainChar.tres" id="7_arv63"]
+[ext_resource type="SpriteFrames" uid="uid://bsfw85cjfjyvg" path="res://Assets/Sprites/Battle/DisplaySprites/Enemies/EnemiesBattle.tres" id="8_6162h"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f8xi8"]
 
 [node name="Battle" type="Control"]
 layout_mode = 3
@@ -47,16 +51,15 @@ alignment = 1
 clip_contents = true
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
-texture = ExtResource("1_thw3p")
+texture = ExtResource("2_jxn8f")
 expand_mode = 1
 stretch_mode = 4
-flip_h = true
 
 [node name="Special" type="TextureRect" parent="OptionsPanel/OptionsContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
-texture = ExtResource("1_thw3p")
+texture = ExtResource("2_jxn8f")
 expand_mode = 1
 stretch_mode = 4
 
@@ -64,7 +67,7 @@ stretch_mode = 4
 clip_contents = true
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
-texture = ExtResource("1_thw3p")
+texture = ExtResource("2_jxn8f")
 expand_mode = 1
 stretch_mode = 4
 
@@ -72,7 +75,7 @@ stretch_mode = 4
 clip_contents = true
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
-texture = ExtResource("1_thw3p")
+texture = ExtResource("2_jxn8f")
 expand_mode = 1
 stretch_mode = 4
 
@@ -242,3 +245,45 @@ custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 texture = ExtResource("2_b0yqc")
 expand_mode = 1
+
+[node name="PlayerDisplay" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 280.0
+offset_top = 304.0
+offset_right = 320.0
+offset_bottom = 344.0
+theme = ExtResource("4_6af57")
+
+[node name="Sample" type="Panel" parent="PlayerDisplay"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 16.0
+offset_right = 40.0
+offset_bottom = 24.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_f8xi8")
+
+[node name="PSprite" type="AnimatedSprite2D" parent="PlayerDisplay/Sample"]
+texture_filter = 1
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("7_arv63")
+animation = &"Debug"
+
+[node name="EnemyDisplay" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 152.0
+offset_right = 328.0
+offset_bottom = 192.0
+theme = ExtResource("4_6af57")
+
+[node name="Sample" type="Panel" parent="EnemyDisplay"]
+layout_mode = 0
+offset_left = 592.0
+offset_top = 160.0
+offset_right = 632.0
+offset_bottom = 200.0
+
+[node name="PSprite" type="AnimatedSprite2D" parent="EnemyDisplay/Sample"]
+texture_filter = 1
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("8_6162h")
