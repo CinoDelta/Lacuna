@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dffw7ogio4hw6"]
+[gd_scene load_steps=11 format=3 uid="uid://dffw7ogio4hw6"]
 
 [ext_resource type="Script" path="res://Scripts/Global/battle.gd" id="1_s088x"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
@@ -7,7 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://cniflqpycfgax" path="res://Assets/Sprites/Battle/StatusConditions/Poisoned.png" id="3_ev4bj"]
 [ext_resource type="Theme" uid="uid://byvtha8ricedj" path="res://Assets/Themes/transparentstuff.tres" id="4_6af57"]
 [ext_resource type="SpriteFrames" uid="uid://cfurixtwnp536" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/MainChar.tres" id="7_arv63"]
-[ext_resource type="SpriteFrames" uid="uid://bsfw85cjfjyvg" path="res://Assets/Sprites/Battle/DisplaySprites/Enemies/EnemiesBattle.tres" id="8_6162h"]
+[ext_resource type="SpriteFrames" uid="uid://bsfw85cjfjyvg" path="res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy.tres" id="8_xwmyp"]
+[ext_resource type="Texture2D" uid="uid://ds8l87qec8y6i" path="res://Assets/Sprites/MiscSprites/PrototypeBattleBox.png" id="9_bshqe"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f8xi8"]
 
@@ -27,7 +28,7 @@ grow_vertical = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 script = ExtResource("1_s088x")
-metadata/battleid = 0
+metadata/battleId = 1
 
 [node name="OptionsPanel" type="Panel" parent="."]
 layout_mode = 0
@@ -253,6 +254,7 @@ offset_top = 304.0
 offset_right = 320.0
 offset_bottom = 344.0
 theme = ExtResource("4_6af57")
+metadata/_edit_lock_ = true
 
 [node name="Sample" type="Panel" parent="PlayerDisplay"]
 layout_mode = 0
@@ -277,6 +279,7 @@ offset_bottom = 192.0
 theme = ExtResource("4_6af57")
 
 [node name="Sample" type="Panel" parent="EnemyDisplay"]
+visible = false
 layout_mode = 0
 offset_left = 592.0
 offset_top = 160.0
@@ -286,4 +289,36 @@ offset_bottom = 200.0
 [node name="PSprite" type="AnimatedSprite2D" parent="EnemyDisplay/Sample"]
 texture_filter = 1
 scale = Vector2(2, 2)
-sprite_frames = ExtResource("8_6162h")
+sprite_frames = ExtResource("8_xwmyp")
+
+[node name="TextBoxPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("4_6af57")
+
+[node name="Background" type="NinePatchRect" parent="TextBoxPanel"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 550.0
+offset_bottom = 60.0
+scale = Vector2(2, 2)
+texture = ExtResource("9_bshqe")
+region_rect = Rect2(2, 2, 28, 28)
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="TexboxText" type="RichTextLabel" parent="TextBoxPanel/Background"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 1080.0
+offset_bottom = 104.0
+scale = Vector2(0.5, 0.5)
+theme = ExtResource("3_7ko0y")
+theme_override_font_sizes/normal_font_size = 35
+text = "????? used the Honeydew Express Pie! Healed 300 HP."

@@ -3,9 +3,10 @@ extends Node
 # Naming convention: lowercase with _ between words
 var battleIdInfo = {
 	"1" = {
-		enemies = ["TestEnemy"], # String[]
-		background = "Basic", # String
-		exp = 10, # int
+		"ENEMIES" = ["DebugBoy"], # String[]
+		"BACKGROUND" = "Basic", # String
+		"START_TEXT" = ["Bugs crawl inside your skin. You must be debugged."]
+		"EXP" = 10, # int
 	}
 }
 

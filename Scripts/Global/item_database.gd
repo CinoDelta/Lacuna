@@ -10,8 +10,10 @@ var ITEM_DATABASE = {
 	# All different Item TYPES:
 	# 1: Battle item. 
 	# 2: Armour items
-	# 3: Weapon items
-	# 4: KEY items
+	# 3: Weapon items - if its a weapon then special data will contain the Hand it is equipped to. (mainHand, offHand)
+	# 4: Amulet items
+	# 5: Ring items
+	# 6: KEY items
 	# String parsers for use text:
 	# %s: reciever of health, reciever of equipped armour or weapon, reciever in any context.
 	# %u: %s but the user.
@@ -40,6 +42,26 @@ var ITEM_DATABASE = {
 		"SPECIAL_DATA" = {
 			"Health_Removed" = 50,
 			"Target" = "AllEnemies"
+		}
+	},
+	
+	"WOODENSWORD" = {
+		"NAME" = "Wooden Sword",
+		"DESCRIPTION" = "A useless sword. +3 ATTACK when equipped.",
+		"ID" = 3, 
+		"TYPE" = 2,
+		"USE_TEXT" = "%u equipped the wooden sword!",
+		"SPECIAL_DATA" = {
+			"Hand" = "mainHand",
+			"Buffs" = {
+				"ATTACK" = 3,
+				"DEFENSE" = 0,
+				"SPEED" = 0,
+				"RESISTANCES" = {
+					"FIRE" = 0
+				},
+				"ABILITIES" = {} # none
+			}
 		}
 	}
 }
@@ -70,3 +92,5 @@ func createNewItem(itemName):
 		"UID" = getRandomUID()
 	}
 	return packet
+
+# should be a function to calculate item buffs here! (should return a packet table of buffs.

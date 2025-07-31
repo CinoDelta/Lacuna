@@ -1,4 +1,6 @@
-AnimatedSprite2D
+NinePatchRect
+RichTextLabel
 TextureRect
 Panel
+AnimatedSprite2D
 CollisionShape2D

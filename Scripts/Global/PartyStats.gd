@@ -23,8 +23,16 @@ var partyDatabase = {
 		"MAX_EXP" = 20,
 		"CURRENT_EXP" = 0,
 		"CURRENT_PARTY_POSITION" = "First", # First, Second, Third, etc for placement. Put NONE for them to not be in the party.
-		"CURRENT_ARMOUR" = "None",
-		"CURRENT_WEAPON" = "None",
+		"EQUIPMENT" = {
+			"WEAPON" = "WOODENSWORD", 
+			"ARMOUR" = "NONE",
+			"RINGS" = {
+				"FIRST" = "NONE",
+				"SECOND" = "NONE"
+			},
+			"AMULETS" = "NONE",
+		},
+		"SPELLS" = {},
 		"DISTRIBUTION" = "Fighter"
 	}
 }
@@ -43,14 +51,14 @@ var partyDatabase = {
 #Low 1.5
 
 #Attack
-#Low 16
-#Average 23
-#High 31
+#Low 13
+#Average 20
+#High 28
 
 #Defense:
-#High 25
-#Average 15
-#Low 10
+#High 22
+#Average 12
+#Low 7
 
 var levelUpStatDistribution = {
 	"Fighter" = {
@@ -67,6 +75,8 @@ var inventory = {}
 var currentPartyMembers = ["WeCalledIt"] # yes ik party position exists this is for easy access instead of converting to an array the whole time
 
 var inBattle = false
+
+var debug = true
 
 var states = {}
 

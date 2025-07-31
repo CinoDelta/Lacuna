@@ -2,8 +2,8 @@ extends Node
 
 # Naming convention: 
 var enemiesInfo = {
-	"TestEnemy" = {
-		"NAME" = "Test Enemy",
+	"DebugBoy" = {
+		"NAME" = "Debug Boy",
 		"MAX_HP" = 20,
 		"HP" = 20,
 		"VITALITY" = 2,
