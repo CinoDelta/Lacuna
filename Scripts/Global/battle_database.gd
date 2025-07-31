@@ -4,9 +4,9 @@ extends Node
 var battleIdInfo = {
 	"1" = {
 		"ENEMIES" = ["DebugBoy"], # String[]
-		"BACKGROUND" = "Basic", # String
-		"START_TEXT" = ["Bugs crawl inside your skin. You must be debugged."]
-		"EXP" = 10, # int
+		"BACKGROUND" = "Debug", # String
+		"START_TEXT" = ["Bugs crawl inside your skin. You must be debugged."],
+		"EXP" = 10 # int
 	}
 }
 

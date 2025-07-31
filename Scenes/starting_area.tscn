@@ -19,6 +19,7 @@ grow_horizontal = 1
 grow_vertical = 1
 
 [node name="Player" parent="." instance=ExtResource("1_vyou3")]
+position = Vector2(1592, 48)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(583, 331)

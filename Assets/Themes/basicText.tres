@@ -3,4 +3,5 @@
 [ext_resource type="FontFile" uid="uid://bqeob0dobcq1t" path="res://Assets/Fonts/Tiny5-Regular.ttf" id="1_3mdso"]
 
 [resource]
+RichTextLabel/font_sizes/normal_font_size = 36
 RichTextLabel/fonts/normal_font = ExtResource("1_3mdso")

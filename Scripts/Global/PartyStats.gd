@@ -46,8 +46,8 @@ var partyDatabase = {
 #High: 6-7
 
 #Vitality
-#High 4
-#Average 3
+#High 2.5
+#Average 2
 #Low 1.5
 
 #Attack
@@ -128,15 +128,18 @@ func levelUp(memberName):
 
 				partyDatabase[memberName]["VITALITY"] += increase
 				#print(increase)
-				if increase * 13 > 20:
+				if increase * 11 > 20:
 					statMessages.insert(0, "Rock on! Vitality increased by " + str(roundi(increase)) + "!")
-				elif (increase * 13) > 2:
-					if partyDatabase[memberName]["HP"] < roundi(partyDatabase[memberName]["VITALITY"] * 13):
-						partyDatabase[memberName]["HP"] = roundi(partyDatabase[memberName]["VITALITY"] * 13) 
+				elif (increase * 11) > 2:
+					if partyDatabase[memberName]["HP"] < roundi(partyDatabase[memberName]["VITALITY"] * 11):
+						partyDatabase[memberName]["HP"] = roundi(partyDatabase[memberName]["VITALITY"] * 11) 
+						partyDatabase[memberName]["MAX_HP"] = roundi(partyDatabase[memberName]["VITALITY"] * 11) 
 						if roundi(increase) > 0:
 							statMessages.insert(0, "Vitality increased by " + str(roundi(increase)) + "!")
 				else:
-					partyDatabase[memberName]["HP"] += randi_range(1, 2)
+					var hpInc = randi_range(1, 2)
+					partyDatabase[memberName]["HP"] += hpInc
+					partyDatabase[memberName]["MAX_HP"] += hpInc
 				# Otherwise no message :((
 				
 				#vitalityIncreases.insert(vitalityIncreases.size(), partyDatabase[memberName]["HP"]) #laggy, will be removed after data scraping
@@ -187,6 +190,6 @@ func purge_state(ids_that_start_with: String):
 		states.erase(key)
 
 func _process(delta):
-	if Input.is_action_pressed("ui_up"):
+	if Input.is_action_just_pressed("ui_up"):
 		for i in range(1, 101):
 			levelUp("WeCalledIt")

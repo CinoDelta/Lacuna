@@ -1,6 +1,6 @@
 extends Control
 
-# textbox
+# battle text box specifically (local signals)
 signal textbox_continued
 signal textbox_ended
 
@@ -25,7 +25,13 @@ enum battlePhases {
 }
 
 var battlePhase = battlePhases.Starting
-var indexToBattlePosition = [Vector2(32, 16), Vector2(-48, 128), Vector2(-56, -80), Vector2(-128, 16)]
+var indexToBattlePosition = [
+	Vector2(32, 16), 
+	Vector2(-48, 128), 
+	Vector2(-56, -80), 
+	Vector2(-128, 16), 
+	Vector2(592, 160),
+	]
 var battleData = {}
 
 var currentSelection = {} # will hold the selection of the member who has chosen something to do.
@@ -57,15 +63,24 @@ var fieldData = { # field data contains team wide
 var currentEnemies = {}
 var amountOfEnemies = 0
 
+# built ins
+
 func _ready(): # void
+	var blacklist = ["Select"]
 	for child in get_children():
-		child.visible = false
+		if !blacklist.has(child.name):
+			child.visible = false
 	PartyStats.battleStart.connect(battleStarted)
+	
+func _physics_process(delta):
+	emit_signal("physics")
 	
 # Setup functions
 
 
 func playerSetup(): #I'll add aniamtion when i feel like it. void.
+	
+	$PlayerDisplay/Sample.visible = false # just in case i forgot 
 	
 	var count = 0
 	
@@ -74,21 +89,36 @@ func playerSetup(): #I'll add aniamtion when i feel like it. void.
 		
 		newDisplay.visible = true
 		newDisplay.name = member 
+		
+		$PlayerDisplay.add_child(newDisplay)
+		
 		var displayAnimatedSprite:AnimatedSprite2D = get_node("PlayerDisplay/" + member + "/" + "PSprite")
 		
-		match member:
-			"WeCalledIt":
-				displayAnimatedSprite.play(StringName("Debug"))
-		
+		displayAnimatedSprite.sprite_frames = load("res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/" + member + ".tres")
+				
 		displayAnimatedSprite.play(StringName("Debug")) # comment when we actually get animations PLACEHOLDER
 		
 		newDisplay.position = indexToBattlePosition[count]
 		
-		$PlayerDisplay.add_child(newDisplay)
-		
 		count += 1
 		
+		var newStatDisplay = $PlayerPanels/PlayerPanelsContainer/SampleMember.duplicate()
+		
+		newStatDisplay.visible = true
+		newStatDisplay.name = member
+		
+		$PlayerPanels/PlayerPanelsContainer.add_child(newStatDisplay)
+		
+		var nameDisplay = get_node("PlayerPanels/PlayerPanelsContainer/" + member + "/" + "Name")
+		nameDisplay.text = PartyStats.partyDatabase[member]["NAME"]
+		
+		
+		
+		
+		
 func enemySetup(): # void
+	
+	$EnemyDisplay/Sample.visible = false # just in case i forgot 
 	
 	var count = 0
 	
@@ -105,6 +135,23 @@ func enemySetup(): # void
 		currentEnemies[indexName]["NAME"] = indexName
 		
 		createNewFieldData(indexName)
+		
+		var newDisplay = $EnemyDisplay/Sample.duplicate()
+		
+		newDisplay.visible = true
+		newDisplay.name = indexName 
+		
+		$EnemyDisplay.add_child(newDisplay)
+		
+		var displayAnimatedSprite:AnimatedSprite2D = get_node("EnemyDisplay/" + indexName + "/" + "PSprite")
+		
+		displayAnimatedSprite.sprite_frames = load("res://Assets/Sprites/Battle/DisplaySprites/Enemies/" + enemyName + ".tres")
+		
+		displayAnimatedSprite.play(StringName("Debug")) # comment when we actually get animations PLACEHOLDER
+		
+		newDisplay.position = indexToBattlePosition[count+4]
+		
+		
 	
 	
 func createNewFieldData(participant): # void
@@ -121,12 +168,18 @@ func refreshSelectionData():
 	
 func setUpBattle(battleId): # void
 	
-	battleData = BattleDatabase.battleIdInfo[get_meta("battleId")]
+	battleData = BattleDatabase.battleIdInfo[str(get_meta("battleId"))]
+	
+	get_node("BackgroundOverlay/" + battleData["BACKGROUND"]).visible = true
 	
 	refreshSelectionData()
 	
 	playerSetup()
 	enemySetup()
+	
+	PartyStats.inBattle = true
+	
+	display_text(battleData["START_TEXT"], Vector2(576, 60), Vector2(0, 30))
 	
 # ui getters
 
@@ -137,7 +190,7 @@ func getEnemyDisplayFromName(enemyName:String): # Panel
 	return get_node("EnemyDisplay/" + enemyName)
 
 func battleStarted(id): # void
-	var blacklist = ["TextBoxPanel"]
+	var blacklist = ["TextBoxPanel", "Select"]
 	for child in get_children():
 		if !blacklist.has(child.name):
 			child.visible = true
@@ -153,41 +206,78 @@ func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):
 	
 	textBackground.size = Vector2(boxSize.x, 0)
 	
-	textBoxText.visible = false
+
 	$TextBoxPanel.show()
 	
 	var newTween = get_tree().create_tween()
-	newTween.tween_property(textBackground, "size", boxSize, .75)
-	await newTween
+	newTween.tween_property(textBackground, "size", boxSize, .15)
 	
-	textBoxText.visible = true
+	await get_tree().create_timer(.15).timeout
 	
-	for currentText in totalText:
-		textBoxText.visible_characters = 0
-		textBoxText.text = textArray[currentText]
+
+	$TextBoxPanel/Background/TexboxText.show()
+	
+	for i in range(0, totalText):
+		$TextBoxPanel/Background/TexboxText.text = textArray[i]
+		print(textBoxText.text)
 		
-		var allCharacters = textBoxText.get_total_character_count()
+		var allCharacters = $TextBoxPanel/Background/TexboxText.get_total_character_count()
 		
-		for v in allCharacters + 1:
-			textBoxText.visible_characters = v
+		for v in range(0, allCharacters + 1):
+			$TextBoxPanel/Background/TexboxText.visible_characters = v
+
+			if $TextBoxPanel/Background/TexboxText.text[v-1] == "." or $TextBoxPanel/Background/TexboxText.text[v-1] == ",":
+				for j in range(0, 10):
+					await physics
+					await physics
+			else:
+				await physics
+				await physics
 			
-			await physics
-			await physics
-			$DialogueBox/TextContinueSound.play()
-		
+			$TextBoxPanel/Background/TexboxText/textBox.play()
+			print("anything?")
 		await textbox_continued
 	
-	$DialogueBox.hide()
+	$TextBoxPanel.hide()
 	emit_signal("textbox_ended")
 	
 func _process(delta): # void 
 	
 	# misc keys
-	if Input.is_action_just_pressed("Confirm") and PartyStats.inBattle == false and PartyStats.debug == true:
-		PartyStats.emit_signal("battleStart")
+	
+	# CONFIRM
+	if Input.is_action_just_pressed("Confirm"):
+		if PartyStats.inBattle == false and PartyStats.debug == true:
+			PartyStats.emit_signal("battleStart", 1)
+			$Select.play()
+		elif $TextBoxPanel.visible == true:
+			emit_signal("textbox_continued")
+			$Select.play()
 	
 	# Input handling. 
 	match battlePhase:
 		battlePhases.Starting:
 			pass
 	
+	# UI displays
+	if PartyStats.inBattle == true:
+		for panel in $PlayerPanels/PlayerPanelsContainer.get_children():
+			if panel.name != "SampleMember":
+				var partyMemStats = PartyStats.partyDatabase[panel.name]
+				var rootPath = "PlayerPanels/PlayerPanelsContainer/" + panel.name + "/"
+				
+				var hpDisplay = get_node(rootPath + "HPDisplay")
+				var aetherDisplay = get_node(rootPath + "ManaDisplay")
+				var hpBarDisplay = get_node(rootPath + "HP")
+				var aetherBarDisplay = get_node(rootPath + "AETHER")
+				
+				hpDisplay.text = str(partyMemStats["HP"]) + "/" + str(partyMemStats["MAX_HP"])
+				aetherDisplay.text = str(partyMemStats["AETHER"] * 100) + "%"
+				
+				aetherBarDisplay.value = partyMemStats["AETHER"] 
+				hpBarDisplay.max_value = partyMemStats["MAX_HP"]
+				hpBarDisplay.value = partyMemStats["HP"]
+				
+				
+				
+				

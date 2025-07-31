@@ -1,14 +1,14 @@
 [gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://bsfw85cjfjyvg"]
 
-[ext_resource type="Texture2D" uid="uid://b61m2dxslc2gl" path="res://Assets/Sprites/MiscSprites/PlaceholderEnemy.png" id="1_laq12"]
+[ext_resource type="Texture2D" uid="uid://b61m2dxslc2gl" path="res://Assets/Sprites/MiscSprites/PlaceholderEnemy.png" id="1_kqjgc"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_laq12")
+"texture": ExtResource("1_kqjgc")
 }],
 "loop": true,
-"name": &"default",
+"name": &"Debug",
 "speed": 5.0
 }]
