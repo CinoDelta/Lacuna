@@ -1,12 +1,13 @@
-[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://defhw7jwsl3bp"]
+[gd_resource type="SpriteFrames" load_steps=3 format=3 uid="uid://defhw7jwsl3bp"]
 
+[ext_resource type="Texture2D" uid="uid://bydia2vibsmr7" path="res://Assets/Sprites/Player/OverworldSprites/Alistair/Idle_Down.png" id="1_j380x"]
 [ext_resource type="Texture2D" uid="uid://cutjvnelo2el8" path="res://Assets/Sprites/MiscSprites/PlaceholderSprite.png" id="1_pgp24"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_pgp24")
+"texture": ExtResource("1_j380x")
 }],
 "loop": true,
 "name": &"Idle_Down",

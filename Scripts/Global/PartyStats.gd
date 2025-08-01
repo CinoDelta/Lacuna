@@ -8,8 +8,8 @@ signal playerPositionPacket(currentPos, animation)
 # stats are by no means final
 # naming convention: ALL CAPS, _ between words
 var partyDatabase = {
-	"WeCalledIt" = {
-		"NAME" = "???",
+	"Alistair" = {
+		"NAME" = "Alistair",
 		"MAX_HP" = 20,
 		"HP" = 20,
 		"VITALITY" = 2,
@@ -72,7 +72,7 @@ var levelUpStatDistribution = {
 
 var inventory = {}
 
-var currentPartyMembers = ["WeCalledIt"] # yes ik party position exists this is for easy access instead of converting to an array the whole time
+var currentPartyMembers = ["Alistair"] # yes ik party position exists this is for easy access instead of converting to an array the whole time
 
 var inBattle = false
 
@@ -190,6 +190,6 @@ func purge_state(ids_that_start_with: String):
 		states.erase(key)
 
 func _process(delta):
-	if Input.is_action_just_pressed("ui_up"):
+	if Input.is_action_just_pressed("DebugLevelUp"):
 		for i in range(1, 101):
-			levelUp("WeCalledIt")
+			levelUp("Alistair")

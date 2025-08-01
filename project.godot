@@ -22,6 +22,12 @@ PartyStats="*res://Scripts/Global/PartyStats.gd"
 ItemDatabase="*res://Scripts/Global/item_database.gd"
 BattleDatabase="*res://Scripts/Global/battle_database.gd"
 EnemyDatabase="*res://Scripts/Global/enemy_database.gd"
+MainMusicChannel="*res://Scenes/MainMusicChannel.tscn"
+MusicManager="*res://Scripts/Global/music_manager.gd"
+
+[display]
+
+window/size/resizable=false
 
 [editor]
 
@@ -53,5 +59,10 @@ Cancel={
 Menu={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":67,"key_label":0,"unicode":99,"echo":false,"script":null)
+]
+}
+DebugLevelUp={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":92,"key_label":0,"unicode":92,"echo":false,"script":null)
 ]
 }

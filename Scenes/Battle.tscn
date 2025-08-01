@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dffw7ogio4hw6"]
+[gd_scene load_steps=20 format=3 uid="uid://dffw7ogio4hw6"]
 
 [ext_resource type="Script" path="res://Scripts/Global/battle.gd" id="1_s088x"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
@@ -7,13 +7,16 @@
 [ext_resource type="Theme" uid="uid://25nh0v5d7y1b" path="res://Assets/Themes/basicText.tres" id="3_7ko0y"]
 [ext_resource type="Texture2D" uid="uid://cniflqpycfgax" path="res://Assets/Sprites/Battle/StatusConditions/Poisoned.png" id="3_ev4bj"]
 [ext_resource type="Theme" uid="uid://byvtha8ricedj" path="res://Assets/Themes/transparentstuff.tres" id="4_6af57"]
-[ext_resource type="SpriteFrames" uid="uid://cfurixtwnp536" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/WeCalledIt.tres" id="7_wjuki"]
+[ext_resource type="Texture2D" uid="uid://c1bjve3ydfl3g" path="res://Assets/Sprites/Battle/DisplaySprites/Selections/Selection.png" id="4_likxi"]
 [ext_resource type="SpriteFrames" uid="uid://bsfw85cjfjyvg" path="res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy.tres" id="8_xwmyp"]
 [ext_resource type="Texture2D" uid="uid://ds8l87qec8y6i" path="res://Assets/Sprites/MiscSprites/PrototypeBattleBox.png" id="9_bshqe"]
+[ext_resource type="SpriteFrames" uid="uid://cfurixtwnp536" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistair.tres" id="9_iopbk"]
 [ext_resource type="Material" uid="uid://b0mad586t5q10" path="res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres" id="10_karwh"]
 [ext_resource type="Texture2D" uid="uid://cwff51t3lrprl" path="res://Assets/Sprites/Battle/Backgrounds/Debug.png" id="10_y4552"]
 [ext_resource type="AudioStream" uid="uid://bsuu6vxtit4ai" path="res://Assets/Sounds/DefaultTextBox.mp3" id="11_jo0um"]
 [ext_resource type="AudioStream" uid="uid://c52lqokbyl4p7" path="res://Assets/Sounds/selectSound.wav" id="14_6h02j"]
+[ext_resource type="AudioStream" uid="uid://ddtr617js65cj" path="res://Assets/Sounds/WeirdOnesApproaching.ogg" id="16_4uec0"]
+[ext_resource type="AudioStream" uid="uid://4g0wxn244y28" path="res://Assets/Sounds/BattleIntro.wav" id="17_4qeh0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u2i3t"]
 bg_color = Color(0.376471, 0.611765, 0.894118, 1)
@@ -21,6 +24,7 @@ bg_color = Color(0.376471, 0.611765, 0.894118, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f8xi8"]
 
 [node name="Battle" type="Control"]
+z_index = 21
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -39,14 +43,15 @@ script = ExtResource("1_s088x")
 metadata/battleId = 1
 
 [node name="OptionsPanel" type="Panel" parent="."]
+visible = false
 layout_mode = 0
-offset_right = 621.0
-offset_bottom = 118.0
+offset_top = -152.0
+offset_right = 712.0
 theme = ExtResource("2_edys4")
 
 [node name="OptionsContainer" type="HBoxContainer" parent="OptionsPanel"]
 texture_filter = 1
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 0
 offset_left = 160.0
 offset_top = 39.0
@@ -58,36 +63,56 @@ theme_override_constants/separation = 30
 alignment = 1
 
 [node name="Attack" type="TextureRect" parent="OptionsPanel/OptionsContainer"]
-clip_contents = true
-custom_minimum_size = Vector2(48, 48)
+custom_minimum_size = Vector2(64, 48)
 layout_mode = 2
 texture = ExtResource("2_jxn8f")
 expand_mode = 1
 stretch_mode = 4
+
+[node name="Highlight" type="TextureRect" parent="OptionsPanel/OptionsContainer/Attack"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("4_likxi")
 
 [node name="Special" type="TextureRect" parent="OptionsPanel/OptionsContainer"]
-clip_contents = true
-custom_minimum_size = Vector2(48, 48)
+custom_minimum_size = Vector2(64, 48)
 layout_mode = 2
 texture = ExtResource("2_jxn8f")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="Items" type="TextureRect" parent="OptionsPanel/OptionsContainer"]
-clip_contents = true
-custom_minimum_size = Vector2(48, 48)
+[node name="Highlight" type="TextureRect" parent="OptionsPanel/OptionsContainer/Special"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("4_likxi")
+
+[node name="Item" type="TextureRect" parent="OptionsPanel/OptionsContainer"]
+custom_minimum_size = Vector2(64, 48)
 layout_mode = 2
 texture = ExtResource("2_jxn8f")
 expand_mode = 1
 stretch_mode = 4
+
+[node name="Highlight" type="TextureRect" parent="OptionsPanel/OptionsContainer/Item"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("4_likxi")
 
 [node name="Defend" type="TextureRect" parent="OptionsPanel/OptionsContainer"]
-clip_contents = true
-custom_minimum_size = Vector2(48, 48)
+custom_minimum_size = Vector2(64, 48)
 layout_mode = 2
 texture = ExtResource("2_jxn8f")
 expand_mode = 1
 stretch_mode = 4
+
+[node name="Highlight" type="TextureRect" parent="OptionsPanel/OptionsContainer/Defend"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("4_likxi")
 
 [node name="SubMenu" type="Panel" parent="OptionsPanel"]
 visible = false
@@ -97,11 +122,11 @@ offset_right = 320.0
 offset_bottom = 320.0
 
 [node name="PlayerPanels" type="Panel" parent="."]
+visible = false
 layout_mode = 0
-offset_left = -3.0
-offset_top = 528.0
-offset_right = 1149.0
-offset_bottom = 652.0
+offset_top = 696.0
+offset_right = 1152.0
+offset_bottom = 820.0
 theme = ExtResource("2_edys4")
 
 [node name="PlayerPanelsContainer" type="HBoxContainer" parent="PlayerPanels"]
@@ -115,6 +140,7 @@ theme_override_constants/separation = 15
 alignment = 1
 
 [node name="SampleMember" type="Panel" parent="PlayerPanels/PlayerPanelsContainer"]
+visible = false
 z_index = 1
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
@@ -208,10 +234,11 @@ layout_mode = 2
 texture = ExtResource("3_ev4bj")
 
 [node name="OrderPanel" type="Panel" parent="."]
+visible = false
 layout_mode = 0
-offset_top = 160.0
-offset_right = 80.0
-offset_bottom = 522.0
+offset_left = -80.0
+offset_top = 192.0
+offset_bottom = 520.0
 theme = ExtResource("2_edys4")
 
 [node name="Label" type="RichTextLabel" parent="OrderPanel"]
@@ -228,7 +255,7 @@ text = "NEXT UP:"
 clip_contents = true
 layout_mode = 0
 offset_right = 80.0
-offset_bottom = 362.0
+offset_bottom = 320.0
 theme = ExtResource("4_6af57")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="OrderPanel/SecondaryPanel"]
@@ -237,7 +264,7 @@ layout_mode = 0
 offset_left = 8.0
 offset_top = 16.0
 offset_right = 40.0
-offset_bottom = 184.0
+offset_bottom = 160.0
 scale = Vector2(2, 2)
 
 [node name="TextureRect" type="TextureRect" parent="OrderPanel/SecondaryPanel/VBoxContainer"]
@@ -274,6 +301,7 @@ texture = ExtResource("2_b0yqc")
 expand_mode = 1
 
 [node name="PlayerDisplay" type="Panel" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 280.0
 offset_top = 304.0
@@ -293,10 +321,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_f8xi8")
 [node name="PSprite" type="AnimatedSprite2D" parent="PlayerDisplay/Sample"]
 texture_filter = 1
 scale = Vector2(2, 2)
-sprite_frames = ExtResource("7_wjuki")
+sprite_frames = ExtResource("9_iopbk")
 animation = &"Debug"
 
 [node name="EnemyDisplay" type="Panel" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 288.0
 offset_top = 152.0
@@ -318,6 +347,7 @@ sprite_frames = ExtResource("8_xwmyp")
 animation = &"Debug"
 
 [node name="TextBoxPanel" type="Panel" parent="."]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -357,11 +387,10 @@ stream = ExtResource("11_jo0um")
 [node name="BackgroundOverlay" type="Panel" parent="."]
 z_index = -10
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 1168.0
+offset_bottom = 648.0
 
 [node name="Debug" type="ColorRect" parent="BackgroundOverlay"]
-visible = false
 layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 648.0
@@ -385,3 +414,9 @@ color = Color(0.215686, 0.215686, 0.215686, 0.396078)
 
 [node name="Select" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("14_6h02j")
+
+[node name="BattleMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("16_4uec0")
+
+[node name="BattleIntro" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_4qeh0")

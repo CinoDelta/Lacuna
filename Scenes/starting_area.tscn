@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://bxkh201peh7p3"]
+[gd_scene load_steps=4 format=3 uid="uid://bxkh201peh7p3"]
 
+[ext_resource type="Script" path="res://Scripts/Overworld.gd" id="1_lsp77"]
 [ext_resource type="PackedScene" uid="uid://dffw7ogio4hw6" path="res://Scenes/Battle.tscn" id="1_s27aq"]
 [ext_resource type="PackedScene" uid="uid://cx8q1cb0wger4" path="res://Scenes/Player.tscn" id="1_vyou3"]
 
 [node name="StartingArea" type="Node2D"]
+script = ExtResource("1_lsp77")
 
 [node name="Battle" parent="." instance=ExtResource("1_s27aq")]
 anchors_preset = 0
@@ -19,7 +21,23 @@ grow_horizontal = 1
 grow_vertical = 1
 
 [node name="Player" parent="." instance=ExtResource("1_vyou3")]
-position = Vector2(1592, 48)
+position = Vector2(40, 48)
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="OverworldCamera" type="Camera2D" parent="."]
 position = Vector2(583, 331)
+
+[node name="TransitionBlack" type="ColorRect" parent="."]
+z_index = 20
+offset_left = -50000.0
+offset_top = -50000.0
+offset_right = 950000.0
+offset_bottom = 9.995e+07
+color = Color(0, 0, 0, 1)
+
+[node name="TransitionGreen" type="ColorRect" parent="."]
+z_index = 20
+offset_left = -50000.0
+offset_top = -50000.0
+offset_right = 950000.0
+offset_bottom = 9.995e+07
+color = Color(0, 0.780392, 0, 0)

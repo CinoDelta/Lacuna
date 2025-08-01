@@ -66,11 +66,14 @@ var amountOfEnemies = 0
 # built ins
 
 func _ready(): # void
-	var blacklist = ["Select"]
+	
 	for child in get_children():
-		if !blacklist.has(child.name):
+		if child is Panel:
 			child.visible = false
 	PartyStats.battleStart.connect(battleStarted)
+	
+	for child in $BackgroundOverlay.get_children():
+		child.visible = false
 	
 func _physics_process(delta):
 	emit_signal("physics")
@@ -162,22 +165,61 @@ func createNewFieldData(participant): # void
 		}
 	}
 	
-func refreshSelectionData(): 
+func refreshSelectionData(): # void
 	currentSelection = {}
+
+func playSetupTweens(duration): # void
 	
+	var optionPanelTween = [
+		Vector2(0, -152),
+		Vector2(0,0)
+	]
+	var playerPanelsTween = [
+		Vector2(0, 696),
+		Vector2(0,528)
+	]
+	var orderPanelTween = [
+		Vector2(-80, 192),
+		Vector2(0,192)
+	]
+	
+	$OptionsPanel.position = optionPanelTween[0]
+	$PlayerPanels.position = playerPanelsTween[0]
+	$OrderPanel.position = orderPanelTween[0]
+
+	var tweenOptions = get_tree().create_tween()
+	tweenOptions.tween_property($OptionsPanel, "position", optionPanelTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+
+	
+	var tweenPlayerInfo = get_tree().create_tween()
+	tweenPlayerInfo.tween_property($PlayerPanels, "position", playerPanelsTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+
+	
+	var tweenOrderPanel = get_tree().create_tween()
+	tweenOrderPanel.tween_property($OrderPanel, "position", orderPanelTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+
+	await tweenOrderPanel.finished
 	
 func setUpBattle(battleId): # void
 	
-	battleData = BattleDatabase.battleIdInfo[str(get_meta("battleId"))]
-	
+		
 	get_node("BackgroundOverlay/" + battleData["BACKGROUND"]).visible = true
 	
+	
+	battleData = BattleDatabase.battleIdInfo[str(get_meta("battleId"))]
+
 	refreshSelectionData()
 	
 	playerSetup()
 	enemySetup()
 	
 	PartyStats.inBattle = true
+	
+	await get_tree().create_timer(1.5)
+	
+	await playSetupTweens(.5)
+	
+	await get_tree().create_timer(1)
 	
 	display_text(battleData["START_TEXT"], Vector2(576, 60), Vector2(0, 30))
 	
@@ -190,10 +232,15 @@ func getEnemyDisplayFromName(enemyName:String): # Panel
 	return get_node("EnemyDisplay/" + enemyName)
 
 func battleStarted(id): # void
-	var blacklist = ["TextBoxPanel", "Select"]
+	$BattleIntro.play()
+	
+	await get_tree().create_timer(4.0).timeout
+	
 	for child in get_children():
-		if !blacklist.has(child.name):
+		if child is Panel and child.name != "TextBoxPanel":
 			child.visible = true
+			
+			
 	await setUpBattle(id)
 	
 # ui functions
@@ -238,6 +285,7 @@ func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):
 			print("anything?")
 		await textbox_continued
 	
+		$Select.play()
 	$TextBoxPanel.hide()
 	emit_signal("textbox_ended")
 	
@@ -252,7 +300,7 @@ func _process(delta): # void
 			$Select.play()
 		elif $TextBoxPanel.visible == true:
 			emit_signal("textbox_continued")
-			$Select.play()
+			
 	
 	# Input handling. 
 	match battlePhase:
