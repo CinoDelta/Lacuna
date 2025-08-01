@@ -16,13 +16,15 @@ func _process(delta):
 
 func battleTransition(id):
 	
+	player.set_meta("Cutscene", true)
+	
 	var transitionTween = get_tree().create_tween().tween_property(greenTransitionCover, "color", Color(0.09, 0.67, 0.3, 0.5), 1).set_trans(Tween.TRANS_QUAD)
 	await transitionTween.finished
-	await get_tree().create_timer(2.0).timeout
-	var coverTransitionTween = get_tree().create_tween().tween_property(transitionCover, "color", Color(1, 1, 1, 1), 1).set_trans(Tween.TRANS_QUAD)
+	await get_tree().create_timer(1.0).timeout
+	var coverTransitionTween = get_tree().create_tween().tween_property(transitionCover, "color", Color(1, 1, 1, 1), .8).set_trans(Tween.TRANS_QUAD)
 	await coverTransitionTween.finished
 	player.visible = false
 	greenTransitionCover.color = Color(0.09, 0.67, 0.3, 0)
-	await get_tree().create_timer(2).timeout
+	await get_tree().create_timer(1).timeout
 	var coverTransitionOutTween = get_tree().create_tween().tween_property(transitionCover, "color", Color(1, 1, 1, 0), .25).set_trans(Tween.TRANS_QUAD)
 	

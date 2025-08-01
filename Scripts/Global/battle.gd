@@ -243,7 +243,7 @@ func getEnemyDisplayFromName(enemyName:String): # Panel
 func battleStarted(id): # void
 	$BattleIntro.play()
 	
-	await get_tree().create_timer(6).timeout
+	await get_tree().create_timer(3.8).timeout
 	
 	for child in get_children():
 		if child is Panel and child.name != "TextBoxPanel":
