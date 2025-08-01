@@ -203,11 +203,13 @@ func playSetupTweens(duration): # void
 func setUpBattle(battleId): # void
 	
 		
-	get_node("BackgroundOverlay/" + battleData["BACKGROUND"]).visible = true
-	
 	
 	battleData = BattleDatabase.battleIdInfo[str(get_meta("battleId"))]
-
+	
+	get_node("BackgroundOverlay/" + battleData["BACKGROUND"]).visible = true
+	
+	await get_tree().create_timer(2)
+	
 	refreshSelectionData()
 	
 	playerSetup()
@@ -215,11 +217,18 @@ func setUpBattle(battleId): # void
 	
 	PartyStats.inBattle = true
 	
-	await get_tree().create_timer(1.5)
+	await get_tree().create_timer(2)
+	
+	
+
 	
 	await playSetupTweens(.5)
 	
-	await get_tree().create_timer(1)
+	await get_tree().create_timer(4.0)
+	
+	MusicManager.loadMusic("res://Assets/Sounds/WeirdOnesApproaching.ogg")
+	MusicManager.setVolume(0.7)
+	MusicManager.play()
 	
 	display_text(battleData["START_TEXT"], Vector2(576, 60), Vector2(0, 30))
 	
@@ -234,7 +243,7 @@ func getEnemyDisplayFromName(enemyName:String): # Panel
 func battleStarted(id): # void
 	$BattleIntro.play()
 	
-	await get_tree().create_timer(4.0).timeout
+	await get_tree().create_timer(6).timeout
 	
 	for child in get_children():
 		if child is Panel and child.name != "TextBoxPanel":
@@ -252,6 +261,7 @@ func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):
 	var textBoxText = $TextBoxPanel/Background/TexboxText
 	
 	textBackground.size = Vector2(boxSize.x, 0)
+	textBoxText.text = ""
 	
 
 	$TextBoxPanel.show()
@@ -296,7 +306,7 @@ func _process(delta): # void
 	# CONFIRM
 	if Input.is_action_just_pressed("Confirm"):
 		if PartyStats.inBattle == false and PartyStats.debug == true:
-			PartyStats.emit_signal("battleStart", 1)
+			PartyStats.battleStart.emit(1)
 			$Select.play()
 		elif $TextBoxPanel.visible == true:
 			emit_signal("textbox_continued")

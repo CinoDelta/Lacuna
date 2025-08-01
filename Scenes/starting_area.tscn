@@ -27,12 +27,12 @@ position = Vector2(40, 48)
 position = Vector2(583, 331)
 
 [node name="TransitionBlack" type="ColorRect" parent="."]
-z_index = 20
+z_index = 25
 offset_left = -50000.0
 offset_top = -50000.0
 offset_right = 950000.0
 offset_bottom = 9.995e+07
-color = Color(0, 0, 0, 1)
+color = Color(0, 0, 0, 0)
 
 [node name="TransitionGreen" type="ColorRect" parent="."]
 z_index = 20
@@ -40,4 +40,4 @@ offset_left = -50000.0
 offset_top = -50000.0
 offset_right = 950000.0
 offset_bottom = 9.995e+07
-color = Color(0, 0.780392, 0, 0)
+color = Color(0.0941176, 0.666667, 0.298039, 0)
