@@ -246,11 +246,13 @@ func setUpBattle(battleId): # void
 	
 
 	
-	display_text(battleData["START_TEXT"], Vector2(576, 60), Vector2(0, 30))
+	
 	
 	MusicManager.loadMusic("res://Assets/Sounds/RottensApproaching.ogg")
 	MusicManager.setVolume(0.3)
 	MusicManager.play()
+	
+	await display_text(battleData["START_TEXT"], Vector2(576, 60), Vector2(0, 30))
 	
 # ui getters
 
