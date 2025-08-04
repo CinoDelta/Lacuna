@@ -43,7 +43,6 @@ script = ExtResource("1_s088x")
 metadata/battleId = 1
 
 [node name="OptionsPanel" type="Panel" parent="."]
-visible = false
 layout_mode = 0
 offset_top = -152.0
 offset_right = 712.0
@@ -301,7 +300,6 @@ texture = ExtResource("2_b0yqc")
 expand_mode = 1
 
 [node name="PlayerDisplay" type="Panel" parent="."]
-visible = false
 layout_mode = 0
 offset_left = 280.0
 offset_top = 304.0
@@ -311,6 +309,7 @@ theme = ExtResource("4_6af57")
 metadata/_edit_lock_ = true
 
 [node name="Sample" type="Panel" parent="PlayerDisplay"]
+visible = false
 layout_mode = 0
 offset_left = 32.0
 offset_top = 16.0
@@ -319,13 +318,27 @@ offset_bottom = 24.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_f8xi8")
 
 [node name="PSprite" type="AnimatedSprite2D" parent="PlayerDisplay/Sample"]
+clip_children = 2
 texture_filter = 1
 scale = Vector2(2, 2)
 sprite_frames = ExtResource("9_iopbk")
 animation = &"Debug"
 
+[node name="Highlight" type="ColorRect" parent="PlayerDisplay/Sample/PSprite"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.0
+offset_top = -80.0
+offset_right = 20.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+
 [node name="EnemyDisplay" type="Panel" parent="."]
-visible = false
 layout_mode = 0
 offset_left = 288.0
 offset_top = 152.0
@@ -334,6 +347,7 @@ offset_bottom = 192.0
 theme = ExtResource("4_6af57")
 
 [node name="Sample" type="Panel" parent="EnemyDisplay"]
+visible = false
 layout_mode = 0
 offset_left = 592.0
 offset_top = 160.0
@@ -341,10 +355,25 @@ offset_right = 632.0
 offset_bottom = 200.0
 
 [node name="PSprite" type="AnimatedSprite2D" parent="EnemyDisplay/Sample"]
+clip_children = 2
 texture_filter = 1
 scale = Vector2(2, 2)
 sprite_frames = ExtResource("8_xwmyp")
 animation = &"Debug"
+
+[node name="Highlight" type="ColorRect" parent="EnemyDisplay/Sample/PSprite"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -112.0
+offset_top = -100.0
+offset_right = 40.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
 
 [node name="TextBoxPanel" type="Panel" parent="."]
 visible = false

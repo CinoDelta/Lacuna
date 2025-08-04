@@ -5,7 +5,8 @@ signal textbox_continued
 signal textbox_ended
 
 # selections
-signal optionSelected
+signal optionSelected # for basic options and stuff
+signal actionDecided # action is fully decided
 signal participatorSelected
 
 # battle
@@ -34,7 +35,10 @@ var indexToBattlePosition = [
 	]
 var battleData = {}
 
-var currentSelection = {} # will hold the selection of the member who has chosen something to do.
+var currentAttackPacket = {} # will hold the selection of the member who has chosen something to do. might not need?
+var currentAttacker = ""
+var currentSelection = 1 # For all selection picking other than enemies
+var currentItemSelection = Vector2(0, 0) # uses a grid system 
 
 var fieldData = { # field data contains team wide  # ALWAYS Field Name, then number of turns left. If a field is Normal, it cannot be removed.
 	# buffs/debuffs are percentage wise buffs that are multiplied to the stat during calculation.
@@ -116,7 +120,7 @@ func playerSetup(): #I'll add aniamtion when i feel like it. void.
 		var nameDisplay = get_node("PlayerPanels/PlayerPanelsContainer/" + member + "/" + "Name")
 		nameDisplay.text = PartyStats.partyDatabase[member]["NAME"]
 		
-		createNewFieldData(member, false)
+		createNewFieldData(member, false, newDisplay)
 		
 		
 		
@@ -134,11 +138,11 @@ func enemySetup(): # void
 			for enemy in currentEnemies.keys():
 				if enemy == enemyName:
 					amountOfEnemy += 1
-			indexName = indexName + str(amountOfEnemy) # Enemy, Enemy 2, Enemy 3, etc. max 4 enemies per battle.
+			# Enemy, Enemy 2, Enemy 3, etc. max 4 enemies per battle.
+			if amountOfEnemy != 1:
+				indexName = indexName + str(amountOfEnemy) 
 		currentEnemies[indexName] = enemyData
 		currentEnemies[indexName]["NAME"] = indexName
-		
-		createNewFieldData(indexName, true)
 		
 		var newDisplay = $EnemyDisplay/Sample.duplicate()
 		
@@ -155,10 +159,10 @@ func enemySetup(): # void
 		
 		newDisplay.position = indexToBattlePosition[count+4]
 		
-		
+		createNewFieldData(indexName, true, newDisplay)
 	
 	
-func createNewFieldData(participant, isEnemy:bool): # void
+func createNewFieldData(participant, isEnemy:bool, battleDisplay:Panel): # void
 	fieldData[participant] = {
 		"CONDITIONS" = { 
 			"POISONED" = 0, # conditions are ints, goes down by 1 each turn and is calculated after the attack phase.
@@ -172,8 +176,12 @@ func createNewFieldData(participant, isEnemy:bool): # void
 		},
 		"IS_ENEMY" = isEnemy,
 		"TURNS_WAITING" = 0,
-		"CONSECUTIVE_TURNS" = 0
+		"CONSECUTIVE_TURNS" = 0,
+		"BATTLE_DISPLAY" = battleDisplay
 	}
+	
+func removeFieldData(participant):
+	fieldData.erase(participant)
 	
 func refreshSelectionData(): # void
 	currentSelection = {}
@@ -290,15 +298,15 @@ func calculateOrder(refreshOrder, numOfTurns):
 				
 				match fieldData[participant]["CONSECUTIVE_TURNS"]:
 					1:
-						secondSpeedAlter = 0.75
+						secondSpeedAlter = 0.65
 					2:
-						secondSpeedAlter = 0.5
+						secondSpeedAlter = 0.40
 				
 				secondSpeedAlter = 0 if fieldData[participant]["CONSECUTIVE_TURNS"] >= 3 else secondSpeedAlter
 				
-				print("PARTICIPANT: " + str(participant))
-				print("Consecutive turns is " + str(fieldData[participant]["CONSECUTIVE_TURNS"]))
-				print("Altering is " + str(secondSpeedAlter))
+#				print("PARTICIPANT: " + str(participant))
+#				print("Consecutive turns is " + str(fieldData[participant]["CONSECUTIVE_TURNS"]))
+#				print("Altering is " + str(secondSpeedAlter))
 				
 				var participantSpeed
 				
@@ -340,14 +348,75 @@ func calculateOrder(refreshOrder, numOfTurns):
 				print("The currentweight is" + str(currentWeight))
 			
 			
+# Ok lets deisgn the attack data packet!
+
+#var attackPacket = {
+#	# First, it should contain the FIELD DATA of the person.
+#	"ATTACKER_FIELD_DATA" = {
+#		"CONDITIONS" = { 
+#			"POISONED" = 0,
+#			"BURNED" = 0 
+#		},
+#		"STAT_BUFFS" = {
+#			"ATTACK" = {PercentBuff = 1, TurnsLeft = 0},
+#			"DEFENSE" = {PercentBuff = 1, TurnsLeft = 0},
+#			"SPEED" = {PercentBuff = 1, TurnsLeft = 0},
+#			"AETHER_GAIN" = {PercentBuff = 1, TurnsLeft = 0}
+#		},
+#		"IS_ENEMY" = isEnemy,
+#		"TURNS_WAITING" = 0,
+#		"CONSECUTIVE_TURNS" = 0,
+#		"BATTLE_DISPLAY" = battleDisplay
+#	},
+#	# this will fill in any missing data. and since field data isn't being changed in the attack function, we can use this 
+#	# as a getter.
+#
+#	# Next there should probably be an ACTION table.
+#
+#	"ACTION" = {
+#		"PRIMARY_ACTION" = "", # Can be: BasicAttack, SpecialAttack, Item, Defend. 
+#		# leave blank if the thing being done doesn't require a target, or is targeting all enemies.
+#		# Target should contain the participant's name, as with that we can get if they're an enemy or not from
+#		# field data, and get stats from there.
+#		"TARGET" = "",
+#		"EXTRA_DATA" = {} # Extra Data that can be passed if needed, depending on the skill being used. Allows for expandability on the system.
+#	}
+#}
 
 func attack(attackDataPacket):
 	pass
 
+# functions that are run until an action is decided! Only for the player's party.
+
+func basicSelection(memberName, memberFieldData):
+	
+	currentSelection = 1
+	battlePhase = battlePhases.SelectingBasics
+	
+	var highlight = get_node(str(memberFieldData["BATTLE_DISPLAY"].get_path()) + "/PSprite/Highlight")
+	
+	var highlightTween = get_tree().create_tween()
+	
+	highlightTween.tween_property(highlight, "color", Color(1, 1, 1, 0.5), 1)
+	highlightTween.tween_property(highlight, "color", Color(1, 1, 1, 0), 1)
+	
+	highlightTween.set_loops()
+	
+	
+	await optionSelected
+	
+	highlightTween.kill()
+
+	pass
+	
+
+
 func battleStarted(id): # void, main battle loop as well.
 	$BattleIntro.play()
+	$BattleIntro.get_path()
 	
 	var isBattleOver = false
+	var isFirstTurn = true
 	
 	await get_tree().create_timer(3.8).timeout
 	
@@ -358,15 +427,33 @@ func battleStarted(id): # void, main battle loop as well.
 			
 	await setUpBattle(id)
 	
-	calculateOrder(true, 4)
+	await calculateOrder(true, 4)
 	
 	
 	while !isBattleOver:
 		# At the start of each loop, figure out which person is supposed to move based on calculate order.
-		battlePhase = battlePhases.SelectingBasics
-		await get_tree().create_timer(1.0).timeout
-		pass
-	
+		
+		if !isFirstTurn:
+			calculateOrder(false, 1)
+		
+		currentAttacker = turnOrder.back()
+		turnOrder.remove_at(turnOrder.size() - 1)
+		
+		var attackerFieldData = fieldData[currentAttacker] # for getting. for setting, just get index normally.
+		
+		if !attackerFieldData["IS_ENEMY"]:
+			# run the code for it being a player.
+			basicSelection(currentAttacker, attackerFieldData)
+			
+			print("ittsss " + currentAttacker + "'s turn!")
+			await actionDecided
+		else:
+			# run the code for it being an enemy
+			print("pretend the enemy went")
+			pass
+			
+		
+		isFirstTurn = false
 
 	
 # ui functions
@@ -415,9 +502,14 @@ func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):
 	$TextBoxPanel.hide()
 	emit_signal("textbox_ended")
 	
+func resetSelectionHighlights(): #void
+	for child in $OptionsPanel/OptionsContainer.get_children():
+		var borderHighlight:TextureRect = get_node(str(child.get_path()) + "/Highlight")
+		borderHighlight.texture = load("res://Assets/Sprites/Battle/DisplaySprites/Selections/Selection.png")
+
 func _process(delta): # void 
 	
-	# misc keys
+	# keys
 	
 	# CONFIRM
 	if Input.is_action_just_pressed("Confirm"):
@@ -426,12 +518,22 @@ func _process(delta): # void
 			$Select.play()
 		elif $TextBoxPanel.visible == true:
 			emit_signal("textbox_continued")
-			
+	elif Input.is_action_just_pressed("ui_left"):
+		match battlePhase:
+			battlePhases.SelectingBasics:
+				currentSelection = 4 if currentSelection == 1 else currentSelection - 1
+	elif Input.is_action_just_pressed("ui_right"):
+		match battlePhase:
+			battlePhases.SelectingBasics:
+				currentSelection = 1 if currentSelection == 4 else currentSelection + 1
 	
-	# Input handling. 
-	match battlePhase:
-		battlePhases.Starting:
-			pass
+	# Selection highlights
+	if battlePhase == battlePhases.SelectingBasics:
+		var boxCounter = 1
+		for child in $OptionsPanel/OptionsContainer.get_children():
+			var borderHighlight:TextureRect = get_node(str(child.get_path()) + "/Highlight")
+			borderHighlight.texture = load("res://Assets/Sprites/Battle/DisplaySprites/Selections/HighlightedSelection.png") if boxCounter == currentSelection else load("res://Assets/Sprites/Battle/DisplaySprites/Selections/Selection.png")
+			boxCounter += 1
 	
 	# UI displays
 	if PartyStats.inBattle == true:
