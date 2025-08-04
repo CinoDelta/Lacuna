@@ -36,29 +36,30 @@ var battleData = {}
 
 var currentSelection = {} # will hold the selection of the member who has chosen something to do.
 
-var fieldData = { # field data contains team wide 
-	"FIELD" = ["Normal", 0], # ALWAYS Field Name, then number of turns left. If a field is Normal, it cannot be removed.
+var fieldData = { # field data contains team wide  # ALWAYS Field Name, then number of turns left. If a field is Normal, it cannot be removed.
 	# buffs/debuffs are percentage wise buffs that are multiplied to the stat during calculation.
 	# if the current buff is one, turns left doesn't go down and the buff is not mentioned before last phase.
-	"PLAYERTEAM" = 
-	{ 
-		"ATTACK" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
-		"MAGIC" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
-		"DEFENSE" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
-		"SPEED" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
-		"AETHERGAIN" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
-	},
-	"ENEMYTEAM" = 
-	{ 
-		"ATTACK" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
-		"MAGIC" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
-		"DEFENSE" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
-		"SPEED" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
-		"AETHERGAIN" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
-	}
+#	"PLAYERTEAM" = 
+#	{ 
+#		"ATTACK" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
+#		"MAGIC" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
+#		"DEFENSE" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
+#		"SPEED" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
+#		"AETHERGAIN" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
+#	},
+#	"ENEMYTEAM" = 
+#	{ 
+#		"ATTACK" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
+#		"MAGIC" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
+#		"DEFENSE" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
+#		"SPEED" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
+#		"AETHERGAIN" = {"CurrentBuff" = 1, "TurnsLeft" = 0},
+#	}
 	
 	# other individual specific buffs are initialized in the function createNewFieldData.
 }
+
+var fieldStatus = ["Normal", 0]
 
 var currentEnemies = {}
 var amountOfEnemies = 0
@@ -115,7 +116,7 @@ func playerSetup(): #I'll add aniamtion when i feel like it. void.
 		var nameDisplay = get_node("PlayerPanels/PlayerPanelsContainer/" + member + "/" + "Name")
 		nameDisplay.text = PartyStats.partyDatabase[member]["NAME"]
 		
-		
+		createNewFieldData(member, false)
 		
 		
 		
@@ -137,7 +138,7 @@ func enemySetup(): # void
 		currentEnemies[indexName] = enemyData
 		currentEnemies[indexName]["NAME"] = indexName
 		
-		createNewFieldData(indexName)
+		createNewFieldData(indexName, true)
 		
 		var newDisplay = $EnemyDisplay/Sample.duplicate()
 		
@@ -157,12 +158,21 @@ func enemySetup(): # void
 		
 	
 	
-func createNewFieldData(participant): # void
+func createNewFieldData(participant, isEnemy:bool): # void
 	fieldData[participant] = {
 		"CONDITIONS" = { 
 			"POISONED" = 0, # conditions are ints, goes down by 1 each turn and is calculated after the attack phase.
 			"BURNED" = 0 
-		}
+		},
+		"STAT_BUFFS" = {
+			"ATTACK" = {PercentBuff = 1, TurnsLeft = 0},
+			"DEFENSE" = {PercentBuff = 1, TurnsLeft = 0},
+			"SPEED" = {PercentBuff = 1, TurnsLeft = 0},
+			"AETHER_GAIN" = {PercentBuff = 1, TurnsLeft = 0}
+		},
+		"IS_ENEMY" = isEnemy,
+		"TURNS_WAITING" = 0,
+		"CONSECUTIVE_TURNS" = 0
 	}
 	
 func refreshSelectionData(): # void
@@ -226,11 +236,13 @@ func setUpBattle(battleId): # void
 	
 	await get_tree().create_timer(4.0)
 	
-	MusicManager.loadMusic("res://Assets/Sounds/WeirdOnesApproaching.ogg")
-	MusicManager.setVolume(0.7)
-	MusicManager.play()
+
 	
 	display_text(battleData["START_TEXT"], Vector2(576, 60), Vector2(0, 30))
+	
+	MusicManager.loadMusic("res://Assets/Sounds/RottensApproaching.ogg")
+	MusicManager.setVolume(0.3)
+	MusicManager.play()
 	
 # ui getters
 
@@ -239,9 +251,103 @@ func getPlayerDisplayFromName(memberName:String): # Panel
 	
 func getEnemyDisplayFromName(enemyName:String): # Panel
 	return get_node("EnemyDisplay/" + enemyName)
+	
+# very very very important battle functions
 
-func battleStarted(id): # void
+var turnOrder = []
+
+func calculateOrder(refreshOrder, numOfTurns):
+	
+	turnOrder = [] if refreshOrder else turnOrder
+	
+	# pre calculation (Are there people that haven't moved for 5 turns
+	
+	var peopleWaitingTooLong = []
+	var turnThreshold = 5
+	
+	for i in range(0, numOfTurns):
+		# if there are ever more than 5 participants in the battle, threshold will be increased.
+		if fieldData.keys().size() > 5:
+			turnThreshold += fieldData.keys().size() - 5
+		
+		for participant in fieldData:
+			if fieldData[participant]["TURNS_WAITING"] >= 5:
+				peopleWaitingTooLong.append(participant)
+				
+		if peopleWaitingTooLong.size() > 0:
+			turnOrder.insert(0, peopleWaitingTooLong.pick_random()) # if theres one, it picks that no matter what. if theres more than that, it just picks random.
+		else:
+			# main calculation
+			print("main calculation")
+			var weightedChanceTable = {}
+			var totalWeight = 0
+			var currentWeight = 0
+			
+			for participant in fieldData:
+				var randSpeedAlter = randf_range(0.9, 1.1)
+				
+				var secondSpeedAlter = 1.0
+				
+				match fieldData[participant]["CONSECUTIVE_TURNS"]:
+					1:
+						secondSpeedAlter = 0.75
+					2:
+						secondSpeedAlter = 0.5
+				
+				secondSpeedAlter = 0 if fieldData[participant]["CONSECUTIVE_TURNS"] >= 3 else secondSpeedAlter
+				
+				print("PARTICIPANT: " + str(participant))
+				print("Consecutive turns is " + str(fieldData[participant]["CONSECUTIVE_TURNS"]))
+				print("Altering is " + str(secondSpeedAlter))
+				
+				var participantSpeed
+				
+				# this exists for more variability, especially early game!
+				var uniformSpeedMultiplier = 5
+				
+				if fieldData[participant]["IS_ENEMY"]:
+					participantSpeed = currentEnemies[participant]["SPEED"] * uniformSpeedMultiplier
+				else:
+					participantSpeed = PartyStats.partyDatabase[participant]["SPEED"] * uniformSpeedMultiplier
+				
+				participantSpeed *= randSpeedAlter
+				participantSpeed *= secondSpeedAlter
+				
+				participantSpeed = roundi(participantSpeed)
+				
+				weightedChanceTable[participant] = participantSpeed
+				totalWeight += participantSpeed
+				
+			var randWeight = randf_range(0, totalWeight)
+			print("The random weight is " + str(randWeight))
+			print(weightedChanceTable)
+			for participant in weightedChanceTable:
+				if currentWeight <= randWeight and randWeight < weightedChanceTable[participant] + currentWeight:
+					var tempArray = [participant]
+					print("the person picked is: " + participant)
+					tempArray.append_array(turnOrder)
+					turnOrder = tempArray
+					print(turnOrder)
+					for person in fieldData:
+						if person != participant:
+							fieldData[person]["TURNS_WAITING"] += 1
+							fieldData[person]["CONSECUTIVE_TURNS"] = 0
+					fieldData[participant]["TURNS_WAITING"] = 0
+					fieldData[participant]["CONSECUTIVE_TURNS"] += 1
+					break
+				else:
+					currentWeight += weightedChanceTable[participant]
+				print("The currentweight is" + str(currentWeight))
+			
+			
+
+func attack(attackDataPacket):
+	pass
+
+func battleStarted(id): # void, main battle loop as well.
 	$BattleIntro.play()
+	
+	var isBattleOver = false
 	
 	await get_tree().create_timer(3.8).timeout
 	
@@ -251,6 +357,17 @@ func battleStarted(id): # void
 			
 			
 	await setUpBattle(id)
+	
+	calculateOrder(true, 4)
+	
+	
+	while !isBattleOver:
+		# At the start of each loop, figure out which person is supposed to move based on calculate order.
+		battlePhase = battlePhases.SelectingBasics
+		await get_tree().create_timer(1.0).timeout
+		pass
+	
+
 	
 # ui functions
 
@@ -292,7 +409,6 @@ func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):
 				await physics
 			
 			$TextBoxPanel/Background/TexboxText/textBox.play()
-			print("anything?")
 		await textbox_continued
 	
 		$Select.play()

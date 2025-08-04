@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="ThePrototype"
+config/name="TheLegendOfAuterra"
 config/tags=PackedStringArray("realtimebattle")
 run/main_scene="res://Scenes/starting_area.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")

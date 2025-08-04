@@ -14,8 +14,8 @@
 [ext_resource type="Material" uid="uid://b0mad586t5q10" path="res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres" id="10_karwh"]
 [ext_resource type="Texture2D" uid="uid://cwff51t3lrprl" path="res://Assets/Sprites/Battle/Backgrounds/Debug.png" id="10_y4552"]
 [ext_resource type="AudioStream" uid="uid://bsuu6vxtit4ai" path="res://Assets/Sounds/DefaultTextBox.mp3" id="11_jo0um"]
-[ext_resource type="AudioStream" uid="uid://c52lqokbyl4p7" path="res://Assets/Sounds/selectSound.wav" id="14_6h02j"]
-[ext_resource type="AudioStream" uid="uid://ddtr617js65cj" path="res://Assets/Sounds/WeirdOnesApproaching.ogg" id="16_4uec0"]
+[ext_resource type="AudioStream" uid="uid://bl6gi1l2jipge" path="res://Assets/Sounds/Select.ogg" id="15_2i87i"]
+[ext_resource type="AudioStream" uid="uid://5raltdq20y2o" path="res://Assets/Sounds/RottensApproaching.ogg" id="16_dujln"]
 [ext_resource type="AudioStream" uid="uid://4g0wxn244y28" path="res://Assets/Sounds/BattleIntro.wav" id="17_4qeh0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u2i3t"]
@@ -414,10 +414,10 @@ offset_bottom = 332.0
 color = Color(0.215686, 0.215686, 0.215686, 0.396078)
 
 [node name="Select" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("14_6h02j")
+stream = ExtResource("15_2i87i")
 
 [node name="BattleMusic" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("16_4uec0")
+stream = ExtResource("16_dujln")
 
 [node name="BattleIntro" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("17_4qeh0")

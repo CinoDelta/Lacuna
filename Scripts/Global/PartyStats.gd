@@ -13,10 +13,10 @@ var partyDatabase = {
 		"MAX_HP" = 20,
 		"HP" = 20,
 		"VITALITY" = 2,
-		"ATTACK" = 15,
-		"DEFENSE" = 10,
-		"SPEED" = 20,
-		"MAGIC" = 20,
+		"ATTACK" = 3,
+		"DEFENSE" = 2,
+		"SPEED" = 5,
+		"MAGIC" = 4,
 		"AETHER" = 1, # out of a percentage
 		"AETHER_GAIN" = 7, # min 2 below max 2 above, divided by 100 before gaining
 		"LEVEL" = 1,
@@ -36,6 +36,12 @@ var partyDatabase = {
 		"DISTRIBUTION" = "Fighter"
 	}
 }
+
+var wholePartyStats = {
+	"GOLD" = 0
+}
+
+var storyFlags = {} #flags that are either true or false that effect save data
 
 #Range: 1-7
 #None: 0
@@ -83,6 +89,7 @@ var states = {}
 func addItemToInv(itemName): #extends createNewItem
 	var newItem = ItemDatabase.createNewItem(itemName) #super
 	inventory[newItem["UID"]] = newItem
+
 
 func removeItemFromInv(UID:String):
 	for item in inventory:
