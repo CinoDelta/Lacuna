@@ -330,9 +330,10 @@ func calculateOrder(refreshOrder, numOfTurns):
 				
 			var randWeight = randf_range(0, totalWeight)
 			print("The random weight is " + str(randWeight))
+			
 			print(weightedChanceTable)
 			for participant in weightedChanceTable:
-				if currentWeight <= randWeight and randWeight < weightedChanceTable[participant] + currentWeight:
+				if randWeight <= weightedChanceTable[participant] + currentWeight:
 					var tempArray = [participant]
 					print("the person picked is: " + participant)
 					tempArray.append_array(turnOrder)
