@@ -177,6 +177,8 @@ func levelUp(memberName):
 						# partyDatabase[memberName]["ATTACK"]
 				statIncreases.insert(statIncreases.size(), partyDatabase[memberName]["DEFENSE"])
 	partyDatabase[memberName]["LEVEL"] += 1
+	partyDatabase[memberName]["CURRENT_EXP"] = 0
+	partyDatabase[memberName]["MAX_EXP"] = roundi(partyDatabase[memberName]["LEVEL"] ^ 2.4 + 23)
 	if oldLevel == 99:
 		print(statMessages)
 		print(statIncreases)
