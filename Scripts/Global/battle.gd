@@ -32,13 +32,22 @@ var indexToBattlePosition = [
 	Vector2(-56, -80), 
 	Vector2(-128, 16), 
 	Vector2(592, 160),
+	Vector2(664, 272),
+	Vector2(648, 32)
 	]
 var battleData = {}
 
 var currentAttackPacket = {} # will hold the selection of the member who has chosen something to do. might not need?
 var currentAttacker = ""
-var currentSelection = 1 # For all selection picking other than enemies
-var currentItemSelection = Vector2(0, 0) # uses a grid system 
+var currentSelection = 1 # For basic selection picking
+
+var selectionTracker = { # this is so that it saves when you go back to the selection :>
+	"ENEMY_SELECTION" = 1,
+	"ITEM_SELECTION" = Vector2(0,0),
+	"SPECIAL_SELECTION" = 1
+} 
+
+var optionStatus = false
 
 var fieldData = { # field data contains team wide  # ALWAYS Field Name, then number of turns left. If a field is Normal, it cannot be removed.
 	# buffs/debuffs are percentage wise buffs that are multiplied to the stat during calculation.
@@ -183,9 +192,6 @@ func createNewFieldData(participant, isEnemy:bool, battleDisplay:Panel): # void
 func removeFieldData(participant):
 	fieldData.erase(participant)
 	
-func refreshSelectionData(): # void
-	currentSelection = {}
-
 func playSetupTweens(duration): # void
 	
 	var optionPanelTween = [
@@ -228,8 +234,6 @@ func setUpBattle(battleId): # void
 	
 	await get_tree().create_timer(2)
 	
-	refreshSelectionData()
-	
 	playerSetup()
 	enemySetup()
 	
@@ -248,8 +252,8 @@ func setUpBattle(battleId): # void
 	
 	
 	
-	MusicManager.loadMusic("res://Assets/Sounds/RottensApproaching.ogg")
-	MusicManager.setVolume(0.3)
+	MusicManager.loadMusic("res://Assets/Sounds/DebugBattle.ogg")
+	MusicManager.setVolume(2)
 	MusicManager.play()
 	
 	await display_text(battleData["START_TEXT"], Vector2(576, 60), Vector2(0, 30))
@@ -260,7 +264,7 @@ func getPlayerDisplayFromName(memberName:String): # Panel
 	return get_node("PlayerDisplay/" + memberName)
 	
 func getEnemyDisplayFromName(enemyName:String): # Panel
-	return get_node("EnemyDisplay/" + enemyName)
+	return fieldData[enemyName]["BATTLE_DISPLAY"]
 	
 # very very very important battle functions
 
@@ -391,9 +395,10 @@ func attack(attackDataPacket):
 
 # functions that are run until an action is decided! Only for the player's party.
 
-func basicSelection(memberName, memberFieldData):
+func basicSelection(memberName, memberFieldData):# this just keeps getting passed down (parameters) for special and item selection specifically
 	
-	currentSelection = 1
+	$OptionsPanel/SubMenu.visible = false
+	optionStatus = false
 	battlePhase = battlePhases.SelectingBasics
 	
 	var highlight = get_node(str(memberFieldData["BATTLE_DISPLAY"].get_path()) + "/PSprite/Highlight")
@@ -405,14 +410,42 @@ func basicSelection(memberName, memberFieldData):
 	
 	highlightTween.set_loops()
 	
-	
+	await buffer(.3)
 	await optionSelected
 	
 	highlightTween.kill()
-
-	pass
+	highlight.color = Color(1, 1, 1, 0)
+	# option status HAS to be true, there is no backing out of basic options
+	
+	if currentSelection == 1:
+		$Select.play()
+		selectEnemy(memberName, memberFieldData)
+	else:
+		basicSelection(memberName, memberFieldData)
 	
 
+func selectEnemy(memberName, memberFieldData):
+	
+	$OptionsPanel/SubMenu.visible = true
+	optionStatus = false
+	battlePhase = battlePhases.SelectingEnemyParticipator
+	
+	refreshEnemySelectionInfo()
+	refreshEnemySelectionHighlights()
+	
+	await optionSelected
+	
+	if optionStatus == true:
+		pass
+	else:
+		basicSelection(memberName, memberFieldData) 
+	
+	
+
+# util
+
+func buffer(time):
+	await get_tree().create_timer(time).timeout
 
 func battleStarted(id): # void, main battle loop as well.
 	$BattleIntro.play()
@@ -457,7 +490,7 @@ func battleStarted(id): # void, main battle loop as well.
 			
 		
 		isFirstTurn = false
-
+	
 	
 # ui functions
 
@@ -510,6 +543,42 @@ func resetSelectionHighlights(): #void
 		var borderHighlight:TextureRect = get_node(str(child.get_path()) + "/Highlight")
 		borderHighlight.texture = load("res://Assets/Sprites/Battle/DisplaySprites/Selections/Selection.png")
 
+func refreshEnemySelectionInfo(): # void 
+	
+	var displayEnemyInfo = $OptionsPanel/SubMenu/DisplayEnemyInfo
+	for panel in displayEnemyInfo .get_children():
+		if panel.name != "SampleEnemyInfo":
+			displayEnemyInfo.remove_child(panel)
+			
+	var sampleEnemyInf = $OptionsPanel/SubMenu/DisplayEnemyInfo/SampleEnemyInfo
+	
+	var count = 1
+	
+	for enemy in currentEnemies:
+		
+		var enemyData = fieldData[enemy] # just in case i wanna add more to the enemy display
+		
+		var newInfo = sampleEnemyInf.duplicate()
+		displayEnemyInfo.add_child(newInfo)
+		var newInfoText = get_node(str(newInfo.get_path()) + "/EnemyName")
+		
+		newInfoText.text = enemy
+		newInfo.visible = true
+		
+		newInfo.set_meta("SelectionOrder", count)
+		newInfo.name = enemy
+		count += 1
+		
+func refreshEnemySelectionHighlights(): # void
+	var displayEnemyInfo = $OptionsPanel/SubMenu/DisplayEnemyInfo
+	for panel in displayEnemyInfo.get_children():
+		if panel.name != "SampleEnemyInfo":
+			var panelText = get_node(str(panel.get_path()) + "/EnemyName")
+			if panel.get_meta("SelectionOrder") == selectionTracker["ENEMY_SELECTION"]:
+				panelText.text = "[color=yellow]" + panel.name + "[/color]"
+			else:
+				panelText.text = panel.name
+
 func _process(delta): # void 
 	
 	# keys
@@ -521,15 +590,50 @@ func _process(delta): # void
 			$Select.play()
 		elif $TextBoxPanel.visible == true:
 			emit_signal("textbox_continued")
+		match battlePhase:
+			battlePhases.SelectingBasics:
+				optionStatus = true
+				emit_signal("optionSelected")
+	# CANCEL
+	if Input.is_action_just_pressed("Cancel"):
+		match battlePhase:
+			battlePhases.SelectingEnemyParticipator: # if below is the same for each phase im going to uniform it
+				$Select.play()
+				emit_signal("optionSelected")
+				optionStatus = false
+	# LEFT
 	elif Input.is_action_just_pressed("ui_left"):
 		match battlePhase:
 			battlePhases.SelectingBasics:
+				$MenuMovement.play()
 				currentSelection = 4 if currentSelection == 1 else currentSelection - 1
+	# RIGHT
 	elif Input.is_action_just_pressed("ui_right"):
 		match battlePhase:
 			battlePhases.SelectingBasics:
+				$MenuMovement.play()
 				currentSelection = 1 if currentSelection == 4 else currentSelection + 1
-	
+	# DOWN
+	elif Input.is_action_just_pressed("ui_up"):
+		match battlePhase:
+			battlePhases.SelectingEnemyParticipator:
+				$MenuMovement.play()
+				if selectionTracker["ENEMY_SELECTION"] + 1 > currentEnemies.keys().size():
+					selectionTracker["ENEMY_SELECTION"] = 1
+				else:
+					selectionTracker["ENEMY_SELECTION"] += 1
+				refreshEnemySelectionHighlights()
+	# UP
+	elif Input.is_action_just_pressed("ui_up"):
+		match battlePhase:
+			battlePhases.SelectingEnemyParticipator:
+				$MenuMovement.play()
+				if selectionTracker["ENEMY_SELECTION"] < 2:
+					selectionTracker["ENEMY_SELECTION"] = currentEnemies.keys().size()
+				else:
+					selectionTracker["ENEMY_SELECTION"] -= 1
+				refreshEnemySelectionHighlights()
+				
 	# Selection highlights
 	if battlePhase == battlePhases.SelectingBasics:
 		var boxCounter = 1

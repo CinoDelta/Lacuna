@@ -5,4 +5,7 @@ res://Assets/Themes/Thamoiras.tres
 res://Assets/Themes/basicText.tres
 res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.gdshader
 res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres
-res://Scripts/Global/PartyStats.gd
+res://Scripts/Global/battle.gd
+res://Scenes/starting_area.tscn
+res://Scenes/Player.tscn
+res://Scenes/MainMusicChannel.tscn
