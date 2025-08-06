@@ -19,10 +19,11 @@ THIRDPARTY.md::TextFile::-1::1753672528::0::1::::<><>::
 ::res://Assets/Aseprite/::1753672528
 ::res://Assets/Fonts/::1753672594
 Tiny5-Regular.ttf::FontFile::3518552834966190823::1753672528::1753672594::1::::<><>::
-::res://Assets/Sounds/::1754520283
+::res://Assets/Sounds/::1754520864
 BattleIntro.wav::AudioStreamWAV::2049421173698556527::1754078091::1754079578::1::::<><>::
 DebugBattle.ogg::AudioStreamOggVorbis::7356341892805424000::1754520247::1754520370::1::::<><>::
 DefaultTextBox.mp3::AudioStreamMP3::3692378263120859188::1753929245::1753929698::1::::<><>::
+Encounter.ogg::AudioStreamOggVorbis::2393607309566382980::1754520864::1754520864::1::::<><>::
 menuMovement.ogg::AudioStreamOggVorbis::760507125613790393::1754518904::1754518905::1::::<><>::
 Select.ogg::AudioStreamOggVorbis::3222873646234216060::1754245471::1754265182::1::::<><>::
 selectSound.wav::AudioStreamWAV::6934942086362617098::1753929642::1753929693::1::::<><>::
@@ -32,8 +33,8 @@ WeirdOnesApproaching.ogg::AudioStreamOggVorbis::7410140723283688829::1754079545:
 ::res://Assets/Sprites/Battle/::1753922193
 ::res://Assets/Sprites/Battle/Backgrounds/::1753922399
 Debug.png::CompressedTexture2D::6327676371220157953::1753922209::1753922211::1::::<><>::
-::res://Assets/Sprites/Battle/Backgrounds/Shaders/::1754519670
-Debug.gdshader::Shader::-1::1754519670::0::1::::<><>::
+::res://Assets/Sprites/Battle/Backgrounds/Shaders/::1754520374
+Debug.gdshader::Shader::-1::1754520374::0::1::::<><>::
 Debug.tres::ShaderMaterial::4165921293188479757::1754516548::0::1::::<><>::res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.gdshader
 ::res://Assets/Sprites/Battle/DisplaySprites/::1754012328
 ::res://Assets/Sprites/Battle/DisplaySprites/Enemies/::1753926127
@@ -71,8 +72,8 @@ basicText.tres::Theme::1957833279204970373::1754516548::0::1::::<><>::uid://bqeo
 Thamoiras.tres::Theme::3176705910576103313::1754516548::0::1::::<><>::uid://dt0lgyrfwbbgt::::res://Assets/Themes/BasicBox.tres
 transparentstuff.tres::Theme::4115471039022752623::1753672528::0::1::::<><>::uid://bwajrto7fby00
 transparentStuffFlat.tres::StyleBoxFlat::3931153076192692643::1753672528::0::1::::<><>::
-::res://Scenes/::1754519670
-Battle.tscn::PackedScene::7521921822264652143::1754519670::0::1::::<><>::res://Scripts/Global/battle.gd<>uid://chwry8w5riibi::::res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png<>uid://bli24837s4wbp::::res://Assets/Themes/Thamoiras.tres<>uid://25nh0v5d7y1b::::res://Assets/Themes/basicText.tres<>uid://cniflqpycfgax::::res://Assets/Sprites/Battle/StatusConditions/Poisoned.png<>uid://cfv01vil13hsq::::res://Assets/Sprites/Battle/DisplaySprites/Selections/AttackSelection.png<>uid://byvtha8ricedj::::res://Assets/Themes/transparentstuff.tres<>uid://c1bjve3ydfl3g::::res://Assets/Sprites/Battle/DisplaySprites/Selections/Selection.png<>uid://jg824fqmi1s2::::res://Assets/Sprites/Battle/DisplaySprites/Selections/SpecialSelection.png<>uid://bst3bmxxc8wup::::res://Assets/Sprites/Battle/DisplaySprites/Selections/ItemSelection.png<>uid://3sjnjewec3ba::::res://Assets/Sprites/Battle/DisplaySprites/Selections/DefendSelection.png<>uid://bsfw85cjfjyvg::::res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy.tres<>uid://ds8l87qec8y6i::::res://Assets/Sprites/MiscSprites/PrototypeBattleBox.png<>uid://cfurixtwnp536::::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistair.tres<>uid://b0mad586t5q10::::res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres<>uid://cwff51t3lrprl::::res://Assets/Sprites/Battle/Backgrounds/Debug.png<>uid://bsuu6vxtit4ai::::res://Assets/Sounds/DefaultTextBox.mp3<>uid://bl6gi1l2jipge::::res://Assets/Sounds/Select.ogg<>uid://4g0wxn244y28::::res://Assets/Sounds/BattleIntro.wav<>uid://k3npac10xllp::::res://Assets/Sounds/menuMovement.ogg
+::res://Scenes/::1754520374
+Battle.tscn::PackedScene::7521921822264652143::1754520374::0::1::::<><>::res://Scripts/Global/battle.gd<>uid://chwry8w5riibi::::res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png<>uid://bli24837s4wbp::::res://Assets/Themes/Thamoiras.tres<>uid://25nh0v5d7y1b::::res://Assets/Themes/basicText.tres<>uid://cniflqpycfgax::::res://Assets/Sprites/Battle/StatusConditions/Poisoned.png<>uid://cfv01vil13hsq::::res://Assets/Sprites/Battle/DisplaySprites/Selections/AttackSelection.png<>uid://byvtha8ricedj::::res://Assets/Themes/transparentstuff.tres<>uid://c1bjve3ydfl3g::::res://Assets/Sprites/Battle/DisplaySprites/Selections/Selection.png<>uid://jg824fqmi1s2::::res://Assets/Sprites/Battle/DisplaySprites/Selections/SpecialSelection.png<>uid://bst3bmxxc8wup::::res://Assets/Sprites/Battle/DisplaySprites/Selections/ItemSelection.png<>uid://3sjnjewec3ba::::res://Assets/Sprites/Battle/DisplaySprites/Selections/DefendSelection.png<>uid://bsfw85cjfjyvg::::res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy.tres<>uid://ds8l87qec8y6i::::res://Assets/Sprites/MiscSprites/PrototypeBattleBox.png<>uid://cfurixtwnp536::::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistair.tres<>uid://b0mad586t5q10::::res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres<>uid://cwff51t3lrprl::::res://Assets/Sprites/Battle/Backgrounds/Debug.png<>uid://bsuu6vxtit4ai::::res://Assets/Sounds/DefaultTextBox.mp3<>uid://bl6gi1l2jipge::::res://Assets/Sounds/Select.ogg<>uid://4g0wxn244y28::::res://Assets/Sounds/BattleIntro.wav<>uid://k3npac10xllp::::res://Assets/Sounds/menuMovement.ogg
 Follower.tscn::PackedScene::6602658807865867992::1753672528::0::1::::<><>::
 MainMusicChannel.tscn::PackedScene::8414934580978669990::1754519670::0::1::::<><>::res://Scripts/Global/music_manager.gd
 Player.tscn::PackedScene::6456327247227741023::1754519670::0::1::::<><>::res://Scripts/Player.gd<>uid://defhw7jwsl3bp::::res://Assets/Sprites/Player/OverworldSprites/MainCharAnims.tres
@@ -80,8 +81,8 @@ starting_area.tscn::PackedScene::4021882454229098866::1754519669::0::1::::<><>::
 ::res://Scripts/::1754516548
 Overworld.gd::GDScript::-1::1754088550::0::1::::<>Node2D<>::
 Player.gd::GDScript::-1::1754516548::0::1::::<>CharacterBody2D<>::
-::res://Scripts/Global/::1754519669
-battle.gd::GDScript::-1::1754519669::0::1::::<>Control<>::
+::res://Scripts/Global/::1754520374
+battle.gd::GDScript::-1::1754520374::0::1::::<>Control<>::
 battle_database.gd::GDScript::-1::1753922683::0::1::::<>Node<>::
 enemy_database.gd::GDScript::-1::1754264881::0::1::::<>Node<>::
 item_database.gd::GDScript::-1::1753916061::0::1::::<>Node<>::

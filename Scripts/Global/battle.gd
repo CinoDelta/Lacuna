@@ -439,7 +439,8 @@ func selectEnemy(memberName, memberFieldData):
 		pass
 	else:
 		basicSelection(memberName, memberFieldData) 
-	
+		
+	clearEnemyHighlights()
 	
 
 # util
@@ -573,12 +574,20 @@ func refreshEnemySelectionHighlights(): # void
 	var displayEnemyInfo = $OptionsPanel/SubMenu/DisplayEnemyInfo
 	for panel in displayEnemyInfo.get_children():
 		if panel.name != "SampleEnemyInfo":
+			var enemyFieldDisplayHighlight = get_node(str(fieldData[panel.name]["BATTLE_DISPLAY"].get_path()) + "/PSprite/Highlight")
 			var panelText = get_node(str(panel.get_path()) + "/EnemyName")
 			if panel.get_meta("SelectionOrder") == selectionTracker["ENEMY_SELECTION"]:
 				panelText.text = "[color=yellow]" + panel.name + "[/color]"
+				enemyFieldDisplayHighlight.color = Color(1, 1, 1, 0.5)
 			else:
+				enemyFieldDisplayHighlight.color = Color(1, 1, 1, 1)
 				panelText.text = panel.name
-
+				
+func clearEnemyHighlights():
+	for enemy in currentEnemies:
+		var enemyFieldDisplayHighlight = get_node(str(fieldData[enemy]["BATTLE_DISPLAY"].get_path()) + "/PSprite/Highlight")
+		enemyFieldDisplayHighlight.color = Color(1, 1, 1, 0)
+		
 func _process(delta): # void 
 	
 	# keys
@@ -586,6 +595,7 @@ func _process(delta): # void
 	# CONFIRM
 	if Input.is_action_just_pressed("Confirm"):
 		if PartyStats.inBattle == false and PartyStats.debug == true:
+			PartyStats.inBattle = true
 			PartyStats.battleStart.emit(1)
 			$Select.play()
 		elif $TextBoxPanel.visible == true:
