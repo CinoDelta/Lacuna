@@ -9,3 +9,4 @@ res://Scripts/Global/battle.gd
 res://Scenes/starting_area.tscn
 res://Scenes/Player.tscn
 res://Scenes/MainMusicChannel.tscn
+res://Scripts/Global/battle_database.gd

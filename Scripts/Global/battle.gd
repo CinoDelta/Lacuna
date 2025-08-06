@@ -140,18 +140,20 @@ func enemySetup(): # void
 	var count = 0
 	
 	for enemyName in battleData["ENEMIES"]:
+		print("enemy ")
 		var enemyData = EnemyDatabase.getEnemyFromString(enemyName)
 		var indexName = enemyData["NAME"]
-		if currentEnemies.has(enemyData["NAME"]):
+		print("actual name is " + indexName)
+		if currentEnemies.keys().has(indexName):
 			var amountOfEnemy = 1
 			for enemy in currentEnemies.keys():
-				if enemy == enemyName:
+				if enemyData["NAME"] in enemy:
 					amountOfEnemy += 1
 			# Enemy, Enemy 2, Enemy 3, etc. max 4 enemies per battle.
-			if amountOfEnemy != 1:
-				indexName = indexName + str(amountOfEnemy) 
+			print(amountOfEnemy)
+			indexName = indexName + str(amountOfEnemy)
+		print("new name is " + indexName)
 		currentEnemies[indexName] = enemyData
-		currentEnemies[indexName]["NAME"] = indexName
 		
 		var newDisplay = $EnemyDisplay/Sample.duplicate()
 		
@@ -169,6 +171,8 @@ func enemySetup(): # void
 		newDisplay.position = indexToBattlePosition[count+4]
 		
 		createNewFieldData(indexName, true, newDisplay)
+		
+		count += 1
 	
 	
 func createNewFieldData(participant, isEnemy:bool, battleDisplay:Panel): # void
@@ -292,7 +296,7 @@ func calculateOrder(refreshOrder, numOfTurns):
 			turnOrder.insert(0, peopleWaitingTooLong.pick_random()) # if theres one, it picks that no matter what. if theres more than that, it just picks random.
 		else:
 			# main calculation
-			print("main calculation")
+			#print("main calculation")
 			var weightedChanceTable = {}
 			var totalWeight = 0
 			var currentWeight = 0
@@ -333,16 +337,16 @@ func calculateOrder(refreshOrder, numOfTurns):
 				totalWeight += participantSpeed
 				
 			var randWeight = randf_range(0, totalWeight)
-			print("The random weight is " + str(randWeight))
+			#print("The random weight is " + str(randWeight))
 			
-			print(weightedChanceTable)
+			#print(weightedChanceTable)
 			for participant in weightedChanceTable:
 				if randWeight <= weightedChanceTable[participant] + currentWeight:
 					var tempArray = [participant]
-					print("the person picked is: " + participant)
+					#print("the person picked is: " + participant)
 					tempArray.append_array(turnOrder)
 					turnOrder = tempArray
-					print(turnOrder)
+					#print(turnOrder)
 					for person in fieldData:
 						if person != participant:
 							fieldData[person]["TURNS_WAITING"] += 1
@@ -352,7 +356,7 @@ func calculateOrder(refreshOrder, numOfTurns):
 					break
 				else:
 					currentWeight += weightedChanceTable[participant]
-				print("The currentweight is" + str(currentWeight))
+				#print("The currentweight is" + str(currentWeight))
 			
 			
 # Ok lets deisgn the attack data packet!
@@ -580,7 +584,7 @@ func refreshEnemySelectionHighlights(): # void
 				panelText.text = "[color=yellow]" + panel.name + "[/color]"
 				enemyFieldDisplayHighlight.color = Color(1, 1, 1, 0.5)
 			else:
-				enemyFieldDisplayHighlight.color = Color(1, 1, 1, 1)
+				enemyFieldDisplayHighlight.color = Color(1, 1, 1, 0)
 				panelText.text = panel.name
 				
 func clearEnemyHighlights():
@@ -623,16 +627,6 @@ func _process(delta): # void
 			battlePhases.SelectingBasics:
 				$MenuMovement.play()
 				currentSelection = 1 if currentSelection == 4 else currentSelection + 1
-	# DOWN
-	elif Input.is_action_just_pressed("ui_up"):
-		match battlePhase:
-			battlePhases.SelectingEnemyParticipator:
-				$MenuMovement.play()
-				if selectionTracker["ENEMY_SELECTION"] + 1 > currentEnemies.keys().size():
-					selectionTracker["ENEMY_SELECTION"] = 1
-				else:
-					selectionTracker["ENEMY_SELECTION"] += 1
-				refreshEnemySelectionHighlights()
 	# UP
 	elif Input.is_action_just_pressed("ui_up"):
 		match battlePhase:
@@ -642,6 +636,16 @@ func _process(delta): # void
 					selectionTracker["ENEMY_SELECTION"] = currentEnemies.keys().size()
 				else:
 					selectionTracker["ENEMY_SELECTION"] -= 1
+				refreshEnemySelectionHighlights()
+	# DOWN
+	elif Input.is_action_just_pressed("ui_down"):
+		match battlePhase:
+			battlePhases.SelectingEnemyParticipator:
+				$MenuMovement.play()
+				if selectionTracker["ENEMY_SELECTION"] + 1 > currentEnemies.keys().size():
+					selectionTracker["ENEMY_SELECTION"] = 1
+				else:
+					selectionTracker["ENEMY_SELECTION"] += 1
 				refreshEnemySelectionHighlights()
 				
 	# Selection highlights
