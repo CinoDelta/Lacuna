@@ -1,7 +1,8 @@
+ColorRect
+Sprite2D
 Panel
 RichTextLabel
 VBoxContainer
-ColorRect
 AudioStreamPlayer
 TextureRect
 NinePatchRect

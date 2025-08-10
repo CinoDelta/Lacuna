@@ -33,7 +33,7 @@ var ITEM_DATABASE = {
 			"Target" = "OnePlayer"
 		}
 	},
-	"POWERBOMB" = {
+	"POWER_BOMB" = {
 		"NAME" = "Power Bomb",
 		"DESCRIPTION" = "A bomb containing a bit of ???'s power. Does 50 damage to all enemies.",
 		"ID" = 2, # IDS are used in the ATTACK function to identify what to do with an item.
@@ -45,7 +45,7 @@ var ITEM_DATABASE = {
 		}
 	},
 	
-	"WOODENSWORD" = {
+	"WOODEN_SWORD" = {
 		"NAME" = "Wooden Sword",
 		"DESCRIPTION" = "A useless sword. +3 ATTACK when equipped.",
 		"ID" = 3, 
@@ -53,6 +53,7 @@ var ITEM_DATABASE = {
 		"USE_TEXT" = "%u equipped the wooden sword!",
 		"SPECIAL_DATA" = {
 			"Hand" = "mainHand",
+			"WeaponType" = "Sword",
 			"Buffs" = {
 				"ATTACK" = 3,
 				"DEFENSE" = 0,

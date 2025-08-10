@@ -11,6 +11,8 @@ signal participatorSelected
 
 # battle
 signal attackedEnded
+# battle minigames
+signal minigameConfirm
 
 #built-in
 signal physics
@@ -23,6 +25,8 @@ enum battlePhases {
 	SelectingPartyParticipator,
 	SelectingEnemyParticipator,
 	ExecutingSelection,
+	# mingame shit
+	SwordMinigame,
 }
 
 var battlePhase = battlePhases.Starting
@@ -37,7 +41,38 @@ var indexToBattlePosition = [
 	]
 var battleData = {}
 
-var currentAttackPacket = {} # will hold the selection of the member who has chosen something to do. might not need?
+var currentAttackPacket = {
+	"ATTACKER_FIELD_DATA" = {
+		"CONDITIONS" = { 
+			"POISONED" = 0,
+			"BURNED" = 0 
+		},
+		"STAT_BUFFS" = {
+			"ATTACK" = {PercentBuff = 1, TurnsLeft = 0},
+			"DEFENSE" = {PercentBuff = 1, TurnsLeft = 0},
+			"SPEED" = {PercentBuff = 1, TurnsLeft = 0},
+			"AETHER_GAIN" = {PercentBuff = 1, TurnsLeft = 0}
+		},
+		"IS_ENEMY" = false,
+		"TURNS_WAITING" = 0,
+		"CONSECUTIVE_TURNS" = 0,
+		"BATTLE_DISPLAY" = ""
+	},
+	# this will fill in any missing data. and since field data isn't being changed in the attack function, we can use this 
+	# as a getter.
+
+	# Next there should probably be an ACTION table.
+
+	"ACTION" = {
+		"PRIMARY_ACTION" = "", # Can be: BasicAttack, SpecialAttack, Item, Defend. 
+		# leave blank if the thing being done doesn't require a target, or is targeting all enemies.
+		# Target should contain the participant's name, as with that we can get if they're an enemy or not from
+		# field data, and get stats from there.
+		"TARGET" = "",
+		"EXTRA_DATA" = {} # Extra Data that can be passed if needed, depending on the skill being used. Allows for expandability on the system.
+	}
+} # will hold the selection of the member who has chosen something to do. 
+
 var currentAttacker = ""
 var currentSelection = 1 # For basic selection picking
 
@@ -76,6 +111,10 @@ var fieldStatus = ["Normal", 0]
 
 var currentEnemies = {}
 var amountOfEnemies = 0
+
+# more minigame bools
+var minigameHasConfirmed = false
+var currentMinigameData = {}
 
 # built ins
 
@@ -195,22 +234,23 @@ func createNewFieldData(participant, isEnemy:bool, battleDisplay:Panel): # void
 	
 func removeFieldData(participant):
 	fieldData.erase(participant)
+
+var optionPanelTween = [
+	Vector2(0, -152),
+	Vector2(0,0)
+]
+var playerPanelsTween = [
+	Vector2(0, 696),
+	Vector2(0,528)
+]
+var orderPanelTween = [
+	Vector2(-80, 192),
+	Vector2(0,192)
+]
 	
 func playSetupTweens(duration): # void
 	
-	var optionPanelTween = [
-		Vector2(0, -152),
-		Vector2(0,0)
-	]
-	var playerPanelsTween = [
-		Vector2(0, 696),
-		Vector2(0,528)
-	]
-	var orderPanelTween = [
-		Vector2(-80, 192),
-		Vector2(0,192)
-	]
-	
+
 	$OptionsPanel.position = optionPanelTween[0]
 	$PlayerPanels.position = playerPanelsTween[0]
 	$OrderPanel.position = orderPanelTween[0]
@@ -227,6 +267,16 @@ func playSetupTweens(duration): # void
 	tweenOrderPanel.tween_property($OrderPanel, "position", orderPanelTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 
 	await tweenOrderPanel.finished
+	
+func tweenOptions(goIn, duration):
+	if goIn == false:
+		$OptionsPanel.position = optionPanelTween[0]
+		var tweenOptions = get_tree().create_tween()
+		tweenOptions.tween_property($OptionsPanel, "position", optionPanelTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+	else:
+		$OptionsPanel.position = optionPanelTween[1]
+		var tweenOptions = get_tree().create_tween()
+		tweenOptions.tween_property($OptionsPanel, "position", optionPanelTween[0], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	
 func setUpBattle(battleId): # void
 	
@@ -257,7 +307,7 @@ func setUpBattle(battleId): # void
 	
 	
 	MusicManager.loadMusic("res://Assets/Sounds/DebugBattle.ogg")
-	MusicManager.setVolume(2)
+	MusicManager.setVolume(1.2)
 	MusicManager.play()
 	
 	await display_text(battleData["START_TEXT"], Vector2(576, 60), Vector2(0, 30))
@@ -270,6 +320,15 @@ func getPlayerDisplayFromName(memberName:String): # Panel
 func getEnemyDisplayFromName(enemyName:String): # Panel
 	return fieldData[enemyName]["BATTLE_DISPLAY"]
 	
+func getEnemyFromSelection(): # String
+	print(selectionTracker["ENEMY_SELECTION"])
+	for child in $OptionsPanel/SubMenu/DisplayEnemyInfo.get_children():
+		if child.name != "SampleEnemyInfo":
+			print("not sample")
+			print(child.get_meta("SelectionOrder"))
+			if child.get_meta("SelectionOrder") == selectionTracker["ENEMY_SELECTION"]:
+				print("selected")
+				return child.name
 # very very very important battle functions
 
 var turnOrder = []
@@ -394,12 +453,154 @@ func calculateOrder(refreshOrder, numOfTurns):
 #	}
 #}
 
-func attack(attackDataPacket):
-	pass
-
+func attack(attacker, attackDataPacket):
+	
+	# some useful info
+	var attackerFieldData = attackDataPacket["ATTACKER_FIELD_DATA"]
+	var attackerAction = attackDataPacket["ACTION"]
+	var isEnemy = attackerFieldData["IS_ENEMY"]
+	
+	var target = attackerAction["TARGET"]
+	var targetFieldData
+	var targetDisplay
+	
+	if target != "":
+		print("target")
+		targetFieldData = fieldData[target]
+		targetDisplay = targetFieldData["BATTLE_DISPLAY"]
+	
+	# I think ill split it like -> basic action -> nuances... -> player/enemy split
+	
+	match attackerAction["PRIMARY_ACTION"]:
+		"BasicAttack":
+			if !isEnemy:
+				
+				var weapon = PartyStats.partyDatabase[attacker]["EQUIPMENT"]["WEAPON"]
+				var weaponType = ItemDatabase.ITEM_DATABASE[weapon]["SPECIAL_DATA"]["WeaponType"]
+				# minigames 
+				
+				var specialWeapons = []
+				
+				var minigamePoints = 0
+				
+				if !(weapon in specialWeapons):
+					match weaponType:
+						"Sword":
+							
+							currentMinigameData = {
+								"currentDirection" = "up",
+								"currentSprite" = $Select
+							}
+							
+							battlePhase = battlePhases.SwordMinigame
+							var differentCombinations = {"ui_up" = 0, "ui_right" = 90, "ui_down" = 180, "ui_left" = 270} 
+							var randomCombo = [differentCombinations.keys().pick_random(), differentCombinations.keys().pick_random()]
+							
+							# first frame of animation here:
+							
+							# tweening minigame panel to expand
+							$MinigamePanel.visible = true
+							$MinigamePanel.position = targetDisplay.position + Vector2(-$MinigamePanel.size.x/2, 0)
+							$MinigamePanel.scale = Vector2(0, 1)
+							
+							var panelTween = get_tree().create_tween().tween_property($MinigamePanel, "scale", Vector2(1,1), 0.75).set_trans(Tween.TRANS_QUAD)
+							
+							await panelTween.finished
+							
+							var comboSprites = []
+							
+							var thresholds = { # if x is greater than threshold then its that judgment. loops through
+								"Miss" = 0,
+								"Okay" = 200,
+								"Good" = 360,
+								"Perfect" = 424
+							}
+							
+							var points = {
+								"Miss" = 0,
+								"Okay" = 40,
+								"Good" = 50,
+								"Perfect" = 60
+							}
+							
+							var spriteIndex = 0
+							
+							
+							for direction in randomCombo:
+								
+								var newCommandSprite = $MinigamePanel/SampleCommand.duplicate()
+								$MinigamePanel.add_child(newCommandSprite)
+								
+								newCommandSprite.position = Vector2(32, 40)
+								newCommandSprite.scale = Vector2(0, 0)
+								newCommandSprite.rotation_degrees = differentCombinations[direction]
+								newCommandSprite.set_meta("Direction", direction)
+								newCommandSprite.name = direction
+								
+								comboSprites.insert(spriteIndex, newCommandSprite)
+								spriteIndex += 1
+								
+							
+							var i = 0
+							
+							var spawnSprite = func(sprite, i):
+								print("SPAWNING SPRITE")
+								minigameHasConfirmed = false
+								
+								var currentSprite = sprite
+								currentMinigameData["currentSprite"] = currentSprite
+								
+								currentMinigameData["currentDirection"] = currentSprite.get_meta("Direction")
+								
+								currentSprite.visible = true
+								
+								var scaleTween = get_tree().create_tween()
+								scaleTween.tween_property(currentSprite, "scale", Vector2(2, 2), 0.3).set_trans(Tween.TRANS_QUAD)
+								
+								var positionTween = get_tree().create_tween()
+								positionTween.tween_property(currentSprite, "position", Vector2(456, 32), 0.8).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+										
+								await minigameConfirm
+								positionTween.kill()
+								
+								var transparencyTween = get_tree().create_tween()
+								transparencyTween.tween_property(comboSprites[i], "modulate", Color(1, 1, 1, 0), 0.5).set_trans(Tween.TRANS_QUAD)
+								
+								var pointsGained = 0
+								var judgementDecided = "Miss"
+								
+								for judgement in thresholds:
+									if currentSprite.position.x > thresholds[judgement]:
+										judgementDecided = judgement
+								
+								pointsGained = points[judgementDecided]
+								minigamePoints += pointsGained
+								
+								if judgementDecided != "Miss":
+									$Select.play()
+							
+							for sprite in comboSprites:
+								if i > 0:
+									await get_tree().create_timer(randf_range(0.5, 0.8)).timeout
+								spawnSprite.call(sprite, i)
+								i += 1
+								
+							await get_tree().create_timer(1.0).timeout
+							
+							var panelTween2 = get_tree().create_tween().tween_property($MinigamePanel, "scale", Vector2(0,1), 0.75).set_trans(Tween.TRANS_QUAD)
+							await get_tree().create_timer(1000.0).timeout
+			else:
+				var attackMessage = attackerAction["EXTRA_DATA"]["ENEMY_ATTACK_MESSAGE"]
+				pass
 # functions that are run until an action is decided! Only for the player's party.
 
 func basicSelection(memberName, memberFieldData):# this just keeps getting passed down (parameters) for special and item selection specifically
+	
+	
+	if $OptionsPanel.position != optionPanelTween[1]:
+		tweenOptions(true, .5)
+		
+	resetCurrentAttackPacket()
 	
 	$OptionsPanel/SubMenu.visible = false
 	optionStatus = false
@@ -423,6 +624,7 @@ func basicSelection(memberName, memberFieldData):# this just keeps getting passe
 	
 	if currentSelection == 1:
 		$Select.play()
+		currentAttackPacket["ACTION"]["PRIMARY_ACTION"] = "BasicAttack"
 		selectEnemy(memberName, memberFieldData)
 	else:
 		basicSelection(memberName, memberFieldData)
@@ -440,10 +642,15 @@ func selectEnemy(memberName, memberFieldData):
 	await optionSelected
 	
 	if optionStatus == true:
-		pass
+		# turn should always end with selecting an enmy/player.
+		currentAttackPacket["ACTION"]["TARGET"] = getEnemyFromSelection()
+		emit_signal("actionDecided")
+		tweenOptions(false, .5)
 	else:
 		basicSelection(memberName, memberFieldData) 
 		
+	$OptionsPanel/SubMenu.visible = false
+	
 	clearEnemyHighlights()
 	
 
@@ -451,7 +658,34 @@ func selectEnemy(memberName, memberFieldData):
 
 func buffer(time):
 	await get_tree().create_timer(time).timeout
-
+	
+func resetCurrentAttackPacket(): # void
+	currentAttackPacket = {
+		"ATTACKER_FIELD_DATA" = {
+			"CONDITIONS" = { 
+				"POISONED" = 0,
+				"BURNED" = 0 
+			},
+			"STAT_BUFFS" = {
+				"ATTACK" = {PercentBuff = 1, TurnsLeft = 0},
+				"DEFENSE" = {PercentBuff = 1, TurnsLeft = 0},
+				"SPEED" = {PercentBuff = 1, TurnsLeft = 0},
+				"AETHER_GAIN" = {PercentBuff = 1, TurnsLeft = 0}
+			},
+			"IS_ENEMY" = false,
+			"TURNS_WAITING" = 0,
+			"CONSECUTIVE_TURNS" = 0,
+			"BATTLE_DISPLAY" = ""
+		},
+		"ACTION" = {
+			"PRIMARY_ACTION" = "", # Can be: BasicAttack, SpecialAttack, Item, Defend. 
+			# leave blank if the thing being done doesn't require a target, or is targeting all enemies.
+			# Target should contain the participant's name, as with that we can get if they're an enemy or not from
+			# field data, and get stats from there.
+			"TARGET" = "",
+			"EXTRA_DATA" = {} # Extra Data that can be passed if needed, depending on the skill being used. Allows for expandability on the system.
+		}
+	}
 func battleStarted(id): # void, main battle loop as well.
 	$BattleIntro.play()
 	$BattleIntro.get_path()
@@ -462,7 +696,7 @@ func battleStarted(id): # void, main battle loop as well.
 	await get_tree().create_timer(3.8).timeout
 	
 	for child in get_children():
-		if child is Panel and child.name != "TextBoxPanel":
+		if child is Panel and child.name != "TextBoxPanel" and child.name != "MinigamePanel":
 			child.visible = true
 			
 			
@@ -484,15 +718,20 @@ func battleStarted(id): # void, main battle loop as well.
 		
 		if !attackerFieldData["IS_ENEMY"]:
 			# run the code for it being a player.
+			print("player attack")
 			basicSelection(currentAttacker, attackerFieldData)
+			
 			
 			print("ittsss " + currentAttacker + "'s turn!")
 			await actionDecided
+			currentAttackPacket["ATTACKER_FIELD_DATA"] = attackerFieldData
+			await attack(currentAttacker, currentAttackPacket)
 		else:
 			# run the code for it being an enemy
 			print("pretend the enemy went")
 			pass
-			
+		
+		
 		
 		isFirstTurn = false
 	
@@ -594,6 +833,13 @@ func clearEnemyHighlights():
 		
 func _process(delta): # void 
 	
+	# misc
+	match battlePhase:
+		battlePhases.SwordMinigame:
+			if currentMinigameData["currentSprite"] != $Select:
+				if currentMinigameData["currentSprite"].position.x > 455:
+					emit_signal("minigameConfirm")
+	
 	# keys
 	
 	# CONFIRM
@@ -606,6 +852,9 @@ func _process(delta): # void
 			emit_signal("textbox_continued")
 		match battlePhase:
 			battlePhases.SelectingBasics:
+				optionStatus = true
+				emit_signal("optionSelected")
+			battlePhases.SelectingEnemyParticipator:
 				optionStatus = true
 				emit_signal("optionSelected")
 	# CANCEL
@@ -621,12 +870,20 @@ func _process(delta): # void
 			battlePhases.SelectingBasics:
 				$MenuMovement.play()
 				currentSelection = 4 if currentSelection == 1 else currentSelection - 1
+			battlePhases.SwordMinigame:
+				if currentMinigameData["currentDirection"] == "ui_left":
+					minigameHasConfirmed = true
+					emit_signal("minigameConfirm")
 	# RIGHT
 	elif Input.is_action_just_pressed("ui_right"):
 		match battlePhase:
 			battlePhases.SelectingBasics:
 				$MenuMovement.play()
 				currentSelection = 1 if currentSelection == 4 else currentSelection + 1
+			battlePhases.SwordMinigame:
+				if currentMinigameData["currentDirection"] == "ui_right":
+					minigameHasConfirmed = true
+					emit_signal("minigameConfirm")
 	# UP
 	elif Input.is_action_just_pressed("ui_up"):
 		match battlePhase:
@@ -637,6 +894,10 @@ func _process(delta): # void
 				else:
 					selectionTracker["ENEMY_SELECTION"] -= 1
 				refreshEnemySelectionHighlights()
+			battlePhases.SwordMinigame:
+				if currentMinigameData["currentDirection"] == "ui_up":
+					minigameHasConfirmed = true
+					emit_signal("minigameConfirm")
 	# DOWN
 	elif Input.is_action_just_pressed("ui_down"):
 		match battlePhase:
@@ -647,6 +908,10 @@ func _process(delta): # void
 				else:
 					selectionTracker["ENEMY_SELECTION"] += 1
 				refreshEnemySelectionHighlights()
+			battlePhases.SwordMinigame:
+				if currentMinigameData["currentDirection"] == "ui_down":
+					minigameHasConfirmed = true
+					emit_signal("minigameConfirm")
 				
 	# Selection highlights
 	if battlePhase == battlePhases.SelectingBasics:
