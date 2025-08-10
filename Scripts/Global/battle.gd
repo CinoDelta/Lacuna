@@ -152,7 +152,7 @@ func playerSetup(): #I'll add aniamtion when i feel like it. void.
 		
 		displayAnimatedSprite.sprite_frames = load("res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/" + member + ".tres")
 				
-		displayAnimatedSprite.play(StringName("Debug")) # comment when we actually get animations PLACEHOLDER
+		displayAnimatedSprite.play(StringName("Idle")) # comment when we actually get animations PLACEHOLDER
 		
 		newDisplay.position = indexToBattlePosition[count]
 		
@@ -460,6 +460,8 @@ func attack(attacker, attackDataPacket):
 	var attackerAction = attackDataPacket["ACTION"]
 	var isEnemy = attackerFieldData["IS_ENEMY"]
 	
+	var attackerSprite = get_node(str(attackerFieldData["BATTLE_DISPLAY"].get_path()) + "/PSprite")
+	
 	var target = attackerAction["TARGET"]
 	var targetFieldData
 	var targetDisplay
@@ -483,6 +485,8 @@ func attack(attacker, attackDataPacket):
 				
 				var minigamePoints = 0
 				
+				attackerSprite.play(StringName("AttackHold"))
+				
 				if !(weapon in specialWeapons):
 					match weaponType:
 						"Sword":
@@ -492,9 +496,15 @@ func attack(attacker, attackDataPacket):
 								"currentSprite" = $Select
 							}
 							
+							var comboNumber = 2
+							
 							battlePhase = battlePhases.SwordMinigame
 							var differentCombinations = {"ui_up" = 0, "ui_right" = 90, "ui_down" = 180, "ui_left" = 270} 
-							var randomCombo = [differentCombinations.keys().pick_random(), differentCombinations.keys().pick_random()]
+							
+							var randomCombo
+							
+							for num in range(0, comboNumber):
+								randomCombo.insert(num, differentCombinations.keys().pick_random())
 							
 							# first frame of animation here:
 							
@@ -542,8 +552,9 @@ func attack(attacker, attackDataPacket):
 								
 							
 							var i = 0
+							var swordMinigameCompleted = false
 							
-							var spawnSprite = func(sprite, i):
+							var spawnSprite = func(sprite, index):
 								print("SPAWNING SPRITE")
 								minigameHasConfirmed = false
 								
@@ -563,11 +574,15 @@ func attack(attacker, attackDataPacket):
 								await minigameConfirm
 								positionTween.kill()
 								
+								var scaleTween2 = get_tree().create_tween()
+								scaleTween2.tween_property(currentSprite, "scale", Vector2(4, 4), 0.3).set_trans(Tween.TRANS_QUAD)
+								
 								var transparencyTween = get_tree().create_tween()
 								transparencyTween.tween_property(comboSprites[i], "modulate", Color(1, 1, 1, 0), 0.5).set_trans(Tween.TRANS_QUAD)
 								
 								var pointsGained = 0
 								var judgementDecided = "Miss"
+								var tintSprite = get_node(str(comboSprites[i].get_path()) + "/Tint")
 								
 								for judgement in thresholds:
 									if currentSprite.position.x > thresholds[judgement]:
@@ -577,7 +592,20 @@ func attack(attacker, attackDataPacket):
 								minigamePoints += pointsGained
 								
 								if judgementDecided != "Miss":
-									$Select.play()
+									$ComboHit.play()
+									
+								var tintTween = get_tree().create_tween()
+								var judgementToColor = {
+									"Miss" = Color(0.97, 0, 0, 0.5),
+									"Okay" = Color(0.97, 0.94, 0, 1),
+									"Good" = Color(0, 0.92, 0.25, 1),
+									"Perfect" = Color()
+								}
+								
+								tintTween.tween_property(tintSprite,"color", judgementToColor[judgementDecided], 0.5).set_trans(Tween.TRANS_QUAD)
+								
+								if index >= comboNumber - 1:
+									emit_signal("attackedEnded")
 							
 							for sprite in comboSprites:
 								if i > 0:
@@ -585,10 +613,22 @@ func attack(attacker, attackDataPacket):
 								spawnSprite.call(sprite, i)
 								i += 1
 								
-							await get_tree().create_timer(1.0).timeout
+									
+							await attackedEnded
 							
 							var panelTween2 = get_tree().create_tween().tween_property($MinigamePanel, "scale", Vector2(0,1), 0.75).set_trans(Tween.TRANS_QUAD)
+							
+							await get_tree().create_timer(0.5).timeout
+							
+							attackerSprite.play("Attack")
+							$SlashHit.play()
+							
+							await attackerSprite.animation_finished
+							
+							
 							await get_tree().create_timer(1000.0).timeout
+							
+						
 			else:
 				var attackMessage = attackerAction["EXTRA_DATA"]["ENEMY_ATTACK_MESSAGE"]
 				pass
@@ -895,7 +935,7 @@ func _process(delta): # void
 					selectionTracker["ENEMY_SELECTION"] -= 1
 				refreshEnemySelectionHighlights()
 			battlePhases.SwordMinigame:
-				if currentMinigameData["currentDirection"] == "ui_up":
+				if currentMinigameData["currentDirection"] == "ui_up" and currentMinigameData["currentSprite"].position.x > 60:
 					minigameHasConfirmed = true
 					emit_signal("minigameConfirm")
 	# DOWN

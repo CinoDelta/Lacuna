@@ -1,23 +1,82 @@
-[gd_resource type="SpriteFrames" load_steps=3 format=3 uid="uid://cfurixtwnp536"]
+[gd_resource type="SpriteFrames" load_steps=12 format=3 uid="uid://cfurixtwnp536"]
 
-[ext_resource type="Texture2D" uid="uid://dg3jpgwmdy5q0" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayer.png" id="1_252ut"]
-[ext_resource type="Texture2D" uid="uid://bydia2vibsmr7" path="res://Assets/Sprites/Player/OverworldSprites/Alistair/Idle_Down.png" id="2_6ov01"]
+[ext_resource type="Texture2D" uid="uid://c3tqvkrwhhhkv" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistar/BasicAttack/Attackhold.png" id="1_n322q"]
+[ext_resource type="Texture2D" uid="uid://c13o3h1k7xoxh" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistar/BasicAttack/AttackAnim-Sheet.png" id="1_rhyfg"]
+[ext_resource type="Texture2D" uid="uid://e22r6qt8n815" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistar/Idle/Idle-Sheet.png" id="2_oekyr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_20kjf"]
+atlas = ExtResource("1_rhyfg")
+region = Rect2(0, 0, 64, 84)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mhsab"]
+atlas = ExtResource("1_rhyfg")
+region = Rect2(64, 0, 64, 84)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0yuxt"]
+atlas = ExtResource("1_rhyfg")
+region = Rect2(128, 0, 64, 84)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yf5e2"]
+atlas = ExtResource("1_rhyfg")
+region = Rect2(192, 0, 64, 84)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ylxam"]
+atlas = ExtResource("1_rhyfg")
+region = Rect2(256, 0, 64, 84)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m0eeb"]
+atlas = ExtResource("1_rhyfg")
+region = Rect2(320, 0, 64, 84)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f73im"]
+atlas = ExtResource("2_oekyr")
+region = Rect2(0, 0, 64, 84)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k1je1"]
+atlas = ExtResource("2_oekyr")
+region = Rect2(64, 0, 64, 84)
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_252ut")
+"texture": SubResource("AtlasTexture_20kjf")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_mhsab")
+}, {
+"duration": 0.2,
+"texture": SubResource("AtlasTexture_0yuxt")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_yf5e2")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_ylxam")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_m0eeb")
+}],
+"loop": false,
+"name": &"Attack",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_n322q")
 }],
 "loop": true,
-"name": &"Debug",
+"name": &"AttackHold",
 "speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_6ov01")
+"texture": SubResource("AtlasTexture_f73im")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k1je1")
 }],
 "loop": true,
-"name": &"new_animation",
-"speed": 5.0
+"name": &"Idle",
+"speed": 2.0
 }]
