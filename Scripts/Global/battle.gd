@@ -269,7 +269,7 @@ func playSetupTweens(duration): # void
 	await tweenOrderPanel.finished
 	
 func tweenOptions(goIn, duration):
-	if goIn == false:
+	if goIn == true:
 		$OptionsPanel.position = optionPanelTween[0]
 		var tweenOptions = get_tree().create_tween()
 		tweenOptions.tween_property($OptionsPanel, "position", optionPanelTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
