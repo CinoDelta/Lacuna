@@ -13,6 +13,7 @@ signal participatorSelected
 signal attackedEnded
 # battle minigames
 signal minigameConfirm
+signal minigameCancel
 
 #built-in
 signal physics
@@ -501,7 +502,7 @@ func attack(attacker, attackDataPacket):
 							battlePhase = battlePhases.SwordMinigame
 							var differentCombinations = {"ui_up" = 0, "ui_right" = 90, "ui_down" = 180, "ui_left" = 270} 
 							
-							var randomCombo
+							var randomCombo = []
 							
 							for num in range(0, comboNumber):
 								randomCombo.insert(num, differentCombinations.keys().pick_random())
@@ -510,7 +511,7 @@ func attack(attacker, attackDataPacket):
 							
 							# tweening minigame panel to expand
 							$MinigamePanel.visible = true
-							$MinigamePanel.position = targetDisplay.position + Vector2(-$MinigamePanel.size.x/2, 0)
+							$MinigamePanel.position = targetDisplay.global_position + Vector2(-$MinigamePanel.size.x, -$MinigamePanel.size.y/2)
 							$MinigamePanel.scale = Vector2(0, 1)
 							
 							var panelTween = get_tree().create_tween().tween_property($MinigamePanel, "scale", Vector2(1,1), 0.75).set_trans(Tween.TRANS_QUAD)
@@ -558,18 +559,28 @@ func attack(attacker, attackDataPacket):
 								print("SPAWNING SPRITE")
 								minigameHasConfirmed = false
 								
+								
+								
+								sprite.visible = true
+								
+								
+								
+								var scaleTween = get_tree().create_tween()
+								scaleTween.tween_property(sprite, "scale", Vector2(2, 2), 0.3).set_trans(Tween.TRANS_QUAD)
+								
+								var positionTween = get_tree().create_tween()
+								positionTween.tween_property(sprite, "position", Vector2(456, 32), 0.8).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+								
+								if index > 0:
+									if randomCombo[index] != "":
+										print("i am waiting")
+										await minigameCancel
+										print("done waiting")
+									
 								var currentSprite = sprite
 								currentMinigameData["currentSprite"] = currentSprite
 								
 								currentMinigameData["currentDirection"] = currentSprite.get_meta("Direction")
-								
-								currentSprite.visible = true
-								
-								var scaleTween = get_tree().create_tween()
-								scaleTween.tween_property(currentSprite, "scale", Vector2(2, 2), 0.3).set_trans(Tween.TRANS_QUAD)
-								
-								var positionTween = get_tree().create_tween()
-								positionTween.tween_property(currentSprite, "position", Vector2(456, 32), 0.8).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 										
 								await minigameConfirm
 								positionTween.kill()
@@ -578,39 +589,50 @@ func attack(attacker, attackDataPacket):
 								scaleTween2.tween_property(currentSprite, "scale", Vector2(4, 4), 0.3).set_trans(Tween.TRANS_QUAD)
 								
 								var transparencyTween = get_tree().create_tween()
-								transparencyTween.tween_property(comboSprites[i], "modulate", Color(1, 1, 1, 0), 0.5).set_trans(Tween.TRANS_QUAD)
+								transparencyTween.tween_property(currentSprite, "modulate", Color(1, 1, 1, 0), 0.5).set_trans(Tween.TRANS_QUAD)
 								
 								var pointsGained = 0
 								var judgementDecided = "Miss"
-								var tintSprite = get_node(str(comboSprites[i].get_path()) + "/Tint")
+								var tintSprite = get_node(str(sprite.get_path()) + "/Tint")
 								
-								for judgement in thresholds:
-									if currentSprite.position.x > thresholds[judgement]:
-										judgementDecided = judgement
+								if minigameHasConfirmed == true:
+									for judgement in thresholds:
+										if currentSprite.position.x > thresholds[judgement]:
+											judgementDecided = judgement
 								
 								pointsGained = points[judgementDecided]
 								minigamePoints += pointsGained
 								
 								if judgementDecided != "Miss":
 									$ComboHit.play()
+								else:
+									pass
 									
-								var tintTween = get_tree().create_tween()
+								
 								var judgementToColor = {
 									"Miss" = Color(0.97, 0, 0, 0.5),
 									"Okay" = Color(0.97, 0.94, 0, 1),
 									"Good" = Color(0, 0.92, 0.25, 1),
-									"Perfect" = Color()
+									"Perfect" = Color(0.32, 1, 0.92, 0.5)
 								}
 								
-								tintTween.tween_property(tintSprite,"color", judgementToColor[judgementDecided], 0.5).set_trans(Tween.TRANS_QUAD)
+								var tintTween = get_tree().create_tween().tween_property(tintSprite, "color", judgementToColor[judgementDecided], 0.5)
+								
+								print('completed')
+								randomCombo[index] = ""
+								emit_signal("minigameCancel")
 								
 								if index >= comboNumber - 1:
+									print("emitted ")
 									emit_signal("attackedEnded")
+									
 							
 							for sprite in comboSprites:
 								if i > 0:
 									await get_tree().create_timer(randf_range(0.5, 0.8)).timeout
 								spawnSprite.call(sprite, i)
+#								print("cancel minigame")
+#								emit_signal("minigameCancel")
 								i += 1
 								
 									
@@ -911,8 +933,11 @@ func _process(delta): # void
 				$MenuMovement.play()
 				currentSelection = 4 if currentSelection == 1 else currentSelection - 1
 			battlePhases.SwordMinigame:
-				if currentMinigameData["currentDirection"] == "ui_left":
-					minigameHasConfirmed = true
+				minigameHasConfirmed = true
+				if currentMinigameData["currentDirection"] == "ui_left" and currentMinigameData["currentSprite"].position.x > 90:
+					emit_signal("minigameConfirm")
+				else:
+					minigameHasConfirmed = false
 					emit_signal("minigameConfirm")
 	# RIGHT
 	elif Input.is_action_just_pressed("ui_right"):
@@ -921,8 +946,11 @@ func _process(delta): # void
 				$MenuMovement.play()
 				currentSelection = 1 if currentSelection == 4 else currentSelection + 1
 			battlePhases.SwordMinigame:
-				if currentMinigameData["currentDirection"] == "ui_right":
-					minigameHasConfirmed = true
+				minigameHasConfirmed = true
+				if currentMinigameData["currentDirection"] == "ui_right" and currentMinigameData["currentSprite"].position.x > 90:
+					emit_signal("minigameConfirm")
+				else:
+					minigameHasConfirmed = false
 					emit_signal("minigameConfirm")
 	# UP
 	elif Input.is_action_just_pressed("ui_up"):
@@ -935,8 +963,11 @@ func _process(delta): # void
 					selectionTracker["ENEMY_SELECTION"] -= 1
 				refreshEnemySelectionHighlights()
 			battlePhases.SwordMinigame:
-				if currentMinigameData["currentDirection"] == "ui_up" and currentMinigameData["currentSprite"].position.x > 60:
-					minigameHasConfirmed = true
+				minigameHasConfirmed = true
+				if currentMinigameData["currentDirection"] == "ui_up" and currentMinigameData["currentSprite"].position.x > 90:
+					emit_signal("minigameConfirm")
+				else:
+					minigameHasConfirmed = false
 					emit_signal("minigameConfirm")
 	# DOWN
 	elif Input.is_action_just_pressed("ui_down"):
@@ -949,10 +980,12 @@ func _process(delta): # void
 					selectionTracker["ENEMY_SELECTION"] += 1
 				refreshEnemySelectionHighlights()
 			battlePhases.SwordMinigame:
-				if currentMinigameData["currentDirection"] == "ui_down":
-					minigameHasConfirmed = true
+				minigameHasConfirmed = true
+				if currentMinigameData["currentDirection"] == "ui_down" and currentMinigameData["currentSprite"].position.x > 90:
 					emit_signal("minigameConfirm")
-				
+				else:
+					minigameHasConfirmed = false
+					emit_signal("minigameConfirm")
 	# Selection highlights
 	if battlePhase == battlePhases.SelectingBasics:
 		var boxCounter = 1
