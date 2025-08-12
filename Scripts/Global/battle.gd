@@ -524,8 +524,8 @@ func attack(attacker, attackDataPacket):
 							var thresholds = { # if x is greater than threshold then its that judgment. loops through
 								"Miss" = 0,
 								"Okay" = 200,
-								"Good" = 360,
-								"Perfect" = 424
+								"Good" = 344,
+								"Perfect" = 418
 							}
 							
 							var points = {
@@ -570,7 +570,7 @@ func attack(attacker, attackDataPacket):
 								scaleTween.tween_property(sprite, "scale", Vector2(2, 2), 0.3 * comboSpeedMulti).set_trans(Tween.TRANS_QUAD)
 								
 								var positionTween = get_tree().create_tween()
-								positionTween.tween_property(sprite, "position", Vector2(456, 32), 0.8 * comboSpeedMulti).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+								positionTween.tween_property(sprite, "position", Vector2(468, 32), 0.8 * comboSpeedMulti).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 								
 								if index > 0:
 									if randomCombo[index-1] != "":
@@ -630,14 +630,15 @@ func attack(attacker, attackDataPacket):
 								if index >= comboNumber - 1:
 									print("emitted ")
 									emit_signal("attackedEnded")
-									
+								
+								await get_tree().create_timer(0.05).timeout
 								emit_signal("minigameCancel")
 								randomCombo[index] = ""
 								print(tintSprite.color)
 							
 							for sprite in comboSprites:
 								if i > 0:
-									await get_tree().create_timer(randf_range(0.5, 0.8) * comboSpeedMulti).timeout
+									await get_tree().create_timer(randf_range(0.4, 0.6) * comboSpeedMulti).timeout
 								spawnSprite.call(sprite, i)
 #								print("cancel minigame")
 #								emit_signal("minigameCancel")
@@ -909,7 +910,7 @@ func _process(delta): # void
 	match battlePhase:
 		battlePhases.SwordMinigame:
 			if currentMinigameData["currentSprite"] != $Select:
-				if currentMinigameData["currentSprite"].position.x > 455:
+				if currentMinigameData["currentSprite"].position.x > 467:
 					emit_signal("minigameConfirm")
 	
 	# keys

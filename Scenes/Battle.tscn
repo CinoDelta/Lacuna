@@ -536,11 +536,10 @@ pivot_offset = Vector2(464, 36)
 theme = ExtResource("2_edys4")
 
 [node name="SampleCommand" type="Sprite2D" parent="MinigamePanel"]
-visible = false
 clip_children = 2
 z_index = 1
 texture_filter = 1
-position = Vector2(100, 32)
+position = Vector2(464, 32)
 rotation = 4.71239
 scale = Vector2(2, 2)
 texture = ExtResource("21_f54aj")
@@ -557,18 +556,17 @@ metadata/_edit_lock_ = true
 
 [node name="PerfectJudgment" type="ColorRect" parent="MinigamePanel"]
 layout_mode = 0
-offset_left = 424.0
+offset_left = 416.0
 offset_top = 8.0
 offset_right = 464.0
 offset_bottom = 64.0
 color = Color(0.607843, 0.890196, 1, 0.823529)
-metadata/_edit_lock_ = true
 
 [node name="GoodJudgment" type="ColorRect" parent="MinigamePanel"]
 layout_mode = 0
-offset_left = 360.0
+offset_left = 344.0
 offset_top = 8.0
-offset_right = 424.0
+offset_right = 416.0
 offset_bottom = 64.0
 color = Color(0, 0.729412, 0.368627, 0.823529)
 metadata/_edit_lock_ = true
@@ -577,7 +575,7 @@ metadata/_edit_lock_ = true
 layout_mode = 0
 offset_left = 200.0
 offset_top = 8.0
-offset_right = 360.0
+offset_right = 344.0
 offset_bottom = 64.0
 color = Color(0.980392, 0.988235, 0.317647, 0.823529)
 metadata/_edit_lock_ = true
