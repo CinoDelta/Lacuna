@@ -910,6 +910,10 @@ func clearEnemyHighlights():
 		var enemyFieldDisplayHighlight = get_node(str(fieldData[enemy]["BATTLE_DISPLAY"].get_path()) + "/PSprite/Highlight")
 		enemyFieldDisplayHighlight.color = Color(1, 1, 1, 0)
 		
+
+# Minigame constants
+var missCoyoteFrames = 40
+		
 func _process(delta): # void 
 	
 	# misc
@@ -951,8 +955,8 @@ func _process(delta): # void
 				currentSelection = 4 if currentSelection == 1 else currentSelection - 1
 			battlePhases.SwordMinigame:
 				minigameHasConfirmed = true
-				if currentMinigameData["framesSinceMiss"] > 30:
-					if currentMinigameData["currentDirection"] == "ui_left" and currentMinigameData["framesSinceMiss"] > 30:
+				if currentMinigameData["framesSinceMiss"] > missCoyoteFrames:
+					if currentMinigameData["currentDirection"] == "ui_left":
 						emit_signal("minigameConfirm")
 					else:
 						minigameHasConfirmed = false
@@ -966,8 +970,8 @@ func _process(delta): # void
 				currentSelection = 1 if currentSelection == 4 else currentSelection + 1
 			battlePhases.SwordMinigame:
 				minigameHasConfirmed = true
-				if currentMinigameData["framesSinceMiss"] > 30:
-					if currentMinigameData["currentDirection"] == "ui_right" and currentMinigameData["framesSinceMiss"] > 30:
+				if currentMinigameData["framesSinceMiss"] > missCoyoteFrames:
+					if currentMinigameData["currentDirection"] == "ui_right":
 						emit_signal("minigameConfirm")
 					else:
 						minigameHasConfirmed = false
@@ -985,14 +989,14 @@ func _process(delta): # void
 				refreshEnemySelectionHighlights()
 			battlePhases.SwordMinigame:
 				minigameHasConfirmed = true
-				if currentMinigameData["framesSinceMiss"] > 30:
+				if currentMinigameData["framesSinceMiss"] > missCoyoteFrames:
 					if currentMinigameData["currentDirection"] == "ui_up":
 						emit_signal("minigameConfirm")
 					else:
 						minigameHasConfirmed = false
 						emit_signal("minigameConfirm")
 						currentMinigameData["framesSinceMiss"] = 0
-	# DOWN
+	# DOWNzx
 	elif Input.is_action_just_pressed("ui_down"):
 		match battlePhase:
 			battlePhases.SelectingEnemyParticipator:
@@ -1004,8 +1008,8 @@ func _process(delta): # void
 				refreshEnemySelectionHighlights()
 			battlePhases.SwordMinigame:
 				minigameHasConfirmed = true
-				if currentMinigameData["framesSinceMiss"] > 30:
-					if currentMinigameData["currentDirection"] == "ui_down" and currentMinigameData["framesSinceMiss"] > 30:
+				if currentMinigameData["framesSinceMiss"] > missCoyoteFrames:
+					if currentMinigameData["currentDirection"] == "ui_down":
 						emit_signal("minigameConfirm")
 					else:
 						minigameHasConfirmed = false
