@@ -454,7 +454,8 @@ stream = ExtResource("11_jo0um")
 [node name="BackgroundOverlay" type="Panel" parent="."]
 z_index = -10
 layout_mode = 0
-offset_right = 1168.0
+offset_left = -16.0
+offset_right = 1152.0
 offset_bottom = 648.0
 
 [node name="Debug" type="ColorRect" parent="BackgroundOverlay"]
@@ -536,10 +537,11 @@ pivot_offset = Vector2(464, 36)
 theme = ExtResource("2_edys4")
 
 [node name="SampleCommand" type="Sprite2D" parent="MinigamePanel"]
+visible = false
 clip_children = 2
 z_index = 1
 texture_filter = 1
-position = Vector2(464, 32)
+position = Vector2(24, 32)
 rotation = 4.71239
 scale = Vector2(2, 2)
 texture = ExtResource("21_f54aj")
@@ -561,6 +563,7 @@ offset_top = 8.0
 offset_right = 464.0
 offset_bottom = 64.0
 color = Color(0.607843, 0.890196, 1, 0.823529)
+metadata/_edit_lock_ = true
 
 [node name="GoodJudgment" type="ColorRect" parent="MinigamePanel"]
 layout_mode = 0
