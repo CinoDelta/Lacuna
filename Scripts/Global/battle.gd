@@ -117,6 +117,10 @@ var amountOfEnemies = 0
 var minigameHasConfirmed = false
 var currentMinigameData = {}
 
+#pre-load nodes
+
+@onready var battleCamera = $BattleCamera
+
 # built ins
 
 func _ready(): # void
@@ -129,7 +133,7 @@ func _ready(): # void
 	for child in $BackgroundOverlay.get_children():
 		child.visible = false
 	
-func _physics_process(delta):
+func _physics_process(_delta):
 	emit_signal("physics")
 	match battlePhase:
 		battlePhases.SwordMinigame:
@@ -197,6 +201,7 @@ func enemySetup(): # void
 			indexName = indexName + str(amountOfEnemy)
 		print("new name is " + indexName)
 		currentEnemies[indexName] = enemyData
+		currentEnemies[indexName]["REAL_NAME"] = enemyName
 		
 		var newDisplay = $EnemyDisplay/Sample.duplicate()
 		
@@ -209,7 +214,7 @@ func enemySetup(): # void
 		
 		displayAnimatedSprite.sprite_frames = load("res://Assets/Sprites/Battle/DisplaySprites/Enemies/" + enemyName + ".tres")
 		
-		displayAnimatedSprite.play(StringName("Debug")) # comment when we actually get animations PLACEHOLDER
+		displayAnimatedSprite.play(StringName("Idle")) # comment 
 		
 		newDisplay.position = indexToBattlePosition[count+4]
 		
@@ -225,8 +230,8 @@ func createNewFieldData(participant, isEnemy:bool, battleDisplay:Panel): # void
 			"BURNED" = 0 
 		},
 		"STAT_BUFFS" = {
-			"ATTACK" = {PercentBuff = 1, TurnsLeft = 0},
-			"DEFENSE" = {PercentBuff = 1, TurnsLeft = 0},
+			"ATTACK" = {PercentBuff = 1, FlatBuff = 0, TurnsLeft = 0},
+			"DEFENSE" = {PercentBuff = 1, FlatBuff = 0, TurnsLeft = 0},
 			"SPEED" = {PercentBuff = 1, TurnsLeft = 0},
 			"AETHER_GAIN" = {PercentBuff = 1, TurnsLeft = 0}
 		},
@@ -259,8 +264,8 @@ func playSetupTweens(duration): # void
 	$PlayerPanels.position = playerPanelsTween[0]
 	$OrderPanel.position = orderPanelTween[0]
 
-	var tweenOptions = get_tree().create_tween()
-	tweenOptions.tween_property($OptionsPanel, "position", optionPanelTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+	var tweenOptionsPanel = get_tree().create_tween()
+	tweenOptionsPanel.tween_property($OptionsPanel, "position", optionPanelTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 
 	
 	var tweenPlayerInfo = get_tree().create_tween()
@@ -275,14 +280,14 @@ func playSetupTweens(duration): # void
 func tweenOptions(goIn, duration):
 	if goIn == true:
 		$OptionsPanel.position = optionPanelTween[0]
-		var tweenOptions = get_tree().create_tween()
-		tweenOptions.tween_property($OptionsPanel, "position", optionPanelTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+		var tweenOptionsPanel = get_tree().create_tween()
+		tweenOptionsPanel.tween_property($OptionsPanel, "position", optionPanelTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	else:
 		$OptionsPanel.position = optionPanelTween[1]
-		var tweenOptions = get_tree().create_tween()
-		tweenOptions.tween_property($OptionsPanel, "position", optionPanelTween[0], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+		var tweenOptionsPanel = get_tree().create_tween()
+		tweenOptionsPanel.tween_property($OptionsPanel, "position", optionPanelTween[0], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	
-func setUpBattle(battleId): # void
+func setUpBattle(_battleId): # void
 	
 		
 	
@@ -290,22 +295,16 @@ func setUpBattle(battleId): # void
 	
 	get_node("BackgroundOverlay/" + battleData["BACKGROUND"]).visible = true
 	
-	await get_tree().create_timer(2)
+
 	
 	playerSetup()
 	enemySetup()
 	
 	PartyStats.inBattle = true
-	
-	await get_tree().create_timer(2)
-	
-	
 
 	
 	await playSetupTweens(.5)
-	
-	await get_tree().create_timer(4.0)
-	
+
 
 	
 	
@@ -457,6 +456,27 @@ func calculateOrder(refreshOrder, numOfTurns):
 #	}
 #}
 
+func shakeAnimatedSprite(sprite:AnimatedSprite2D, intensity:float, times:int, frequency:int): #frequency in seconds. o: void
+	var originalPosition = sprite.position 
+	
+	for i in range(0, times):
+		var randMovement = Vector2(randf_range(-intensity, intensity), randf_range(-intensity, intensity)) *(times - 1)/times
+		sprite.position = randMovement + originalPosition
+		await get_tree().create_timer(frequency).timeout
+	
+	sprite.position = originalPosition
+	
+func shakeCamera(intensity:float, times:int, frequency:int):
+	# the original position of the battle camera will always be 0 so...
+	
+	for i in range(0, times):
+		var randMovement = Vector2(randf_range(-intensity, intensity), randf_range(-intensity, intensity)) *(times - 1)/times
+		battleCamera.offset = randMovement
+		await get_tree().create_timer(frequency).timeout
+	
+	battleCamera.offset = Vector2(0,0)
+	
+
 func attack(attacker, attackDataPacket):
 	
 	# some useful info
@@ -469,11 +489,13 @@ func attack(attacker, attackDataPacket):
 	var target = attackerAction["TARGET"]
 	var targetFieldData
 	var targetDisplay
+	var targetSprite
 	
 	if target != "":
 		print("target")
 		targetFieldData = fieldData[target]
 		targetDisplay = targetFieldData["BATTLE_DISPLAY"]
+		targetSprite = get_node(str(targetDisplay.get_path()) + "/PSprite")
 	
 	# I think ill split it like -> basic action -> nuances... -> player/enemy split
 	
@@ -489,6 +511,7 @@ func attack(attacker, attackDataPacket):
 				
 				var minigamePoints = 0
 				
+				
 				attackerSprite.play(StringName("AttackHold"))
 				
 				if !(weapon in specialWeapons):
@@ -498,11 +521,13 @@ func attack(attacker, attackDataPacket):
 							currentMinigameData = {
 								"currentDirection" = "up",
 								"currentSprite" = $Select,
-								"framesSinceMiss" = 100
+								"framesSinceMiss" = 100,
+								"combo" = 0,
+								"points" = 0
 							}
 							
-							var comboNumber = 6
-							var comboSpeedMulti = 0.85 # LOWER MEANS FASTER
+							var comboNumber = 2
+							var comboSpeedMulti = 1 # LOWER MEANS FASTER
 							
 							battlePhase = battlePhases.SwordMinigame
 							var differentCombinations = {"ui_up" = 0, "ui_right" = 90, "ui_down" = 180, "ui_left" = 270} 
@@ -559,11 +584,13 @@ func attack(attacker, attackDataPacket):
 							
 							var i = 0
 							var swordMinigameCompleted = false
+							var lastJudgement = ""
+							
 							
 							var spawnSprite = func(sprite, index):
 								print("SPAWNING SPRITE")
 								minigameHasConfirmed = false
-								
+								var hit = false
 								
 								
 								sprite.visible = true
@@ -574,7 +601,7 @@ func attack(attacker, attackDataPacket):
 								scaleTween.tween_property(sprite, "scale", Vector2(2, 2), 0.3 * comboSpeedMulti).set_trans(Tween.TRANS_QUAD)
 								
 								var positionTween = get_tree().create_tween()
-								positionTween.tween_property(sprite, "position", Vector2(470, 32), 0.8 * comboSpeedMulti).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+								positionTween.tween_property(sprite, "position", Vector2(475, 32), 0.8 * comboSpeedMulti).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 								
 								if index > 0:
 									if randomCombo[index-1] != "":
@@ -584,11 +611,14 @@ func attack(attacker, attackDataPacket):
 									
 								var currentSprite = sprite
 								
+								if lastJudgement == "Miss":
+									currentMinigameData["framesSinceMiss"] = 0
 								
 								currentMinigameData["currentSprite"] = currentSprite
 								currentMinigameData["currentDirection"] = currentSprite.get_meta("Direction")
 								
-										
+								
+								
 								await minigameConfirm
 								positionTween.kill()
 								randomCombo[index] = ""
@@ -604,19 +634,28 @@ func attack(attacker, attackDataPacket):
 								var tintSprite = get_node(str(sprite.get_path()) + "/Tint")
 								
 								if minigameHasConfirmed == true:
+									hit = true
 									for judgement in thresholds:
 										if currentSprite.position.x > thresholds[judgement]:
 											judgementDecided = judgement
 								
 								pointsGained = points[judgementDecided]
-								minigamePoints += pointsGained
+								currentMinigameData["points"] += pointsGained
 								
 								if judgementDecided != "Miss":
+									
+									$ComboHit.pitch_scale = 1 + currentMinigameData["combo"]/5
+									print($ComboHit.pitch_scale)
 									$ComboHit.play()
 									print(judgementDecided)
-								else:
-									print(judgementDecided)
 									
+									currentMinigameData["combo"] += 1
+								else:
+									pass
+#									print(judgementDecided)
+#									comboPitch = 1
+									
+								lastJudgement = judgementDecided
 								
 								var judgementToColor = {
 									"Miss" = Color(0.97, 0, 0, 0.5),
@@ -641,11 +680,13 @@ func attack(attacker, attackDataPacket):
 								emit_signal("minigameCancel")
 								randomCombo[index] = ""
 								print(tintSprite.color)
+								return pointsGained
+							
 							
 							for sprite in comboSprites:
 								if i > 0:
 									await get_tree().create_timer(randf_range(0.4, 0.6) * comboSpeedMulti).timeout
-								spawnSprite.call(sprite, i)
+								spawnSprite.call(sprite, i) 
 #								print("cancel minigame")
 #								emit_signal("minigameCancel")
 								i += 1
@@ -660,7 +701,34 @@ func attack(attacker, attackDataPacket):
 							attackerSprite.play("Attack")
 							$SlashHit.play()
 							
-							await attackerSprite.animation_finished
+							
+							await get_tree().create_timer(0.5).timeout
+							
+							targetSprite.play("Hurt")
+							shakeAnimatedSprite(targetSprite, 6, 20, 0.02)
+							
+							$EnemyDamaged.stream = load("res://Assets/Sounds/Enemies/" + currentEnemies[target]["REAL_NAME"] + "/Hurt.mp3")
+							$EnemyDamaged.play()
+							
+							print(currentMinigameData["points"])
+							var allowCriticals = true if currentMinigameData["points"] >= 100 else false # remove minigame points if works
+							
+							var damageInfo = calculatebaseAttackDamage(PartyStats.getPartyMemberTrueStats(attacker)["ATTACK"], currentEnemies[target]["DEFENSE"], 2 * currentMinigameData["points"]/100, attackerFieldData, targetFieldData, allowCriticals)
+
+							currentEnemies[target]["HP"] -= damageInfo[0]
+							displayDamageNumber(damageInfo[0], targetDisplay.global_position, (damageInfo[1] == 2))
+							
+							if damageInfo[1] == 2: # critical attacks
+								pass
+							else: # normal damage numbers
+								pass
+							
+							print("total damage is: " + str(damageInfo[0]) + ". Done by attacker: " + attacker + ".")
+							await get_tree().create_timer(0.75).timeout
+							
+							attackerSprite.play("Idle")
+							targetSprite.play("Idle")
+							
 							
 							for sprite in comboSprites:
 								$MinigamePanel.remove_child(sprite)
@@ -735,6 +803,64 @@ func selectEnemy(memberName, memberFieldData):
 
 # util
 
+func calculatebaseAttackDamage(attackStat, defense, attackLevel, attackerFieldData, defenderFieldData, allowCriticalAttack):
+	var attackerBuffs = attackerFieldData["STAT_BUFFS"]
+	var defenderBuffs = defenderFieldData["STAT_BUFFS"]
+	var critical = 1
+	
+	attackStat *= attackerBuffs["ATTACK"].PercentBuff 
+	attackStat += attackerBuffs["ATTACK"].FlatBuff
+	
+	defense *= defenderBuffs["DEFENSE"].PercentBuff
+	defense += defenderBuffs["DEFENSE"].FlatBuff
+	
+	if allowCriticalAttack:
+		if !attackerFieldData["IS_ENEMY"]:
+			critical = 2 if (randi_range(1, 100) <= 10) else 1
+		else:
+			critical = 2 if (randi_range(1, 100) <= 5) else 1
+	
+	return [(attackStat * attackLevel * critical) - defense, critical]
+
+func displayDamageNumber(value: int, numPosition: Vector2, isCritical = false):
+	var number = Label.new()
+	number.global_position = numPosition
+	number.text = str(value)
+	number.z_index = 10
+	number.label_settings = LabelSettings.new()
+	
+	var color = Color(1, 1, 1, 1)
+	if isCritical:
+		color = Color(0.23, 0.23, 1, 1)
+	if value == 0:
+		color = Color(0.56, 0.56, 0.56, 1)
+		
+	number.label_settings.font_color = color
+	number.label_settings.font_size = 60
+	number.label_settings.outline_color = Color(0, 0, 0, 1)
+	number.label_settings.outline_size = 2
+	
+	add_child(number)
+	
+	await number.resized
+	number.pivot_offset = Vector2(number.size/2)
+	
+	var tween = get_tree().create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(
+		number, "position", Vector2(0, number.position.y - 80), 1
+	).set_ease(Tween.EASE_OUT)
+#	tween.tween_property(
+#		number, "position:y", number.position.y, 0.5
+#	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BOUNCE).set_delay(0.25)
+#	tween.tween_property(
+#		number, "scale", Vector2.ZERO, 0.25
+#	).set_ease(Tween.EASE_IN).set_delay(0.5)
+
+	
+	await tween.finished
+	number.queue_free()
+	
 func buffer(time):
 	await get_tree().create_timer(time).timeout
 	
@@ -746,8 +872,8 @@ func resetCurrentAttackPacket(): # void
 				"BURNED" = 0 
 			},
 			"STAT_BUFFS" = {
-				"ATTACK" = {PercentBuff = 1, TurnsLeft = 0},
-				"DEFENSE" = {PercentBuff = 1, TurnsLeft = 0},
+				"ATTACK" = {PercentBuff = 1, FlatBuff = 0, TurnsLeft = 0},
+				"DEFENSE" = {PercentBuff = 1, FlatBuff = 0, TurnsLeft = 0},
 				"SPEED" = {PercentBuff = 1, TurnsLeft = 0},
 				"AETHER_GAIN" = {PercentBuff = 1, TurnsLeft = 0}
 			},
@@ -825,6 +951,7 @@ func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):
 	
 	textBackground.size = Vector2(boxSize.x, 0)
 	textBoxText.text = ""
+	$TextBoxPanel.position = boxPosition
 	
 
 	$TextBoxPanel.show()
@@ -879,7 +1006,7 @@ func refreshEnemySelectionInfo(): # void
 	
 	for enemy in currentEnemies:
 		
-		var enemyData = fieldData[enemy] # just in case i wanna add more to the enemy display
+		var _enemyData = fieldData[enemy] # just in case i wanna add more to the enemy display
 		
 		var newInfo = sampleEnemyInf.duplicate()
 		displayEnemyInfo.add_child(newInfo)
@@ -912,16 +1039,15 @@ func clearEnemyHighlights():
 		
 
 # Minigame constants
-var missCoyoteFrames = 40
+var missCoyoteFrames = 45
 		
-func _process(delta): # void 
+func _process(_delta): # void 
 	
 	# misc
-	var coyoteFramesLeft = 1
 	match battlePhase:
 		battlePhases.SwordMinigame:
 			if currentMinigameData["currentSprite"] != $Select:
-				if currentMinigameData["currentSprite"].position.x > 467:
+				if currentMinigameData["currentSprite"].position.x > 473:
 					emit_signal("minigameConfirm")
 	# keys
 	
@@ -961,7 +1087,7 @@ func _process(delta): # void
 					else:
 						minigameHasConfirmed = false
 						emit_signal("minigameConfirm")
-						currentMinigameData["framesSinceMiss"] = 0
+						
 	# RIGHT
 	elif Input.is_action_just_pressed("ui_right"):
 		match battlePhase:
@@ -976,7 +1102,6 @@ func _process(delta): # void
 					else:
 						minigameHasConfirmed = false
 						emit_signal("minigameConfirm")
-						currentMinigameData["framesSinceMiss"] = 0
 	# UP
 	elif Input.is_action_just_pressed("ui_up"):
 		match battlePhase:
@@ -995,7 +1120,6 @@ func _process(delta): # void
 					else:
 						minigameHasConfirmed = false
 						emit_signal("minigameConfirm")
-						currentMinigameData["framesSinceMiss"] = 0
 	# DOWNzx
 	elif Input.is_action_just_pressed("ui_down"):
 		match battlePhase:
@@ -1014,7 +1138,6 @@ func _process(delta): # void
 					else:
 						minigameHasConfirmed = false
 						emit_signal("minigameConfirm")
-						currentMinigameData["framesSinceMiss"] = 0
 	# Selection highlights
 	if battlePhase == battlePhases.SelectingBasics:
 		var boxCounter = 1

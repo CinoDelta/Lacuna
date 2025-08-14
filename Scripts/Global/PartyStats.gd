@@ -103,6 +103,35 @@ func getPartyStats(memberName):
 		return partyDatabase[memberName]
 	return partyDatabase
 	
+func getPartyMemberTrueStats(memberName): #adding resistances later PLACEHOLDER o: table
+	var buffsTable = {
+		"ATTACK" = 0,
+		"DEFENSE" = 0,
+		"MAGIC" = 0,
+		"SPEED" = 0,
+		"RESISTANCES" = {}
+	}
+	for type in partyDatabase[memberName]["EQUIPMENT"]:
+		var itemName 
+		var itemData 
+		if type == "RINGS":
+			for ringPos in partyDatabase[memberName]["EQUIPMENT"]["RINGS"]:
+				var ringName = partyDatabase[memberName]["EQUIPMENT"]["RINGS"][ringPos]
+				var ringData = ItemDatabase.ITEM_DATABASE[ringName]
+				
+				buffsTable["ATTACK"] += ringData["SPECIAL_DATA"]["Buffs"]["ATTACK"]
+				buffsTable["DEFENSE"] += ringData["SPECIAL_DATA"]["Buffs"]["DEFENSE"]
+				buffsTable["MAGIC"] += ringData["SPECIAL_DATA"]["Buffs"]["MAGIC"]
+				buffsTable["SPEED"] += ringData["SPECIAL_DATA"]["Buffs"]["SPEED"]
+		else:
+			itemName = partyDatabase[memberName]["EQUIPMENT"][type]
+			itemData = ItemDatabase.ITEM_DATABASE[itemName]
+			buffsTable["ATTACK"] += itemData["SPECIAL_DATA"]["Buffs"]["ATTACK"]
+			buffsTable["DEFENSE"] += itemData["SPECIAL_DATA"]["Buffs"]["DEFENSE"]
+			buffsTable["MAGIC"] += itemData["SPECIAL_DATA"]["Buffs"]["MAGIC"]
+			buffsTable["SPEED"] += itemData["SPECIAL_DATA"]["Buffs"]["SPEED"]
+	return buffsTable
+		
 func canMemberLevelUp(memberName):
 	return partyDatabase[memberName]["EXP"] >= partyDatabase[memberName]["MAX_EXP"]
 	
@@ -198,7 +227,7 @@ func purge_state(ids_that_start_with: String):
 	for key in to_erase:
 		states.erase(key)
 
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_pressed("DebugLevelUp"):
 		for i in range(1, 101):
 			levelUp("Alistair")

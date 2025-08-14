@@ -14,7 +14,7 @@ func _ready():
 func _process(delta):
 	pass
 
-func battleTransition(id):
+func battleTransition(_id):
 	
 	player.set_meta("Cutscene", true)
 	

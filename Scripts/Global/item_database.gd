@@ -22,6 +22,29 @@ var ITEM_DATABASE = {
 	# AllPlayers
 	# OneEnemy
 	# AllEnemies
+	
+	"NONE" = {
+		"NAME" = "NONE",
+		"DESCRIPTION" = "NONE",
+		"ID" = 0, 
+		"TYPE" = 1,
+		"USE_TEXT" = "NONE",
+		"SPECIAL_DATA" = {
+			"Hand" = "NONE",
+			"WeaponType" = "NONE",
+			"Buffs" = {
+				"ATTACK" = 0,
+				"DEFENSE" = 0,
+				"MAGIC" = 0,
+				"SPEED" = 0,
+				"RESISTANCES" = {
+					"FIRE" = 0
+				},
+				"ABILITIES" = {} # none
+			}
+		}
+	},
+	
 	"TEST" = {
 		"NAME" = "Test Item",
 		"DESCRIPTION" = "The best item to ever exist. Heals 30 HP of one party member.",
@@ -57,6 +80,7 @@ var ITEM_DATABASE = {
 			"Buffs" = {
 				"ATTACK" = 3,
 				"DEFENSE" = 0,
+				"MAGIC" = 0,
 				"SPEED" = 0,
 				"RESISTANCES" = {
 					"FIRE" = 0

@@ -1,14 +1,23 @@
-[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://bsfw85cjfjyvg"]
+[gd_resource type="SpriteFrames" load_steps=3 format=3 uid="uid://bsfw85cjfjyvg"]
 
+[ext_resource type="Texture2D" uid="uid://c6p6ywt53j32f" path="res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy/Hurt/DebugBoyOuch.png" id="1_dccrf"]
 [ext_resource type="Texture2D" uid="uid://b61m2dxslc2gl" path="res://Assets/Sprites/MiscSprites/PlaceholderEnemy.png" id="1_kqjgc"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("1_dccrf")
+}],
+"loop": true,
+"name": &"Hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": ExtResource("1_kqjgc")
 }],
 "loop": true,
-"name": &"Debug",
+"name": &"Idle",
 "speed": 5.0
 }]

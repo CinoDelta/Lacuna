@@ -397,7 +397,7 @@ clip_children = 2
 texture_filter = 1
 scale = Vector2(2, 2)
 sprite_frames = ExtResource("8_xwmyp")
-animation = &"Debug"
+animation = &"Hurt"
 
 [node name="Highlight" type="ColorRect" parent="EnemyDisplay/Sample/PSprite"]
 anchors_preset = 8
@@ -454,27 +454,29 @@ stream = ExtResource("11_jo0um")
 [node name="BackgroundOverlay" type="Panel" parent="."]
 z_index = -10
 layout_mode = 0
-offset_left = -16.0
-offset_right = 1152.0
-offset_bottom = 648.0
+offset_left = -88.0
+offset_top = -56.0
+offset_right = 1240.0
+offset_bottom = 744.0
 
 [node name="Debug" type="ColorRect" parent="BackgroundOverlay"]
 layout_mode = 0
-offset_right = 1152.0
-offset_bottom = 648.0
+offset_right = 1304.0
+offset_bottom = 792.0
 color = Color(0, 0.905882, 0.101961, 1)
-metadata/_edit_lock_ = true
 
 [node name="ACertainGoddess" type="TextureRect" parent="BackgroundOverlay/Debug"]
 texture_filter = 1
 material = ExtResource("10_karwh")
 layout_mode = 0
-offset_right = 1240.0
-offset_bottom = 704.0
+offset_left = -152.0
+offset_top = -64.0
+offset_right = 628.0
+offset_bottom = 640.25
 scale = Vector2(2, 2)
 texture = ExtResource("10_y4552")
-stretch_mode = 2
-metadata/_edit_lock_ = true
+expand_mode = 5
+stretch_mode = 4
 
 [node name="TurnThatBrightnessDown" type="ColorRect" parent="BackgroundOverlay/Debug/ACertainGoddess"]
 layout_mode = 0
@@ -499,6 +501,11 @@ stream = ExtResource("19_vkxma")
 volume_db = 5.0
 
 [node name="SlashHit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("20_lnuma")
+volume_db = 3.0
+pitch_scale = 0.8
+
+[node name="EnemyDamaged" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("20_lnuma")
 volume_db = 3.0
 pitch_scale = 0.8
@@ -553,7 +560,7 @@ offset_left = -20.0
 offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
-color = Color(1, 1, 1, 0.619608)
+color = Color(1, 1, 1, 0.364706)
 metadata/_edit_lock_ = true
 
 [node name="PerfectJudgment" type="ColorRect" parent="MinigamePanel"]
@@ -591,3 +598,6 @@ offset_right = 200.0
 offset_bottom = 64.0
 color = Color(0.980392, 0.490196, 0.317647, 0.823529)
 metadata/_edit_lock_ = true
+
+[node name="BattleCamera" type="Camera2D" parent="."]
+position = Vector2(576, 324)
