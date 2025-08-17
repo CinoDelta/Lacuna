@@ -120,6 +120,7 @@ var currentMinigameData = {}
 #pre-load nodes
 
 @onready var battleCamera = $BattleCamera
+var battleFont = preload("res://Assets/Fonts/Tiny5-Regular.ttf")
 
 # built ins
 
@@ -838,28 +839,30 @@ func displayDamageNumber(value: int, numPosition: Vector2, isCritical = false):
 	number.label_settings.font_color = color
 	number.label_settings.font_size = 60
 	number.label_settings.outline_color = Color(0, 0, 0, 1)
-	number.label_settings.outline_size = 2
+	number.label_settings.outline_size = 5
+	number.label_settings.font = battleFont
 	
 	add_child(number)
 	
-	await number.resized
+	#await number.resized
 	number.pivot_offset = Vector2(number.size/2)
 	
-	var tween = get_tree().create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(
-		number, "position", Vector2(0, number.position.y - 80), 1
+	var newNumberTween = get_tree().create_tween()
+	var randXOffset = randi_range(-30, 30)
+
+	newNumberTween.tween_property(
+		number, "position", Vector2(number.position.x + randXOffset, number.position.y - 80), 0.25
 	).set_ease(Tween.EASE_OUT)
-#	tween.tween_property(
-#		number, "position:y", number.position.y, 0.5
-#	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BOUNCE).set_delay(0.25)
-#	tween.tween_property(
-#		number, "scale", Vector2.ZERO, 0.25
-#	).set_ease(Tween.EASE_IN).set_delay(0.5)
+	newNumberTween.tween_property(
+		number, "position", Vector2(number.position.x + randXOffset * 1.5, number.position.y), 1
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BOUNCE)
+	newNumberTween.tween_property(
+		number, "scale", Vector2(0, 1), 0.2
+	).set_ease(Tween.EASE_IN)
 
 	
-	await tween.finished
-	number.queue_free()
+	#await tween.finished
+	#number.queue_free()
 	
 func buffer(time):
 	await get_tree().create_timer(time).timeout

@@ -1,4 +1,4 @@
-res://Scenes/Battle.tscn
+res://Scenes/starting_area.tscn
 res://Scripts/Global/battle.gd
 res://Scripts/Player.gd
 res://Assets/Themes/BasicBox.tres
@@ -7,3 +7,6 @@ res://Assets/Themes/basicText.tres
 res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistair.tres
 res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.gdshader
 res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres
+res://Scenes/Battle.tscn
+res://Scenes/Player.tscn
+res://Scenes/MainMusicChannel.tscn
