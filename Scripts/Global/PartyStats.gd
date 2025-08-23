@@ -90,7 +90,6 @@ func addItemToInv(itemName): #extends createNewItem
 	var newItem = ItemDatabase.createNewItem(itemName) #super
 	inventory[newItem["UID"]] = newItem
 
-
 func removeItemFromInv(UID:String):
 	for item in inventory:
 		if inventory[item]["UID"] == UID:

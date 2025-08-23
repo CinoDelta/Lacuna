@@ -1,6 +1,8 @@
 extends Node
 
-# Naming convention: 
+# BasicAttack effects:
+# GroundShockwave
+# Normal
 var enemiesInfo = {
 	"DebugBoy" = {
 		"NAME" = "Debug Boy",
@@ -15,6 +17,15 @@ var enemiesInfo = {
 		"AETHER_GAIN" = 7,
 		"TYPEMODIFIERS" = {
 			"FIRE" = 0.5 # 50% less damage taken from fire based moves (will add more later
+		},
+		"MOVEPOOL" = {
+			"ShockwaveAttack" = { # first, the name of the attack
+				"TYPE" = "BasicAttack", # the type of attack.
+				"CHANCE" = 100, # The chance BEFORE modification based on the status of the enemy.
+				"ATTACK_MESSAGE" = "%u sent a shockwave!", #attack message, u will be replaced by the attacker's name
+				"ATTACK_EFFECT" = "GroundShockwave", # the effect of the attack, changes what the attack function does before applying damage
+				"ATTACK_LEVEL" = 2 # level of the attack
+			}
 		}
 	}
 }

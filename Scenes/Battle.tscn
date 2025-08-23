@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dffw7ogio4hw6"]
+[gd_scene load_steps=29 format=3 uid="uid://dffw7ogio4hw6"]
 
 [ext_resource type="Script" path="res://Scripts/Global/battle.gd" id="1_s088x"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
@@ -17,12 +17,14 @@
 [ext_resource type="Material" uid="uid://b0mad586t5q10" path="res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres" id="10_karwh"]
 [ext_resource type="Texture2D" uid="uid://cwff51t3lrprl" path="res://Assets/Sprites/Battle/Backgrounds/Debug.png" id="10_y4552"]
 [ext_resource type="AudioStream" uid="uid://bsuu6vxtit4ai" path="res://Assets/Sounds/DefaultTextBox.mp3" id="11_jo0um"]
+[ext_resource type="SpriteFrames" uid="uid://c6h4qmojqggf7" path="res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres" id="14_gecb5"]
 [ext_resource type="AudioStream" uid="uid://bl6gi1l2jipge" path="res://Assets/Sounds/Select.ogg" id="15_2i87i"]
 [ext_resource type="AudioStream" uid="uid://k3npac10xllp" path="res://Assets/Sounds/menuMovement.ogg" id="19_b4msy"]
 [ext_resource type="AudioStream" uid="uid://b5hwl1wyq1t6e" path="res://Assets/Sounds/ComboHit.mp3" id="19_vkxma"]
 [ext_resource type="AudioStream" uid="uid://badqmlix4xsgi" path="res://Assets/Sounds/Encounter.ogg" id="20_0jskv"]
 [ext_resource type="AudioStream" uid="uid://b87tkiuf0ao5r" path="res://Assets/Sounds/SlashHit.mp3" id="20_lnuma"]
 [ext_resource type="Texture2D" uid="uid://ck6bxoqr0dq3g" path="res://Assets/Sprites/Battle/Minigames/UpCommand.png" id="21_f54aj"]
+[ext_resource type="AudioStream" uid="uid://c3xk6eyo1833r" path="res://Assets/Sounds/Sfx/PlayerAttacks.ogg" id="22_5cb5q"]
 [ext_resource type="AudioStream" uid="uid://3y3na1wmph0a" path="res://Assets/Sounds/WallowingWisps.ogg" id="22_m28db"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u2i3t"]
@@ -375,6 +377,12 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
 
+[node name="EffectsSprite" type="AnimatedSprite2D" parent="PlayerDisplay/Sample"]
+texture_filter = 1
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("14_gecb5")
+animation = &"Nothing"
+
 [node name="EnemyDisplay" type="Panel" parent="."]
 z_index = 1
 layout_mode = 0
@@ -397,7 +405,8 @@ clip_children = 2
 texture_filter = 1
 scale = Vector2(2, 2)
 sprite_frames = ExtResource("8_xwmyp")
-animation = &"Hurt"
+animation = &"Idle"
+frame_progress = 0.76483
 
 [node name="Highlight" type="ColorRect" parent="EnemyDisplay/Sample/PSprite"]
 anchors_preset = 8
@@ -412,6 +421,12 @@ offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
+
+[node name="EffectsSprite" type="AnimatedSprite2D" parent="EnemyDisplay/Sample"]
+texture_filter = 1
+scale = Vector2(2, 2)
+sprite_frames = ExtResource("14_gecb5")
+animation = &"Nothing"
 
 [node name="TextBoxPanel" type="Panel" parent="."]
 visible = false
@@ -508,6 +523,11 @@ pitch_scale = 0.8
 [node name="EnemyDamaged" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("20_lnuma")
 volume_db = 3.0
+pitch_scale = 0.8
+
+[node name="EnemyAttacking" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("22_5cb5q")
+volume_db = 13.0
 pitch_scale = 0.8
 
 [node name="MenuMovement" type="AudioStreamPlayer" parent="."]

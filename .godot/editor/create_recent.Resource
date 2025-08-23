@@ -1,5 +1,5 @@
+SpriteFrames
 Theme
 StyleBoxFlat
 Shader
 ShaderMaterial
-SpriteFrames

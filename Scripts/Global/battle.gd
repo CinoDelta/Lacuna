@@ -339,7 +339,15 @@ var turnOrder = []
 
 func calculateOrder(refreshOrder, numOfTurns):
 	
-	turnOrder = [] if refreshOrder else turnOrder
+	# the party member with the fastest speed goes first in a battle always
+	if refreshOrder:
+		var fastestSpeed = 0
+		var fastestPerson = ""
+		for member in PartyStats.currentPartyMembers:
+			if PartyStats.partyDatabase[member]["SPEED"] > fastestSpeed:
+				fastestPerson = PartyStats.partyDatabase[member]["NAME"]
+				fastestSpeed = PartyStats.partyDatabase[member]["SPEED"]
+		turnOrder = [fastestPerson]
 	
 	# pre calculation (Are there people that haven't moved for 5 turns
 	
@@ -484,19 +492,23 @@ func attack(attacker, attackDataPacket):
 	var attackerFieldData = attackDataPacket["ATTACKER_FIELD_DATA"]
 	var attackerAction = attackDataPacket["ACTION"]
 	var isEnemy = attackerFieldData["IS_ENEMY"]
+	var extraData = attackerAction["EXTRA_DATA"]
 	
 	var attackerSprite = get_node(str(attackerFieldData["BATTLE_DISPLAY"].get_path()) + "/PSprite")
+	var attackerEffects = get_node(str(attackerFieldData["BATTLE_DISPLAY"].get_path()) + "/EffectsSprite")
 	
 	var target = attackerAction["TARGET"]
 	var targetFieldData
 	var targetDisplay
 	var targetSprite
+	var targetEffects 
 	
 	if target != "":
 		print("target")
 		targetFieldData = fieldData[target]
 		targetDisplay = targetFieldData["BATTLE_DISPLAY"]
 		targetSprite = get_node(str(targetDisplay.get_path()) + "/PSprite")
+		targetEffects = get_node(str(targetDisplay.get_path()) + "/EffectsSprite")
 	
 	# I think ill split it like -> basic action -> nuances... -> player/enemy split
 	
@@ -648,7 +660,6 @@ func attack(attacker, attackDataPacket):
 									$ComboHit.pitch_scale = 1 + currentMinigameData["combo"]/5
 									print($ComboHit.pitch_scale)
 									$ComboHit.play()
-									print(judgementDecided)
 									
 									currentMinigameData["combo"] += 1
 								else:
@@ -701,6 +712,7 @@ func attack(attacker, attackDataPacket):
 							
 							attackerSprite.play("Attack")
 							$SlashHit.play()
+							targetEffects.play("Slash")
 							
 							
 							await get_tree().create_timer(0.5).timeout
@@ -717,7 +729,7 @@ func attack(attacker, attackDataPacket):
 							var damageInfo = calculatebaseAttackDamage(PartyStats.getPartyMemberTrueStats(attacker)["ATTACK"], currentEnemies[target]["DEFENSE"], 2 * currentMinigameData["points"]/100, attackerFieldData, targetFieldData, allowCriticals)
 
 							currentEnemies[target]["HP"] -= damageInfo[0]
-							displayDamageNumber(damageInfo[0], targetDisplay.global_position, (damageInfo[1] == 2))
+							displayStatus(damageInfo[0], targetDisplay.global_position, "damage", 1, (damageInfo[1] == 2))
 							
 							if damageInfo[1] == 2: # critical attacks
 								pass
@@ -730,16 +742,41 @@ func attack(attacker, attackDataPacket):
 							attackerSprite.play("Idle")
 							targetSprite.play("Idle")
 							
+							targetEffects.play("Nothing")
 							
 							for sprite in comboSprites:
 								$MinigamePanel.remove_child(sprite)
-							
-							await get_tree().create_timer(1000.0).timeout
-							
-						
 			else:
-				var attackMessage = attackerAction["EXTRA_DATA"]["ENEMY_ATTACK_MESSAGE"]
-				pass
+				var attackMessage:String = extraData["ATTACK_MESSAGE"]
+				
+				print(attackMessage)
+				
+				$EnemyAttacking.play()
+				displayStatus(attackMessage.replace("%u", attacker), attackerSprite.global_position, "moveStatus", -1, false)
+				
+				await get_tree().create_timer(3).timeout
+				
+				# attack effects 
+				
+				match extraData["ATTACK_EFFECT"]:
+					"GroundShockwave":
+						$SlashHit.play()
+						await get_tree().create_timer(0.75).timeout
+				
+				targetSprite.play("Hurt")
+				shakeAnimatedSprite(targetSprite, 6, 20, 0.02)
+				
+				# attack damage 
+				
+				var damageInfo = calculatebaseAttackDamage(currentEnemies[attacker]["ATTACK"], PartyStats.partyDatabase[target]["DEFENSE"], extraData["ATTACK_LEVEL"], attackerFieldData, targetFieldData, true)
+				
+				PartyStats.partyDatabase[target]["HP"] -= damageInfo[0]
+				displayStatus(damageInfo[0], targetDisplay.global_position, "damage", 1, (damageInfo[1] == 2))
+				
+				await get_tree().create_timer(.5).timeout
+				
+				targetSprite.play("Idle")
+				
 # functions that are run until an action is decided! Only for the player's party.
 
 func basicSelection(memberName, memberFieldData):# this just keeps getting passed down (parameters) for special and item selection specifically
@@ -823,43 +860,61 @@ func calculatebaseAttackDamage(attackStat, defense, attackLevel, attackerFieldDa
 	
 	return [(attackStat * attackLevel * critical) - defense, critical]
 
-func displayDamageNumber(value: int, numPosition: Vector2, isCritical = false):
+func displayStatus(value, numPosition: Vector2, status = "nothing", statusDirection = 1, isCritical = false):
+	
 	var number = Label.new()
 	number.global_position = numPosition
-	number.text = str(value)
 	number.z_index = 10
 	number.label_settings = LabelSettings.new()
 	
-	var color = Color(1, 1, 1, 1)
-	if isCritical:
-		color = Color(0.23, 0.23, 1, 1)
-	if value == 0:
-		color = Color(0.56, 0.56, 0.56, 1)
-		
-	number.label_settings.font_color = color
-	number.label_settings.font_size = 60
 	number.label_settings.outline_color = Color(0, 0, 0, 1)
-	number.label_settings.outline_size = 5
+	number.label_settings.outline_size = 10
 	number.label_settings.font = battleFont
-	
-	add_child(number)
-	
-	#await number.resized
 	number.pivot_offset = Vector2(number.size/2)
+			
 	
-	var newNumberTween = get_tree().create_tween()
-	var randXOffset = randi_range(-30, 30)
+	match status:
+		"damage":
+			number.text = str(value)
+			number.label_settings.font_size = 60
+			
+			var color = Color(1, 1, 1, 1)
+			if isCritical:
+				color = Color(0.23, 0.23, 1, 1)
+			if value == 0:
+				color = Color(0.56, 0.56, 0.56, 1)
+				
+			number.label_settings.font_color = color
+			
+			add_child(number)
+			
+			var newNumberTween = get_tree().create_tween()
+			var randXOffset = randi_range(-30, 30)
 
-	newNumberTween.tween_property(
-		number, "position", Vector2(number.position.x + randXOffset, number.position.y - 80), 0.25
-	).set_ease(Tween.EASE_OUT)
-	newNumberTween.tween_property(
-		number, "position", Vector2(number.position.x + randXOffset * 1.5, number.position.y), 1
-	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BOUNCE)
-	newNumberTween.tween_property(
-		number, "scale", Vector2(0, 1), 0.2
-	).set_ease(Tween.EASE_IN)
+			newNumberTween.tween_property(
+				number, "position", Vector2(number.position.x + randXOffset, number.position.y - 80), 0.25
+			).set_ease(Tween.EASE_OUT)
+			newNumberTween.tween_property(
+				number, "position", Vector2(number.position.x + randXOffset * 1.5, number.position.y), 1
+			).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BOUNCE)
+			newNumberTween.tween_property(
+				number, "scale", Vector2(0, 1), 0.2
+			).set_ease(Tween.EASE_IN)
+		"moveStatus":
+			number.text = value
+			number.label_settings.font_color = Color(1,1,1,1)
+			number.label_settings.font_size = 30
+			
+			add_child(number)
+			var newNumberTween = get_tree().create_tween()
 
+			newNumberTween.tween_property(
+				number, "position", Vector2(number.position.x + 160 * statusDirection, number.position.y - 80), .25
+			).set_ease(Tween.EASE_OUT)
+			
+			newNumberTween.tween_property(
+				number, "scale", Vector2(0, 1), 0.2
+			).set_ease(Tween.EASE_IN).set_delay(.7)
 	
 	#await tween.finished
 	#number.queue_free()
@@ -894,6 +949,16 @@ func resetCurrentAttackPacket(): # void
 			"EXTRA_DATA" = {} # Extra Data that can be passed if needed, depending on the skill being used. Allows for expandability on the system.
 		}
 	}
+
+func chooseRandomPlayer():
+	var playerList:Array = PartyStats.currentPartyMembers
+	
+	for index in playerList:
+		if PartyStats.partyDatabase[index]["HP"] < 0:
+			playerList.pop_at(index)
+	
+	return playerList.pick_random()
+
 func battleStarted(id): # void, main battle loop as well.
 	$BattleIntro.play()
 	$BattleIntro.get_path()
@@ -924,20 +989,64 @@ func battleStarted(id): # void, main battle loop as well.
 		
 		var attackerFieldData = fieldData[currentAttacker] # for getting. for setting, just get index normally.
 		
+		
+		print("ittsss " + currentAttacker + "'s turn!")
+		
 		if !attackerFieldData["IS_ENEMY"]:
 			# run the code for it being a player.
 			print("player attack")
 			basicSelection(currentAttacker, attackerFieldData)
 			
-			
-			print("ittsss " + currentAttacker + "'s turn!")
 			await actionDecided
 			currentAttackPacket["ATTACKER_FIELD_DATA"] = attackerFieldData
 			await attack(currentAttacker, currentAttackPacket)
 		else:
-			# run the code for it being an enemy
-			print("pretend the enemy went")
-			pass
+
+		
+			currentAttackPacket["ATTACKER_FIELD_DATA"] = attackerFieldData
+			
+			var movePool = currentEnemies[currentAttacker]["MOVEPOOL"]
+			
+			var chanceTable = {}
+			var totalWeight = 0
+			
+			# ok enemy ai stuff
+			
+			# setting up the chances 
+			for possibleAttack in movePool:
+				var baseChance = movePool[possibleAttack]["CHANCE"]
+				
+				# Here is where later, chances will be modified depending on the enemies status
+
+				chanceTable[possibleAttack] = baseChance
+				totalWeight += baseChance
+			
+			var randomChance = randi_range(1, totalWeight)
+			var chosenAttack = ""
+			
+			for possibility in chanceTable:
+				randomChance -= chanceTable[possibility]
+				if randomChance <= 0:
+					chosenAttack = possibility
+					break
+					
+			var chosenAttackData = movePool[chosenAttack]
+			
+			currentAttackPacket["ACTION"]["PRIMARY_ACTION"] = chosenAttackData["TYPE"]
+			#"ATTACK_MESSAGE"
+			#"ATTACK_EFFECT" 
+			#"ATTACK_LEVEL"
+			
+			if chosenAttackData["TYPE"] == "BasicAttack":
+				currentAttackPacket["ACTION"]["EXTRA_DATA"]["ATTACK_MESSAGE"] = chosenAttackData["ATTACK_MESSAGE"]
+				currentAttackPacket["ACTION"]["EXTRA_DATA"]["ATTACK_EFFECT"] = chosenAttackData["ATTACK_EFFECT"]
+				currentAttackPacket["ACTION"]["EXTRA_DATA"]["ATTACK_LEVEL"] = chosenAttackData["ATTACK_LEVEL"]
+				# Ok lets choose a target.
+				currentAttackPacket["ACTION"]["TARGET"] = chooseRandomPlayer()
+				# all ready to go! :D
+				
+			
+			await attack(currentAttacker, currentAttackPacket)
 		
 		
 		

@@ -1,0 +1,47 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://c6h4qmojqggf7"]
+
+[ext_resource type="Texture2D" uid="uid://c31h5kre8e8ky" path="res://Assets/Sprites/Battle/Effects/SlashSheet.png" id="1_pcufq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dsoma"]
+atlas = ExtResource("1_pcufq")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_31jhh"]
+atlas = ExtResource("1_pcufq")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_62lex"]
+atlas = ExtResource("1_pcufq")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l58ij"]
+atlas = ExtResource("1_pcufq")
+region = Rect2(192, 0, 64, 64)
+
+[resource]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"Nothing",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 0.8,
+"texture": SubResource("AtlasTexture_dsoma")
+}, {
+"duration": 0.2,
+"texture": SubResource("AtlasTexture_31jhh")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_62lex")
+}, {
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_l58ij")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"Slash",
+"speed": 5.0
+}]

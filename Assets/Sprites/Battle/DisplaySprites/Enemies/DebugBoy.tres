@@ -1,7 +1,15 @@
-[gd_resource type="SpriteFrames" load_steps=3 format=3 uid="uid://bsfw85cjfjyvg"]
+[gd_resource type="SpriteFrames" load_steps=5 format=3 uid="uid://bsfw85cjfjyvg"]
 
 [ext_resource type="Texture2D" uid="uid://c6p6ywt53j32f" path="res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy/Hurt/DebugBoyOuch.png" id="1_dccrf"]
-[ext_resource type="Texture2D" uid="uid://b61m2dxslc2gl" path="res://Assets/Sprites/MiscSprites/PlaceholderEnemy.png" id="1_kqjgc"]
+[ext_resource type="Texture2D" uid="uid://cxx1gr2yki1lf" path="res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy/Idle/Idle.png" id="2_udkmw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jlenj"]
+atlas = ExtResource("2_udkmw")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t1fan"]
+atlas = ExtResource("2_udkmw")
+region = Rect2(64, 0, 64, 64)
 
 [resource]
 animations = [{
@@ -15,9 +23,12 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_kqjgc")
+"texture": SubResource("AtlasTexture_jlenj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t1fan")
 }],
 "loop": true,
 "name": &"Idle",
-"speed": 5.0
+"speed": 3.0
 }]
