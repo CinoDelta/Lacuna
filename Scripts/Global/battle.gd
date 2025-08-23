@@ -912,9 +912,22 @@ func displayStatus(value, numPosition: Vector2, status = "nothing", statusDirect
 				number, "position", Vector2(number.position.x + 160 * statusDirection, number.position.y - 80), .25
 			).set_ease(Tween.EASE_OUT)
 			
+			await newNumberTween.finished
+			
+			
+			await get_tree().create_timer(.75).timeout
+			
+			var secondNumberTween = get_tree().create_tween()
+
 			newNumberTween.tween_property(
-				number, "scale", Vector2(0, 1), 0.2
-			).set_ease(Tween.EASE_IN).set_delay(.7)
+				number.label_settings, "font_color", Color(1, 1, 1, 0), 0.2
+			)
+			newNumberTween.parallel().tween_property(
+				number.label_settings, "outline_color", Color(1, 1, 1, 0), 0.2
+			)
+			
+			
+			
 	
 	#await tween.finished
 	#number.queue_free()
