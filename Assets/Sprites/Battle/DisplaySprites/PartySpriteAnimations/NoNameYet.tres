@@ -1,9 +1,9 @@
 [gd_resource type="SpriteFrames" load_steps=13 format=3 uid="uid://cfurixtwnp536"]
 
-[ext_resource type="Texture2D" uid="uid://c3tqvkrwhhhkv" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistar/BasicAttack/Attackhold.png" id="1_n322q"]
-[ext_resource type="Texture2D" uid="uid://c13o3h1k7xoxh" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistar/BasicAttack/AttackAnim-Sheet.png" id="1_rhyfg"]
-[ext_resource type="Texture2D" uid="uid://e22r6qt8n815" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistar/Idle/Idle-Sheet.png" id="2_oekyr"]
-[ext_resource type="Texture2D" uid="uid://c4uyugovvb7d4" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistar/Hurt/Hurt.png" id="3_p26ei"]
+[ext_resource type="Texture2D" uid="uid://c3tqvkrwhhhkv" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet/BasicAttack/Attackhold.png" id="1_n322q"]
+[ext_resource type="Texture2D" uid="uid://c13o3h1k7xoxh" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet/BasicAttack/AttackAnim-Sheet.png" id="1_rhyfg"]
+[ext_resource type="Texture2D" uid="uid://e22r6qt8n815" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet/Idle/Idle-Sheet.png" id="2_oekyr"]
+[ext_resource type="Texture2D" uid="uid://c4uyugovvb7d4" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet/Hurt/Hurt.png" id="3_p26ei"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_20kjf"]
 atlas = ExtResource("1_rhyfg")

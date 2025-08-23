@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bydia2vibsmr7"
-path="res://.godot/imported/Idle_Down.png-85f4ffb6674be3605ae6842bd61552a2.ctex"
+path="res://.godot/imported/Idle_Down.png-11a1ff29e60986f7c78d3d70fd8410a1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Player/OverworldSprites/Alistair/Idle_Down.png"
-dest_files=["res://.godot/imported/Idle_Down.png-85f4ffb6674be3605ae6842bd61552a2.ctex"]
+source_file="res://Assets/Sprites/Player/OverworldSprites/NoNameYet/Idle_Down.png"
+dest_files=["res://.godot/imported/Idle_Down.png-11a1ff29e60986f7c78d3d70fd8410a1.ctex"]
 
 [params]
 

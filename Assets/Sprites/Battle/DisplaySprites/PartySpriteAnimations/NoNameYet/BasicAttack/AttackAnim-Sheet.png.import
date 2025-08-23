@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3tqvkrwhhhkv"
-path="res://.godot/imported/Attackhold.png-b1dc73049ca0498771626633a3eee2da.ctex"
+uid="uid://c13o3h1k7xoxh"
+path="res://.godot/imported/AttackAnim-Sheet.png-92b69a31805e3b51ace01070e711bb10.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistar/BasicAttack/Attackhold.png"
-dest_files=["res://.godot/imported/Attackhold.png-b1dc73049ca0498771626633a3eee2da.ctex"]
+source_file="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet/BasicAttack/AttackAnim-Sheet.png"
+dest_files=["res://.godot/imported/AttackAnim-Sheet.png-92b69a31805e3b51ace01070e711bb10.ctex"]
 
 [params]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=23 format=3 uid="uid://cx8q1cb0wger4"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_elbda"]
-[ext_resource type="SpriteFrames" uid="uid://defhw7jwsl3bp" path="res://Assets/Sprites/Player/OverworldSprites/MainCharAnims.tres" id="2_digek"]
+[ext_resource type="SpriteFrames" uid="uid://defhw7jwsl3bp" path="res://Assets/Sprites/Player/OverworldSprites/NoNameYet.tres" id="2_7mdpw"]
 
 [sub_resource type="Animation" id="Animation_37pr0"]
 length = 0.333333
@@ -293,7 +293,7 @@ metadata/Cutscene = false
 texture_filter = 1
 position = Vector2(536, 320)
 scale = Vector2(2, 2)
-sprite_frames = ExtResource("2_digek")
+sprite_frames = ExtResource("2_7mdpw")
 animation = &"Idle_Down"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

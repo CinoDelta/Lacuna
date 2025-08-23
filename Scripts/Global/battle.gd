@@ -380,7 +380,7 @@ func calculateOrder(refreshOrder, numOfTurns):
 				
 				match fieldData[participant]["CONSECUTIVE_TURNS"]:
 					1:
-						secondSpeedAlter = 0.40
+						secondSpeedAlter = 0.45
 					2:
 						secondSpeedAlter = 0.20
 				
@@ -393,9 +393,9 @@ func calculateOrder(refreshOrder, numOfTurns):
 				var participantSpeed
 				
 				if fieldData[participant]["IS_ENEMY"]:
-					participantSpeed = currentEnemies[participant]["SPEED"] 
+					participantSpeed = currentEnemies[participant]["SPEED"] * (1 + fieldData[participant]["TURNS_WAITING"] * 0.1)
 				else:
-					participantSpeed = PartyStats.partyDatabase[participant]["SPEED"]
+					participantSpeed = PartyStats.partyDatabase[participant]["SPEED"] * (1 + fieldData[participant]["TURNS_WAITING"] * 0.1)
 				
 				participantSpeed *= randSpeedAlter
 				participantSpeed *= secondSpeedAlter
@@ -584,7 +584,7 @@ func attack(attacker, attackDataPacket):
 								var newCommandSprite = $MinigamePanel/SampleCommand.duplicate()
 								$MinigamePanel.add_child(newCommandSprite)
 								
-								newCommandSprite.position = Vector2(20, 40)
+								newCommandSprite.position = Vector2(20, 48)
 								newCommandSprite.scale = Vector2(0, 0)
 								newCommandSprite.rotation_degrees = differentCombinations[direction]
 								newCommandSprite.set_meta("Direction", direction)
@@ -613,7 +613,7 @@ func attack(attacker, attackDataPacket):
 								scaleTween.tween_property(sprite, "scale", Vector2(2, 2), 0.3 * comboSpeedMulti).set_delay(.1)
 								
 								var positionTween = get_tree().create_tween()
-								positionTween.tween_property(sprite, "position", Vector2(475, 40), 0.8 * comboSpeedMulti).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+								positionTween.tween_property(sprite, "position", Vector2(475, 48), 0.8 * comboSpeedMulti).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 								
 								if index > 0:
 									if randomCombo[index-1] != "":

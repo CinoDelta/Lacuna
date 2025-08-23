@@ -12,10 +12,10 @@
 [ext_resource type="Texture2D" uid="uid://bst3bmxxc8wup" path="res://Assets/Sprites/Battle/DisplaySprites/Selections/ItemSelection.png" id="6_a5h3j"]
 [ext_resource type="Texture2D" uid="uid://3sjnjewec3ba" path="res://Assets/Sprites/Battle/DisplaySprites/Selections/DefendSelection.png" id="7_rey6m"]
 [ext_resource type="Texture2D" uid="uid://ds8l87qec8y6i" path="res://Assets/Sprites/MiscSprites/PrototypeBattleBox.png" id="9_bshqe"]
-[ext_resource type="SpriteFrames" uid="uid://cfurixtwnp536" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistair.tres" id="9_iopbk"]
 [ext_resource type="Material" uid="uid://b0mad586t5q10" path="res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres" id="10_karwh"]
 [ext_resource type="Texture2D" uid="uid://cwff51t3lrprl" path="res://Assets/Sprites/Battle/Backgrounds/Debug.png" id="10_y4552"]
 [ext_resource type="AudioStream" uid="uid://bsuu6vxtit4ai" path="res://Assets/Sounds/DefaultTextBox.mp3" id="11_jo0um"]
+[ext_resource type="SpriteFrames" uid="uid://cfurixtwnp536" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet.tres" id="12_egcjt"]
 [ext_resource type="SpriteFrames" uid="uid://bsfw85cjfjyvg" path="res://Assets/Sprites/Battle/DisplaySprites/Enemies/Husk.tres" id="14_8abmu"]
 [ext_resource type="SpriteFrames" uid="uid://c6h4qmojqggf7" path="res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres" id="14_gecb5"]
 [ext_resource type="AudioStream" uid="uid://bl6gi1l2jipge" path="res://Assets/Sounds/Select.ogg" id="15_2i87i"]
@@ -167,7 +167,6 @@ text = "Enemy1
 "
 
 [node name="PlayerPanels" type="Panel" parent="."]
-visible = false
 layout_mode = 0
 offset_top = 696.0
 offset_right = 1152.0
@@ -272,6 +271,7 @@ offset_bottom = -24.0
 scale = Vector2(2, 2)
 
 [node name="Poisoned" type="TextureRect" parent="PlayerPanels/PlayerPanelsContainer/SampleMember/StatusContainer"]
+visible = false
 texture_filter = 1
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
@@ -364,7 +364,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_f8xi8")
 clip_children = 2
 texture_filter = 1
 scale = Vector2(2, 2)
-sprite_frames = ExtResource("9_iopbk")
+sprite_frames = ExtResource("12_egcjt")
 animation = &"Attack"
 
 [node name="Highlight" type="ColorRect" parent="PlayerDisplay/Sample/PSprite"]
@@ -557,7 +557,6 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="MinigamePanel" type="Panel" parent="."]
-modulate = Color(1, 1, 1, 0)
 clip_children = 2
 z_index = -1
 layout_mode = 1
@@ -576,9 +575,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_0ceh0")
 [node name="SampleCommand" type="Sprite2D" parent="MinigamePanel"]
 visible = false
 clip_children = 2
-z_index = 1
+z_index = 2
 texture_filter = 1
-position = Vector2(24, 32)
+position = Vector2(152, 48)
 rotation = 4.71239
 scale = Vector2(2, 2)
 texture = ExtResource("21_f54aj")
@@ -590,7 +589,7 @@ offset_left = -20.0
 offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
-color = Color(1, 1, 1, 0.364706)
+color = Color(1, 1, 1, 0.223529)
 metadata/_edit_lock_ = true
 
 [node name="AccuracyChart" type="TextureRect" parent="MinigamePanel"]
@@ -603,6 +602,7 @@ offset_right = 256.0
 offset_bottom = 48.0
 scale = Vector2(2, 2)
 texture = ExtResource("27_pu18d")
+metadata/_edit_lock_ = true
 
 [node name="JudgementDisplayWIP" type="Panel" parent="."]
 modulate = Color(1, 1, 1, 0)

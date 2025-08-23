@@ -12,3 +12,4 @@ res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres
 res://Scenes/Battle.tscn
 res://Scenes/Player.tscn
 res://Scenes/MainMusicChannel.tscn
+res://Scripts/Global/PartyStats.gd

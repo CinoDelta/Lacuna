@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c13o3h1k7xoxh"
-path="res://.godot/imported/AttackAnim-Sheet.png-e5992bd5090e367b2a970ae3a4b4bb7d.ctex"
+uid="uid://c4uyugovvb7d4"
+path="res://.godot/imported/Hurt.png-b5193c2614adc51ecc7987de2477f007.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistar/BasicAttack/AttackAnim-Sheet.png"
-dest_files=["res://.godot/imported/AttackAnim-Sheet.png-e5992bd5090e367b2a970ae3a4b4bb7d.ctex"]
+source_file="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet/Hurt/Hurt.png"
+dest_files=["res://.godot/imported/Hurt.png-b5193c2614adc51ecc7987de2477f007.ctex"]
 
 [params]
 
