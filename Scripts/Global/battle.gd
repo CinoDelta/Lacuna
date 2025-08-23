@@ -347,6 +347,8 @@ func calculateOrder(refreshOrder, numOfTurns):
 			if PartyStats.partyDatabase[member]["SPEED"] > fastestSpeed:
 				fastestPerson = PartyStats.partyDatabase[member]["NAME"]
 				fastestSpeed = PartyStats.partyDatabase[member]["SPEED"]
+				fieldData[fastestPerson]["TURNS_WAITING"] = 0
+				fieldData[fastestPerson]["CONSECUTIVE_TURNS"] += 1
 		turnOrder = [fastestPerson]
 	
 	# pre calculation (Are there people that haven't moved for 5 turns
@@ -373,15 +375,14 @@ func calculateOrder(refreshOrder, numOfTurns):
 			var currentWeight = 0
 			
 			for participant in fieldData:
-				var randSpeedAlter = randf_range(0.9, 1.1)
-				
+				var randSpeedAlter = 1
 				var secondSpeedAlter = 1.0
 				
 				match fieldData[participant]["CONSECUTIVE_TURNS"]:
 					1:
 						secondSpeedAlter = 0.40
 					2:
-						secondSpeedAlter = 0.25
+						secondSpeedAlter = 0.20
 				
 				secondSpeedAlter = 0 if fieldData[participant]["CONSECUTIVE_TURNS"] >= 3 else secondSpeedAlter
 				
@@ -391,18 +392,13 @@ func calculateOrder(refreshOrder, numOfTurns):
 				
 				var participantSpeed
 				
-				# this exists for more variability, especially early game!
-				var uniformSpeedMultiplier = 3
-				
 				if fieldData[participant]["IS_ENEMY"]:
-					participantSpeed = currentEnemies[participant]["SPEED"] * uniformSpeedMultiplier
+					participantSpeed = currentEnemies[participant]["SPEED"] 
 				else:
-					participantSpeed = PartyStats.partyDatabase[participant]["SPEED"] * uniformSpeedMultiplier
+					participantSpeed = PartyStats.partyDatabase[participant]["SPEED"]
 				
 				participantSpeed *= randSpeedAlter
 				participantSpeed *= secondSpeedAlter
-				
-				
 				
 				weightedChanceTable[participant] = participantSpeed
 				totalWeight += participantSpeed
@@ -428,9 +424,9 @@ func calculateOrder(refreshOrder, numOfTurns):
 				else:
 					currentWeight += weightedChanceTable[participant]
 				#print("The currentweight is" + str(currentWeight))
+			print(weightedChanceTable)
 			
-			
-	print(turnOrder)
+	
 # Ok lets deisgn the attack data packet!
 
 #var attackPacket = {
@@ -1002,7 +998,7 @@ func checkEnemyDefeated(enemyName:String, enemySprite:AnimatedSprite2D): # for s
 		enemySprite.play("Death")
 		
 		deathMessage = deathMessage.replace("%u", enemyName)
-		displayStatus(deathMessage, enemySprite.global_position - Vector2(32, 0), "moveStatus", -1, false, 2)
+		displayStatus(deathMessage, enemySprite.global_position - Vector2(32, 0), "moveStatus", -1, false, Color(1, 1, 0.42, 1), 2)
 		
 		await enemySprite.animation_finished
 		

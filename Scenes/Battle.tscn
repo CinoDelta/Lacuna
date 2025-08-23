@@ -605,7 +605,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("27_pu18d")
 
 [node name="JudgementDisplayWIP" type="Panel" parent="."]
-visible = false
+modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = 872.0
 offset_top = 192.0
