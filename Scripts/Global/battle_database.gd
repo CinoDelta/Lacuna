@@ -3,7 +3,7 @@ extends Node
 # Naming convention: lowercase with _ between words
 var battleIdInfo = {
 	"1" = {
-		"ENEMIES" = ["DebugBoy"], # String[]
+		"ENEMIES" = ["Husk"], # String[]
 		"BACKGROUND" = "Debug", # String
 		"START_TEXT" = ["Bugs crawl inside your skin. You must be debugged."],
 		"EXP" = 10 # int

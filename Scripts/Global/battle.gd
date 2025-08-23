@@ -310,7 +310,7 @@ func setUpBattle(_battleId): # void
 	
 	
 	
-	MusicManager.loadMusic("res://Assets/Sounds/WallowingWisps.ogg")
+	MusicManager.loadMusic("res://Assets/Sounds/BattleTwo.ogg")
 	MusicManager.setVolume(1.2)
 	MusicManager.play()
 	
@@ -392,7 +392,7 @@ func calculateOrder(refreshOrder, numOfTurns):
 				var participantSpeed
 				
 				# this exists for more variability, especially early game!
-				var uniformSpeedMultiplier = 5
+				var uniformSpeedMultiplier = 3
 				
 				if fieldData[participant]["IS_ENEMY"]:
 					participantSpeed = currentEnemies[participant]["SPEED"] * uniformSpeedMultiplier
@@ -402,7 +402,7 @@ func calculateOrder(refreshOrder, numOfTurns):
 				participantSpeed *= randSpeedAlter
 				participantSpeed *= secondSpeedAlter
 				
-				participantSpeed = roundi(participantSpeed)
+				
 				
 				weightedChanceTable[participant] = participantSpeed
 				totalWeight += participantSpeed
@@ -430,6 +430,7 @@ func calculateOrder(refreshOrder, numOfTurns):
 				#print("The currentweight is" + str(currentWeight))
 			
 			
+	print(turnOrder)
 # Ok lets deisgn the attack data packet!
 
 #var attackPacket = {
@@ -465,7 +466,7 @@ func calculateOrder(refreshOrder, numOfTurns):
 #	}
 #}
 
-func shakeAnimatedSprite(sprite:AnimatedSprite2D, intensity:float, times:int, frequency:int): #frequency in seconds. o: void
+func shakeAnimatedSprite(sprite:AnimatedSprite2D, intensity = 6, times = 20, frequency = 0.02): #frequency in seconds. o: void
 	var originalPosition = sprite.position 
 	
 	for i in range(0, times):
@@ -751,6 +752,8 @@ func attack(attacker, attackDataPacket):
 							
 							for sprite in comboSprites:
 								$MinigamePanel.remove_child(sprite)
+				
+				await checkEnemyDefeated(target, targetSprite)
 			else:
 				var attackMessage:String = extraData["ATTACK_MESSAGE"]
 				
@@ -781,7 +784,7 @@ func attack(attacker, attackDataPacket):
 				PartyStats.partyDatabase[target]["HP"] -= damageInfo[0]
 				displayStatus(damageInfo[0], targetDisplay.global_position, "damage", 1, (damageInfo[1] == 2))
 				
-				await get_tree().create_timer(0.330).timeout 
+				await get_tree().create_timer(0.45).timeout 
 				
 				attackerSprite.play("Idle")
 				targetSprite.play("Idle")
@@ -871,7 +874,7 @@ func calculatebaseAttackDamage(attackStat, defense, attackLevel, attackerFieldDa
 	finalDamage = clampf(finalDamage, 0, 99999)
 	return [finalDamage, critical]
 
-func displayStatus(value, numPosition: Vector2, status = "nothing", statusDirection = 1, isCritical = false):
+func displayStatus(value, numPosition: Vector2, status = "nothing", statusDirection = 1, isCritical = false, baseColor = Color(1, 1, 1, 1), lifetime = 0.75):
 	
 	var number = Label.new()
 	number.global_position = numPosition
@@ -913,7 +916,7 @@ func displayStatus(value, numPosition: Vector2, status = "nothing", statusDirect
 			).set_ease(Tween.EASE_IN)
 		"moveStatus":
 			number.text = value
-			number.label_settings.font_color = Color(1,1,1,1)
+			number.label_settings.font_color = baseColor
 			number.label_settings.font_size = 30
 			
 			add_child(number)
@@ -926,7 +929,7 @@ func displayStatus(value, numPosition: Vector2, status = "nothing", statusDirect
 			await newNumberTween.finished
 			
 			
-			await get_tree().create_timer(.75).timeout
+			await get_tree().create_timer(lifetime).timeout
 			
 			var secondNumberTween = get_tree().create_tween()
 
@@ -977,17 +980,41 @@ func resetCurrentAttackPacket(): # void
 func chooseRandomPlayer():
 	var playerList:Array = PartyStats.currentPartyMembers
 	
-	for index in playerList:
-		if PartyStats.partyDatabase[index]["HP"] < 0:
+	var index = 0
+	for pName in playerList:
+		if PartyStats.partyDatabase[pName]["HP"] < 0:
 			playerList.pop_at(index)
+		index += 1
 	
 	return playerList.pick_random()
+
+func checkEnemyDefeated(enemyName:String, enemySprite:AnimatedSprite2D): # for single target attacks
+	
+	if currentEnemies[enemyName]["HP"] <= 0:
+		var deathMessage = currentEnemies[enemyName]["DEATH_MESSAGE"]
+		var deathSound = EnemyDatabase.deathSounds[currentEnemies[enemyName]["DEATH_SOUND"]]
+		
+		shakeAnimatedSprite(enemySprite)
+		
+		$EnemyPurified.stream = load(deathSound)
+		$EnemyPurified.play()
+		
+		enemySprite.play("Death")
+		
+		deathMessage = deathMessage.replace("%u", enemyName)
+		displayStatus(deathMessage, enemySprite.global_position - Vector2(32, 0), "moveStatus", -1, false, 2)
+		
+		await enemySprite.animation_finished
+		
+		currentEnemies.erase(enemyName)
+		removeFieldData(enemyName)
 
 func battleStarted(id): # void, main battle loop as well.
 	$BattleIntro.play()
 	$BattleIntro.get_path()
 	
 	var isBattleOver = false
+	var isBattleWon = false
 	var isFirstTurn = true
 	
 	await get_tree().create_timer(3.8).timeout
@@ -1024,6 +1051,12 @@ func battleStarted(id): # void, main battle loop as well.
 			await actionDecided
 			currentAttackPacket["ATTACKER_FIELD_DATA"] = attackerFieldData
 			await attack(currentAttacker, currentAttackPacket)
+			
+			if currentEnemies.keys().size() == 0:
+				isBattleOver = true
+				isBattleWon = true
+				break
+			
 		else:
 
 		
@@ -1076,7 +1109,10 @@ func battleStarted(id): # void, main battle loop as well.
 		
 		isFirstTurn = false
 	
-	
+	if isBattleWon == true:
+		pass
+	else:
+		pass
 # ui functions
 
 func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):

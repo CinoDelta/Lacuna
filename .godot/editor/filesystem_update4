@@ -12,3 +12,6 @@ res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres
 res://Scenes/starting_area.tscn
 res://Scenes/Player.tscn
 res://Scenes/MainMusicChannel.tscn
+res://Scripts/Global/enemy_database.gd
+res://Scripts/Global/battle_database.gd
+res://Assets/Sprites/Battle/DisplaySprites/Enemies/Husk.tres

@@ -11,12 +11,12 @@
 [ext_resource type="Texture2D" uid="uid://jg824fqmi1s2" path="res://Assets/Sprites/Battle/DisplaySprites/Selections/SpecialSelection.png" id="5_twbyb"]
 [ext_resource type="Texture2D" uid="uid://bst3bmxxc8wup" path="res://Assets/Sprites/Battle/DisplaySprites/Selections/ItemSelection.png" id="6_a5h3j"]
 [ext_resource type="Texture2D" uid="uid://3sjnjewec3ba" path="res://Assets/Sprites/Battle/DisplaySprites/Selections/DefendSelection.png" id="7_rey6m"]
-[ext_resource type="SpriteFrames" uid="uid://bsfw85cjfjyvg" path="res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy.tres" id="8_xwmyp"]
 [ext_resource type="Texture2D" uid="uid://ds8l87qec8y6i" path="res://Assets/Sprites/MiscSprites/PrototypeBattleBox.png" id="9_bshqe"]
 [ext_resource type="SpriteFrames" uid="uid://cfurixtwnp536" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistair.tres" id="9_iopbk"]
 [ext_resource type="Material" uid="uid://b0mad586t5q10" path="res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres" id="10_karwh"]
 [ext_resource type="Texture2D" uid="uid://cwff51t3lrprl" path="res://Assets/Sprites/Battle/Backgrounds/Debug.png" id="10_y4552"]
 [ext_resource type="AudioStream" uid="uid://bsuu6vxtit4ai" path="res://Assets/Sounds/DefaultTextBox.mp3" id="11_jo0um"]
+[ext_resource type="SpriteFrames" uid="uid://bsfw85cjfjyvg" path="res://Assets/Sprites/Battle/DisplaySprites/Enemies/Husk.tres" id="14_8abmu"]
 [ext_resource type="SpriteFrames" uid="uid://c6h4qmojqggf7" path="res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres" id="14_gecb5"]
 [ext_resource type="AudioStream" uid="uid://bl6gi1l2jipge" path="res://Assets/Sounds/Select.ogg" id="15_2i87i"]
 [ext_resource type="AudioStream" uid="uid://k3npac10xllp" path="res://Assets/Sounds/menuMovement.ogg" id="19_b4msy"]
@@ -408,10 +408,8 @@ metadata/SelectionOrder = 0
 clip_children = 2
 texture_filter = 1
 scale = Vector2(2, 2)
-sprite_frames = ExtResource("8_xwmyp")
-animation = &"GroundShockwave"
-frame = 14
-frame_progress = 1.0
+sprite_frames = ExtResource("14_8abmu")
+animation = &"Idle"
 
 [node name="Highlight" type="ColorRect" parent="EnemyDisplay/Sample/PSprite"]
 anchors_preset = 8
@@ -500,10 +498,11 @@ stretch_mode = 4
 
 [node name="TurnThatBrightnessDown" type="ColorRect" parent="BackgroundOverlay/Debug/ACertainGoddess"]
 layout_mode = 0
-offset_right = 576.0
-offset_bottom = 332.0
+offset_left = -36.0
+offset_top = -20.0
+offset_right = 820.0
+offset_bottom = 480.0
 color = Color(0.215686, 0.215686, 0.215686, 0.396078)
-metadata/_edit_lock_ = true
 
 [node name="--- SOUNDS ---" type="Control" parent="."]
 layout_mode = 3
@@ -526,6 +525,11 @@ volume_db = 3.0
 pitch_scale = 0.8
 
 [node name="EnemyDamaged" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("20_lnuma")
+volume_db = 3.0
+pitch_scale = 0.8
+
+[node name="EnemyPurified" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("20_lnuma")
 volume_db = 3.0
 pitch_scale = 0.8
