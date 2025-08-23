@@ -379,9 +379,9 @@ func calculateOrder(refreshOrder, numOfTurns):
 				
 				match fieldData[participant]["CONSECUTIVE_TURNS"]:
 					1:
-						secondSpeedAlter = 0.65
+						secondSpeedAlter = 0.50
 					2:
-						secondSpeedAlter = 0.40
+						secondSpeedAlter = 0.25
 				
 				secondSpeedAlter = 0 if fieldData[participant]["CONSECUTIVE_TURNS"] >= 3 else secondSpeedAlter
 				
@@ -557,7 +557,9 @@ func attack(attacker, attackDataPacket):
 							$MinigamePanel.position = targetDisplay.global_position + Vector2(-$MinigamePanel.size.x, -$MinigamePanel.size.y/2)
 							$MinigamePanel.scale = Vector2(0, 1)
 							
-							var panelTween = get_tree().create_tween().tween_property($MinigamePanel, "scale", Vector2(1,1), 0.75).set_trans(Tween.TRANS_QUAD)
+							var panelTween = get_tree().create_tween()
+							panelTween.tween_property($MinigamePanel, "scale", Vector2(1,1), 0.75).set_trans(Tween.TRANS_QUAD)
+							panelTween.parallel().tween_property($MinigamePanel, "modulate", Color(1, 1, 1, 1), 0.3)
 							
 							await panelTween.finished
 							
@@ -611,10 +613,10 @@ func attack(attacker, attackDataPacket):
 								
 								
 								var scaleTween = get_tree().create_tween()
-								scaleTween.tween_property(sprite, "scale", Vector2(2, 2), 0.3 * comboSpeedMulti).set_trans(Tween.TRANS_QUAD)
+								scaleTween.tween_property(sprite, "scale", Vector2(2, 2), 0.3 * comboSpeedMulti).set_delay(.1)
 								
 								var positionTween = get_tree().create_tween()
-								positionTween.tween_property(sprite, "position", Vector2(475, 32), 0.8 * comboSpeedMulti).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+								positionTween.tween_property(sprite, "position", Vector2(475, 40), 0.8 * comboSpeedMulti).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 								
 								if index > 0:
 									if randomCombo[index-1] != "":
@@ -706,7 +708,10 @@ func attack(attacker, attackDataPacket):
 									
 							await attackedEnded
 							
-							var panelTween2 = get_tree().create_tween().tween_property($MinigamePanel, "scale", Vector2(0,1), 0.75).set_trans(Tween.TRANS_QUAD)
+							var panelTween2 = get_tree().create_tween()
+							panelTween2.tween_property($MinigamePanel, "scale", Vector2(2,0), 0.3).set_trans(Tween.TRANS_QUAD)
+							panelTween2.parallel().tween_property($MinigamePanel, "modulate", Color(1, 1, 1, 0), 0.3)
+							
 							
 							await get_tree().create_timer(0.5).timeout
 							
@@ -752,17 +757,20 @@ func attack(attacker, attackDataPacket):
 				print(attackMessage)
 				
 				$EnemyAttacking.play()
-				displayStatus(attackMessage.replace("%u", attacker), attackerSprite.global_position, "moveStatus", -1, false)
+				displayStatus(attackMessage.replace("%u", attacker), attackerSprite.global_position - Vector2(32, 0), "moveStatus", -1, false)
 				
-				await get_tree().create_timer(3).timeout
+				
 				
 				# attack effects 
 				
 				match extraData["ATTACK_EFFECT"]:
 					"GroundShockwave":
-						$SlashHit.play()
-						await get_tree().create_timer(0.75).timeout
+						attackerSprite.play("GroundShockwave")
+						await get_tree().create_timer(0.790).timeout
+						
+						#1120 ms
 				
+				$SlashHit.play()
 				targetSprite.play("Hurt")
 				shakeAnimatedSprite(targetSprite, 6, 20, 0.02)
 				
@@ -773,8 +781,9 @@ func attack(attacker, attackDataPacket):
 				PartyStats.partyDatabase[target]["HP"] -= damageInfo[0]
 				displayStatus(damageInfo[0], targetDisplay.global_position, "damage", 1, (damageInfo[1] == 2))
 				
-				await get_tree().create_timer(.5).timeout
+				await get_tree().create_timer(0.330).timeout 
 				
+				attackerSprite.play("Idle")
 				targetSprite.play("Idle")
 				
 # functions that are run until an action is decided! Only for the player's party.
@@ -910,7 +919,7 @@ func displayStatus(value, numPosition: Vector2, status = "nothing", statusDirect
 
 			newNumberTween.tween_property(
 				number, "position", Vector2(number.position.x + 160 * statusDirection, number.position.y - 80), .25
-			).set_ease(Tween.EASE_OUT)
+			).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 			
 			await newNumberTween.finished
 			
@@ -919,10 +928,10 @@ func displayStatus(value, numPosition: Vector2, status = "nothing", statusDirect
 			
 			var secondNumberTween = get_tree().create_tween()
 
-			newNumberTween.tween_property(
+			secondNumberTween.tween_property(
 				number.label_settings, "font_color", Color(1, 1, 1, 0), 0.2
 			)
-			newNumberTween.parallel().tween_property(
+			secondNumberTween.parallel().tween_property(
 				number.label_settings, "outline_color", Color(1, 1, 1, 0), 0.2
 			)
 			

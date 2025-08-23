@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://dffw7ogio4hw6"]
+[gd_scene load_steps=31 format=3 uid="uid://dffw7ogio4hw6"]
 
 [ext_resource type="Script" path="res://Scripts/Global/battle.gd" id="1_s088x"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
@@ -26,11 +26,15 @@
 [ext_resource type="Texture2D" uid="uid://ck6bxoqr0dq3g" path="res://Assets/Sprites/Battle/Minigames/UpCommand.png" id="21_f54aj"]
 [ext_resource type="AudioStream" uid="uid://c3xk6eyo1833r" path="res://Assets/Sounds/Sfx/PlayerAttacks.ogg" id="22_5cb5q"]
 [ext_resource type="AudioStream" uid="uid://3y3na1wmph0a" path="res://Assets/Sounds/WallowingWisps.ogg" id="22_m28db"]
+[ext_resource type="Texture2D" uid="uid://d3d4fb8x1vrop" path="res://Assets/Sprites/Battle/Minigames/Sword/Accuracy.png" id="27_pu18d"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u2i3t"]
 bg_color = Color(0.376471, 0.611765, 0.894118, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f8xi8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ceh0"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="Battle" type="Control"]
 z_index = 21
@@ -405,8 +409,9 @@ clip_children = 2
 texture_filter = 1
 scale = Vector2(2, 2)
 sprite_frames = ExtResource("8_xwmyp")
-animation = &"Idle"
-frame_progress = 0.76483
+animation = &"GroundShockwave"
+frame = 14
+frame_progress = 1.0
 
 [node name="Highlight" type="ColorRect" parent="EnemyDisplay/Sample/PSprite"]
 anchors_preset = 8
@@ -548,20 +553,21 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="MinigamePanel" type="Panel" parent="."]
+modulate = Color(1, 1, 1, 0)
 clip_children = 2
 z_index = -1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 416.0
-offset_top = 288.0
+offset_left = 392.0
+offset_top = 272.0
 offset_right = -272.0
 offset_bottom = -288.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(464, 36)
-theme = ExtResource("2_edys4")
+theme_override_styles/panel = SubResource("StyleBoxFlat_0ceh0")
 
 [node name="SampleCommand" type="Sprite2D" parent="MinigamePanel"]
 visible = false
@@ -583,41 +589,31 @@ offset_bottom = 20.0
 color = Color(1, 1, 1, 0.364706)
 metadata/_edit_lock_ = true
 
-[node name="PerfectJudgment" type="ColorRect" parent="MinigamePanel"]
+[node name="AccuracyChart" type="TextureRect" parent="MinigamePanel"]
+z_index = 1
+texture_filter = 1
 layout_mode = 0
-offset_left = 416.0
+offset_left = 24.0
 offset_top = 8.0
-offset_right = 464.0
-offset_bottom = 64.0
-color = Color(0.607843, 0.890196, 1, 0.823529)
-metadata/_edit_lock_ = true
+offset_right = 256.0
+offset_bottom = 48.0
+scale = Vector2(2, 2)
+texture = ExtResource("27_pu18d")
 
-[node name="GoodJudgment" type="ColorRect" parent="MinigamePanel"]
+[node name="JudgementDisplayWIP" type="Panel" parent="."]
+visible = false
 layout_mode = 0
-offset_left = 344.0
-offset_top = 8.0
-offset_right = 416.0
-offset_bottom = 64.0
-color = Color(0, 0.729412, 0.368627, 0.823529)
-metadata/_edit_lock_ = true
+offset_left = 872.0
+offset_top = 192.0
+offset_right = 912.0
+offset_bottom = 232.0
 
-[node name="Okay" type="ColorRect" parent="MinigamePanel"]
+[node name="Judgement" type="TextureRect" parent="JudgementDisplayWIP"]
 layout_mode = 0
-offset_left = 200.0
-offset_top = 8.0
-offset_right = 344.0
-offset_bottom = 64.0
-color = Color(0.980392, 0.988235, 0.317647, 0.823529)
-metadata/_edit_lock_ = true
-
-[node name="Miss" type="ColorRect" parent="MinigamePanel"]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 8.0
+offset_left = 160.0
+offset_top = 64.0
 offset_right = 200.0
-offset_bottom = 64.0
-color = Color(0.980392, 0.490196, 0.317647, 0.823529)
-metadata/_edit_lock_ = true
+offset_bottom = 152.0
 
 [node name="BattleCamera" type="Camera2D" parent="."]
 position = Vector2(576, 324)
