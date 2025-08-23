@@ -379,7 +379,7 @@ func calculateOrder(refreshOrder, numOfTurns):
 				
 				match fieldData[participant]["CONSECUTIVE_TURNS"]:
 					1:
-						secondSpeedAlter = 0.50
+						secondSpeedAlter = 0.40
 					2:
 						secondSpeedAlter = 0.25
 				
@@ -867,7 +867,9 @@ func calculatebaseAttackDamage(attackStat, defense, attackLevel, attackerFieldDa
 		else:
 			critical = 2 if (randi_range(1, 100) <= 5) else 1
 	
-	return [(attackStat * attackLevel * critical) - defense, critical]
+	var finalDamage = (attackStat * attackLevel * critical) - defense
+	finalDamage = clampf(finalDamage, 0, 99999)
+	return [finalDamage, critical]
 
 func displayStatus(value, numPosition: Vector2, status = "nothing", statusDirection = 1, isCritical = false):
 	
@@ -1182,6 +1184,7 @@ func _process(_delta): # void
 		battlePhases.SwordMinigame:
 			if currentMinigameData["currentSprite"] != $Select:
 				if currentMinigameData["currentSprite"].position.x > 473:
+					minigameHasConfirmed = false
 					emit_signal("minigameConfirm")
 	# keys
 	
