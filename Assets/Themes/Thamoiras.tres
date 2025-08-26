@@ -1,6 +1,7 @@
-[gd_resource type="Theme" load_steps=4 format=3 uid="uid://bli24837s4wbp"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://bli24837s4wbp"]
 
 [ext_resource type="StyleBox" uid="uid://dt0lgyrfwbbgt" path="res://Assets/Themes/BasicBox.tres" id="1_2soni"]
+[ext_resource type="StyleBox" uid="uid://d00aprxrkosov" path="res://Assets/Themes/OrangeBox.tres" id="1_rpeqe"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5isfi"]
 bg_color = Color(0.419608, 0.65098, 0.627451, 1)
@@ -9,6 +10,7 @@ bg_color = Color(0.419608, 0.65098, 0.627451, 1)
 bg_color = Color(0.811765, 0.521569, 0.337255, 1)
 
 [resource]
+Panel/styles/Orange = ExtResource("1_rpeqe")
 Panel/styles/panel = ExtResource("1_2soni")
 ProgressBar/styles/background = SubResource("StyleBoxFlat_5isfi")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_askh1")

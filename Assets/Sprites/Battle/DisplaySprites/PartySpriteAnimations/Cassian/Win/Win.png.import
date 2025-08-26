@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3tqvkrwhhhkv"
-path="res://.godot/imported/Attackhold.png-1704b5d9f560d6c324b391fd150ebe4a.ctex"
+uid="uid://cyhnn3daa8j1p"
+path="res://.godot/imported/Win.png-e10e64ec3c92d7bbb484c8b7479f6b79.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet/BasicAttack/Attackhold.png"
-dest_files=["res://.godot/imported/Attackhold.png-1704b5d9f560d6c324b391fd150ebe4a.ctex"]
+source_file="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/Win/Win.png"
+dest_files=["res://.godot/imported/Win.png-e10e64ec3c92d7bbb484c8b7479f6b79.ctex"]
 
 [params]
 

@@ -1,13 +1,13 @@
-TextureRect
+ColorRect
+RichTextLabel
 Panel
+TextureRect
 Label
 GPUParticles2D
 AnimatedSprite2D
 Camera2D
 Control
-ColorRect
 Sprite2D
-RichTextLabel
 VBoxContainer
 AudioStreamPlayer
 NinePatchRect

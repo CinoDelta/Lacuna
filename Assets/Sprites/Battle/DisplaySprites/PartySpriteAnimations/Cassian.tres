@@ -1,40 +1,41 @@
-[gd_resource type="SpriteFrames" load_steps=13 format=3 uid="uid://cfurixtwnp536"]
+[gd_resource type="SpriteFrames" load_steps=14 format=3 uid="uid://cfurixtwnp536"]
 
-[ext_resource type="Texture2D" uid="uid://c3tqvkrwhhhkv" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet/BasicAttack/Attackhold.png" id="1_n322q"]
-[ext_resource type="Texture2D" uid="uid://c13o3h1k7xoxh" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet/BasicAttack/AttackAnim-Sheet.png" id="1_rhyfg"]
-[ext_resource type="Texture2D" uid="uid://e22r6qt8n815" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet/Idle/Idle-Sheet.png" id="2_oekyr"]
-[ext_resource type="Texture2D" uid="uid://c4uyugovvb7d4" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet/Hurt/Hurt.png" id="3_p26ei"]
+[ext_resource type="Texture2D" uid="uid://c13o3h1k7xoxh" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/BasicAttack/AttackAnim-Sheet.png" id="1_6t18m"]
+[ext_resource type="Texture2D" uid="uid://c3tqvkrwhhhkv" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/BasicAttack/Attackhold.png" id="2_gowrs"]
+[ext_resource type="Texture2D" uid="uid://c4uyugovvb7d4" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/Hurt/Hurt.png" id="3_fovuk"]
+[ext_resource type="Texture2D" uid="uid://e22r6qt8n815" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/Idle/Idle-Sheet.png" id="4_1piaw"]
+[ext_resource type="Texture2D" uid="uid://cyhnn3daa8j1p" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/Win/Win.png" id="5_u24rb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_20kjf"]
-atlas = ExtResource("1_rhyfg")
+atlas = ExtResource("1_6t18m")
 region = Rect2(0, 0, 64, 84)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mhsab"]
-atlas = ExtResource("1_rhyfg")
+atlas = ExtResource("1_6t18m")
 region = Rect2(64, 0, 64, 84)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0yuxt"]
-atlas = ExtResource("1_rhyfg")
+atlas = ExtResource("1_6t18m")
 region = Rect2(128, 0, 64, 84)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yf5e2"]
-atlas = ExtResource("1_rhyfg")
+atlas = ExtResource("1_6t18m")
 region = Rect2(192, 0, 64, 84)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ylxam"]
-atlas = ExtResource("1_rhyfg")
+atlas = ExtResource("1_6t18m")
 region = Rect2(256, 0, 64, 84)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m0eeb"]
-atlas = ExtResource("1_rhyfg")
+atlas = ExtResource("1_6t18m")
 region = Rect2(320, 0, 64, 84)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f73im"]
-atlas = ExtResource("2_oekyr")
+atlas = ExtResource("4_1piaw")
 region = Rect2(0, 0, 64, 84)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k1je1"]
-atlas = ExtResource("2_oekyr")
+atlas = ExtResource("4_1piaw")
 region = Rect2(64, 0, 64, 84)
 
 [resource]
@@ -64,7 +65,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_n322q")
+"texture": ExtResource("2_gowrs")
 }],
 "loop": true,
 "name": &"AttackHold",
@@ -72,7 +73,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_p26ei")
+"texture": ExtResource("3_fovuk")
 }],
 "loop": true,
 "name": &"Hurt",
@@ -88,4 +89,12 @@ animations = [{
 "loop": true,
 "name": &"Idle",
 "speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_u24rb")
+}],
+"loop": true,
+"name": &"Win",
+"speed": 5.0
 }]

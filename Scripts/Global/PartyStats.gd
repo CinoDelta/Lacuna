@@ -8,8 +8,8 @@ signal playerPositionPacket(currentPos, animation)
 # stats are by no means final
 # naming convention: ALL CAPS, _ between words
 var partyDatabase = {
-	"NoNameYet" = {
-		"NAME" = "NoNameYet",
+	"Cassian" = {
+		"NAME" = "Cassian",
 		"MAX_HP" = 20,
 		"HP" = 20,
 		"VITALITY" = 2,
@@ -78,7 +78,7 @@ var levelUpStatDistribution = {
 
 var inventory = {}
 
-var currentPartyMembers = ["NoNameYet"] # yes ik party position exists this is for easy access instead of converting to an array the whole time
+var currentPartyMembers = ["Cassian"] # yes ik party position exists this is for easy access instead of converting to an array the whole time
 
 var inBattle = false
 

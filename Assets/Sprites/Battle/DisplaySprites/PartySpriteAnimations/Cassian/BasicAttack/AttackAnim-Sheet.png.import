@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://e22r6qt8n815"
-path="res://.godot/imported/Idle-Sheet.png-3ba755ad7c66bc9aceb7f91539812b0b.ctex"
+uid="uid://c13o3h1k7xoxh"
+path="res://.godot/imported/AttackAnim-Sheet.png-2c132e31348a457fedd985a3c94d1479.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet/Idle/Idle-Sheet.png"
-dest_files=["res://.godot/imported/Idle-Sheet.png-3ba755ad7c66bc9aceb7f91539812b0b.ctex"]
+source_file="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/BasicAttack/AttackAnim-Sheet.png"
+dest_files=["res://.godot/imported/AttackAnim-Sheet.png-2c132e31348a457fedd985a3c94d1479.ctex"]
 
 [params]
 

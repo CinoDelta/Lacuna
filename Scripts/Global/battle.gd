@@ -121,6 +121,7 @@ var currentMinigameData = {}
 
 @onready var battleCamera = $BattleCamera
 var battleFont = preload("res://Assets/Fonts/Tiny5-Regular.ttf")
+var winMusic = preload("res://Assets/Sounds/BattleComplete.ogg")
 
 # built ins
 
@@ -129,6 +130,7 @@ func _ready(): # void
 	for child in get_children():
 		if child is Panel:
 			child.visible = false
+	$DarknessOverlay.visible = false
 	PartyStats.battleStart.connect(battleStarted)
 	
 	for child in $BackgroundOverlay.get_children():
@@ -304,6 +306,10 @@ func setUpBattle(_battleId): # void
 	PartyStats.inBattle = true
 
 	
+	calculateOrder(true, 4)
+	
+	updateOrderPanel()
+	
 	await playSetupTweens(.5)
 
 
@@ -313,6 +319,8 @@ func setUpBattle(_battleId): # void
 	MusicManager.loadMusic("res://Assets/Sounds/BattleTwo.ogg")
 	MusicManager.setVolume(1.2)
 	MusicManager.play()
+	
+	
 	
 	await display_text(battleData["START_TEXT"], Vector2(576, 60), Vector2(0, 30))
 	
@@ -849,6 +857,12 @@ func selectEnemy(memberName, memberFieldData):
 
 # util
 
+func getResourceNameFromFieldData(dataName, fData):
+	if fData["IS_ENEMY"]:
+		return currentEnemies[dataName]["REAL_NAME"]
+	else:
+		return dataName
+
 func calculatebaseAttackDamage(attackStat, defense, attackLevel, attackerFieldData, defenderFieldData, allowCriticalAttack):
 	var attackerBuffs = attackerFieldData["STAT_BUFFS"]
 	var defenderBuffs = defenderFieldData["STAT_BUFFS"]
@@ -1019,17 +1033,20 @@ func battleStarted(id): # void, main battle loop as well.
 		if child is Panel and child.name != "TextBoxPanel" and child.name != "MinigamePanel":
 			child.visible = true
 			
+	
 			
 	await setUpBattle(id)
 	
-	await calculateOrder(true, 4)
-	
-	
+
 	while !isBattleOver:
 		# At the start of each loop, figure out which person is supposed to move based on calculate order.
 		
 		if !isFirstTurn:
 			calculateOrder(false, 1)
+			
+		#Update order panel
+		
+		updateOrderPanel()
 		
 		currentAttacker = turnOrder.back()
 		turnOrder.remove_at(turnOrder.size() - 1)
@@ -1106,11 +1123,60 @@ func battleStarted(id): # void, main battle loop as well.
 		isFirstTurn = false
 	
 	if isBattleWon == true:
-		pass
+		$DarknessOverlay.visible = true
+		for player in PartyStats.currentPartyMembers:
+			get_node(str(fieldData[player]["BATTLE_DISPLAY"].get_path()) + "/PSprite").play("Win") 
+		MusicManager.stopMusic()
+		$"YouDidIt!".play()
+		
+		await get_tree().create_timer(6.25).timeout
+		
+		MusicManager.setMusic(winMusic)
+		MusicManager.playMusic()
+		
+		
+		
 	else:
 		pass
 # ui functions
 
+func updateOrderPanel():
+	var container = $OrderPanel/SecondaryPanel/VBoxContainer
+	var sample = $OrderPanel/SecondaryPanel/VBoxContainer/Sample
+	
+	for panel in container.get_children():
+		if panel.name != "Sample":
+			panel.queue_free()
+	
+	
+	var index = 0
+	
+	for person in turnOrder:
+		var pFieldData = fieldData[person]
+		var actualName = getResourceNameFromFieldData(person, pFieldData)
+		var portraitPng = load("res://Assets/Sprites/Battle/DisplaySprites/Portraits/" + actualName + ".png")
+		var placement = turnOrder.size() - index
+		
+		var newPortrait = sample.duplicate()
+		newPortrait.get_child(0).texture = portraitPng
+		
+		newPortrait.name = actualName
+		
+		container.add_child(newPortrait)
+		newPortrait.set_meta("placement", placement)
+		
+		
+		index += 1
+	
+	for panel in container.get_children():
+		if panel.name != "Sample":
+			if panel.get_meta("placement") > 4:
+				panel.queue_free()
+			container.move_child(panel, panel.get_meta("placement"))
+		
+	for panel in container.get_children():
+		if panel.name != "Sample":
+			panel.visible = true
 func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):
 	
 	var totalText = textArray.size()

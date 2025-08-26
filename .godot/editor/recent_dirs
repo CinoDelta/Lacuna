@@ -1,14 +1,12 @@
+res://Assets/Themes
 res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy/Death
 res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy/Attack
 res://Assets/Sprites/Battle/Effects
 res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy/Idle
-res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistar/BasicAttack
-res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Alistar/Idle
 res://Scripts/Global
 res://
 res://Scenes
 res://Scripts
-res://Assets/Themes
 res://Assets/Sprites/Battle/Backgrounds/Shaders
 res://Assets/Sprites/Battle/DisplaySprites/Enemies
 res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations

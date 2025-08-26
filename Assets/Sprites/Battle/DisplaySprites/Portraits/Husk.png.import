@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4uyugovvb7d4"
-path="res://.godot/imported/Hurt.png-b5193c2614adc51ecc7987de2477f007.ctex"
+uid="uid://cf5gcd0nge34t"
+path="res://.godot/imported/Husk.png-10d7a4c8ca82d300ed4d39ac086141d2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/NoNameYet/Hurt/Hurt.png"
-dest_files=["res://.godot/imported/Hurt.png-b5193c2614adc51ecc7987de2477f007.ctex"]
+source_file="res://Assets/Sprites/Battle/DisplaySprites/Portraits/Husk.png"
+dest_files=["res://.godot/imported/Husk.png-10d7a4c8ca82d300ed4d39ac086141d2.ctex"]
 
 [params]
 
