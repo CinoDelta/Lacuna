@@ -4,10 +4,10 @@
 [ext_resource type="StyleBox" uid="uid://d00aprxrkosov" path="res://Assets/Themes/OrangeBox.tres" id="1_rpeqe"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5isfi"]
-bg_color = Color(0.419608, 0.65098, 0.627451, 1)
+bg_color = Color(0.411765, 0.219608, 0.00392157, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_askh1"]
-bg_color = Color(0.811765, 0.521569, 0.337255, 1)
+bg_color = Color(1, 0.945098, 0.682353, 1)
 
 [resource]
 Panel/styles/Orange = ExtResource("1_rpeqe")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://dffw7ogio4hw6"]
+[gd_scene load_steps=38 format=3 uid="uid://dffw7ogio4hw6"]
 
 [ext_resource type="Script" path="res://Scripts/Global/battle.gd" id="1_s088x"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
@@ -14,8 +14,10 @@
 [ext_resource type="Texture2D" uid="uid://ds8l87qec8y6i" path="res://Assets/Sprites/MiscSprites/PrototypeBattleBox.png" id="9_bshqe"]
 [ext_resource type="Material" uid="uid://b0mad586t5q10" path="res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres" id="10_karwh"]
 [ext_resource type="AudioStream" uid="uid://bsuu6vxtit4ai" path="res://Assets/Sounds/DefaultTextBox.mp3" id="11_jo0um"]
+[ext_resource type="Texture2D" uid="uid://4k5mwk75k2ww" path="res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/HealthBorder.png" id="12_8q3u2"]
 [ext_resource type="StyleBox" uid="uid://d00aprxrkosov" path="res://Assets/Themes/OrangeBox.tres" id="12_yrbju"]
 [ext_resource type="Texture2D" uid="uid://dmu67d64hrw88" path="res://Assets/Sprites/Battle/DisplaySprites/Portraits/Cassian.png" id="13_j68nw"]
+[ext_resource type="Texture2D" uid="uid://be3j2kyup38lq" path="res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/AetherBorder.png" id="13_wvbfm"]
 [ext_resource type="SpriteFrames" uid="uid://bsfw85cjfjyvg" path="res://Assets/Sprites/Battle/DisplaySprites/Enemies/Husk.tres" id="14_8abmu"]
 [ext_resource type="SpriteFrames" uid="uid://c6h4qmojqggf7" path="res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres" id="14_gecb5"]
 [ext_resource type="SpriteFrames" uid="uid://cfurixtwnp536" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian.tres" id="14_uqc57"]
@@ -31,8 +33,19 @@
 [ext_resource type="AudioStream" uid="uid://cjqbjgy1yg2ot" path="res://Assets/Sounds/YouWon.ogg" id="27_cjr1v"]
 [ext_resource type="Texture2D" uid="uid://d3d4fb8x1vrop" path="res://Assets/Sprites/Battle/Minigames/Sword/Accuracy.png" id="27_pu18d"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l2sq6"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.321569, 0.913725, 0.196078, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_66356"]
+bg_color = Color(0.184314, 0.247059, 0.258824, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u2i3t"]
-bg_color = Color(0.376471, 0.611765, 0.894118, 1)
+bg_color = Color(0.701961, 0.945098, 0.988235, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f8xi8"]
 
@@ -57,6 +70,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 4
 script = ExtResource("1_s088x")
 metadata/battleId = 1
+metadata/_edit_horizontal_guides_ = [-144.0]
 
 [node name="--- MAIN PANELS ---" type="Control" parent="."]
 anchors_preset = 0
@@ -187,10 +201,10 @@ theme_override_constants/separation = 15
 alignment = 1
 
 [node name="SampleMember" type="Panel" parent="PlayerPanels/PlayerPanelsContainer"]
-visible = false
 z_index = 1
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_l2sq6")
 
 [node name="MemberPortrait" type="TextureRect" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
 z_index = -1
@@ -206,10 +220,10 @@ expand_mode = 1
 
 [node name="HP" type="ProgressBar" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
 layout_mode = 0
-offset_left = 8.0
-offset_top = 15.0
-offset_right = 240.0
-offset_bottom = 42.0
+offset_left = 9.0
+offset_top = 13.0
+offset_right = 241.0
+offset_bottom = 41.0
 theme = ExtResource("2_edys4")
 value = 40.0
 rounded = true
@@ -217,52 +231,68 @@ show_percentage = false
 
 [node name="AETHER" type="ProgressBar" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
 layout_mode = 0
-offset_left = 8.0
-offset_top = 55.0
-offset_right = 240.0
-offset_bottom = 82.0
+offset_left = 9.0
+offset_top = 49.0
+offset_right = 241.0
+offset_bottom = 77.0
+theme_override_styles/background = SubResource("StyleBoxFlat_66356")
 theme_override_styles/fill = SubResource("StyleBoxFlat_u2i3t")
 max_value = 1.0
-value = 1.0
+value = 0.5
 show_percentage = false
 
 [node name="HPDisplay" type="RichTextLabel" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
+z_index = 2
 texture_filter = 1
-texture_repeat = 1
+clip_contents = false
 layout_mode = 0
-offset_top = 9.0
-offset_right = 256.0
-offset_bottom = 49.0
+offset_left = 21.0
+offset_top = 13.0
+offset_right = 173.0
+offset_bottom = 45.0
 theme = ExtResource("3_7ko0y")
-text = " 999/999
+theme_override_colors/default_color = Color(1, 0.929412, 0.690196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/normal_font_size = 25
+text = "100/100
+
+"
+scroll_active = false
+
+[node name="ManaDisplay" type="RichTextLabel" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
+z_index = 2
+texture_filter = 1
+clip_contents = false
+layout_mode = 0
+offset_left = 21.0
+offset_top = 49.0
+offset_right = 173.0
+offset_bottom = 81.0
+theme = ExtResource("3_7ko0y")
+theme_override_colors/default_color = Color(0.670588, 0.941176, 0.968627, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/normal_font_size = 25
+text = "100/100
+
 "
 scroll_active = false
 
 [node name="Name" type="RichTextLabel" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
 texture_filter = 1
 texture_repeat = 1
+clip_contents = false
 layout_mode = 0
+offset_left = 1.0
 offset_top = -39.0
-offset_right = 152.0
+offset_right = 173.0
 offset_bottom = 1.0
 theme = ExtResource("3_7ko0y")
-text = "Auerolius
-"
-scroll_active = false
-
-[node name="ManaDisplay" type="RichTextLabel" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 8.0
-offset_top = 49.0
-offset_right = 112.0
-offset_bottom = 81.0
-theme = ExtResource("3_7ko0y")
-text = "100%
-
-
-
-"
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 40
+text = "Cassian"
 scroll_active = false
 
 [node name="StatusContainer" type="HBoxContainer" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
@@ -279,6 +309,26 @@ texture_filter = 1
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 texture = ExtResource("3_ev4bj")
+
+[node name="HealthBorder" type="TextureRect" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 9.0
+offset_top = 13.0
+offset_right = 241.0
+offset_bottom = 41.0
+texture = ExtResource("12_8q3u2")
+metadata/_edit_lock_ = true
+
+[node name="AetherBorder" type="TextureRect" parent="PlayerPanels/PlayerPanelsContainer/SampleMember"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 9.0
+offset_top = 49.0
+offset_right = 241.0
+offset_bottom = 77.0
+texture = ExtResource("13_wvbfm")
+metadata/_edit_lock_ = true
 
 [node name="OrderPanel" type="Panel" parent="."]
 layout_mode = 0
@@ -316,8 +366,9 @@ layout_mode = 0
 offset_left = 8.0
 offset_top = 16.0
 offset_right = 40.0
-offset_bottom = 160.0
+offset_bottom = 204.0
 scale = Vector2(2, 2)
+theme_override_constants/separation = 7
 
 [node name="Sample" type="Panel" parent="OrderPanel/SecondaryPanel/VBoxContainer"]
 visible = false
@@ -337,6 +388,18 @@ offset_right = 32.0
 offset_bottom = 32.0
 texture = ExtResource("13_j68nw")
 expand_mode = 1
+
+[node name="Placement" type="RichTextLabel" parent="OrderPanel/SecondaryPanel/VBoxContainer/Sample"]
+visible = false
+modulate = Color(1, 1, 0.258824, 1)
+z_index = 2
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_font_sizes/normal_font_size = 25
+text = "1
+"
 
 [node name="PlayerDisplay" type="Panel" parent="."]
 layout_mode = 0
@@ -488,6 +551,7 @@ layout_mode = 0
 offset_right = 1304.0
 offset_bottom = 792.0
 color = Color(0, 0.905882, 0.101961, 0)
+metadata/_edit_lock_ = true
 
 [node name="Grid" type="TextureRect" parent="BackgroundOverlay/Debug"]
 texture_filter = 1
@@ -501,6 +565,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("18_upfd3")
 expand_mode = 1
 stretch_mode = 1
+metadata/_edit_lock_ = true
 
 [node name="--- SOUNDS ---" type="Control" parent="."]
 layout_mode = 3

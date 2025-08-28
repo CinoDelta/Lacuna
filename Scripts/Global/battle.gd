@@ -178,6 +178,11 @@ func playerSetup(): #I'll add aniamtion when i feel like it. void.
 		
 		var nameDisplay = get_node("PlayerPanels/PlayerPanelsContainer/" + member + "/" + "Name")
 		nameDisplay.text = PartyStats.partyDatabase[member]["NAME"]
+
+		var portraitPng = load("res://Assets/Sprites/Battle/DisplaySprites/Portraits/" + member + ".png")
+		
+		var portraitDisplay = get_node("PlayerPanels/PlayerPanelsContainer/" + member + "/" + "MemberPortrait")
+		portraitDisplay.texture = portraitPng
 		
 		createNewFieldData(member, false, newDisplay)
 		
@@ -306,7 +311,7 @@ func setUpBattle(_battleId): # void
 	PartyStats.inBattle = true
 
 	
-	calculateOrder(true, 4)
+	calculateOrder(true, 5)
 	
 	updateOrderPanel()
 	
@@ -355,8 +360,12 @@ func calculateOrder(refreshOrder, numOfTurns):
 			if PartyStats.partyDatabase[member]["SPEED"] > fastestSpeed:
 				fastestPerson = PartyStats.partyDatabase[member]["NAME"]
 				fastestSpeed = PartyStats.partyDatabase[member]["SPEED"]
-				fieldData[fastestPerson]["TURNS_WAITING"] = 0
-				fieldData[fastestPerson]["CONSECUTIVE_TURNS"] += 1
+				
+		fieldData[fastestPerson]["TURNS_WAITING"] = 0
+		fieldData[fastestPerson]["CONSECUTIVE_TURNS"] += 1
+		
+		for person in fieldData:
+			fieldData[person]["TURNS_WAITING"] += 1
 		turnOrder = [fastestPerson]
 	
 	# pre calculation (Are there people that haven't moved for 5 turns
@@ -1046,10 +1055,10 @@ func battleStarted(id): # void, main battle loop as well.
 			
 		#Update order panel
 		
-		updateOrderPanel()
+		
 		
 		currentAttacker = turnOrder.back()
-		turnOrder.remove_at(turnOrder.size() - 1)
+		
 		
 		var attackerFieldData = fieldData[currentAttacker] # for getting. for setting, just get index normally.
 		
@@ -1121,7 +1130,8 @@ func battleStarted(id): # void, main battle loop as well.
 		
 		
 		isFirstTurn = false
-	
+		updateOrderPanel()
+		turnOrder.remove_at(turnOrder.size() - 1)
 	if isBattleWon == true:
 		$DarknessOverlay.visible = true
 		for player in PartyStats.currentPartyMembers:
@@ -1140,9 +1150,20 @@ func battleStarted(id): # void, main battle loop as well.
 		pass
 # ui functions
 
+var firstOrderUpdate = true 
+
 func updateOrderPanel():
 	var container = $OrderPanel/SecondaryPanel/VBoxContainer
 	var sample = $OrderPanel/SecondaryPanel/VBoxContainer/Sample
+	var yOffset = 0
+	
+	if !firstOrderUpdate:
+		var tweenExistingOrder = get_tree().create_tween()
+		tweenExistingOrder.tween_property(container, "position", Vector2(8, -64 + yOffset), 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT) # make it look like the order is moving up
+		
+		await get_tree().create_timer(0.55).timeout
+	else:
+		firstOrderUpdate = false
 	
 	for panel in container.get_children():
 		if panel.name != "Sample":
@@ -1151,32 +1172,40 @@ func updateOrderPanel():
 	
 	var index = 0
 	
+	print(turnOrder)
+	
 	for person in turnOrder:
 		var pFieldData = fieldData[person]
 		var actualName = getResourceNameFromFieldData(person, pFieldData)
 		var portraitPng = load("res://Assets/Sprites/Battle/DisplaySprites/Portraits/" + actualName + ".png")
-		var placement = turnOrder.size() - index
+		var placement = turnOrder.size() - index -1
 		
 		var newPortrait = sample.duplicate()
+		
 		newPortrait.get_child(0).texture = portraitPng
+		newPortrait.get_child(1).text = str(placement) # debug onlt
 		
 		newPortrait.name = actualName
 		
 		container.add_child(newPortrait)
 		newPortrait.set_meta("placement", placement)
+		newPortrait.visible = true
+		
+		print("this placement of panel is " + str(placement))
 		
 		
 		index += 1
 	
 	for panel in container.get_children():
 		if panel.name != "Sample":
-			if panel.get_meta("placement") > 4:
-				panel.queue_free()
 			container.move_child(panel, panel.get_meta("placement"))
-		
-	for panel in container.get_children():
-		if panel.name != "Sample":
-			panel.visible = true
+
+#	for panel in container.get_children():
+#		if panel.name != "Sample":
+#			print(panel.name)
+#			panel.visible = true
+			
+	container.position = Vector2(8, 16 + yOffset)
 func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):
 	
 	var totalText = textArray.size()
@@ -1399,6 +1428,8 @@ func _process(_delta): # void
 				aetherBarDisplay.value = partyMemStats["AETHER"] 
 				hpBarDisplay.max_value = partyMemStats["MAX_HP"]
 				hpBarDisplay.value = partyMemStats["HP"]
+				
+				
 				
 				
 				

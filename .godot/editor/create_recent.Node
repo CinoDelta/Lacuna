@@ -1,7 +1,7 @@
-ColorRect
 RichTextLabel
-Panel
 TextureRect
+ColorRect
+Panel
 Label
 GPUParticles2D
 AnimatedSprite2D
