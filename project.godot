@@ -24,6 +24,7 @@ BattleDatabase="*res://Scripts/Global/battle_database.gd"
 EnemyDatabase="*res://Scripts/Global/enemy_database.gd"
 MainMusicChannel="*res://Scenes/MainMusicChannel.tscn"
 MusicManager="*res://Scripts/Global/music_manager.gd"
+SkillDatabase="*res://Scripts/Global/skill_database.gd"
 
 [display]
 

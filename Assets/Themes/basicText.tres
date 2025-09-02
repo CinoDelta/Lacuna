@@ -1,7 +1,11 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://25nh0v5d7y1b"]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://25nh0v5d7y1b"]
 
 [ext_resource type="FontFile" uid="uid://bqeob0dobcq1t" path="res://Assets/Fonts/Tiny5-Regular.ttf" id="1_3mdso"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eo3o8"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [resource]
 RichTextLabel/font_sizes/normal_font_size = 36
 RichTextLabel/fonts/normal_font = ExtResource("1_3mdso")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_eo3o8")

@@ -21,6 +21,7 @@ signal physics
 enum battlePhases {
 	Starting,
 	SelectingBasics,
+	SelectingSkillsets,
 	SelectingSkills,
 	SelectingItems,
 	SelectingPartyParticipator,
@@ -836,9 +837,35 @@ func basicSelection(memberName, memberFieldData):# this just keeps getting passe
 		$Select.play()
 		currentAttackPacket["ACTION"]["PRIMARY_ACTION"] = "BasicAttack"
 		selectEnemy(memberName, memberFieldData)
+	elif currentSelection == 2:
+		$Select.play()
+		currentAttackPacket["ACTION"]["PRIMARY_ACTION"] = "SkillAttack"
+		selectSkill(memberName, memberFieldData)
 	else:
 		basicSelection(memberName, memberFieldData)
 	
+
+# some useful skill assets.
+
+
+func selectSkill(memberName, memberFieldData):
+	$OptionsPanel/SubMenu.visible = true
+	$OptionsPanel/SubMenu/DisplayMoveInfo.visible = true
+	battlePhase = battlePhases.SelectingSkillsets
+	
+	# Set up moves
+	
+	var sampleMoveInfo = $OptionsPanel/SubMenu/DisplayMoveInfo/SampleMoveInfo
+	var skillsets = PartyStats.partyDatabase[memberName]["SKILLSETS"]
+	
+	for skillset in skillsets:
+		var newMoveInfo = sampleMoveInfo.duplicate()
+		newMoveInfo.get_child(0).texture = null
+		newMoveInfo.get_child(1).text = skillset
+		
+		$OptionsPanel/SubMenu/DisplayMoveInfo.add_child(newMoveInfo)
+		newMoveInfo.visible = true
+		
 
 func selectEnemy(memberName, memberFieldData):
 	

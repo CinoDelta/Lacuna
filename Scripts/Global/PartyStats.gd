@@ -32,7 +32,12 @@ var partyDatabase = {
 			},
 			"AMULETS" = "NONE",
 		},
-		"SPELLS" = {},
+		"SKILLSETS" = {
+			"Swordsmanship" = {
+				"Active" = true,
+				"Skills" = ["X-Slash"]
+			}
+		},
 		"DISTRIBUTION" = "Fighter"
 	}
 }
