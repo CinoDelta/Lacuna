@@ -81,7 +81,8 @@ var currentSelection = 1 # For basic selection picking
 var selectionTracker = { # this is so that it saves when you go back to the selection :>
 	"ENEMY_SELECTION" = 1,
 	"ITEM_SELECTION" = Vector2(0,0),
-	"SPECIAL_SELECTION" = 1
+	"SPECIAL_SELECTION" = 1,
+	"SKILLSET_SELECTION" = 0,
 } 
 
 var optionStatus = false
@@ -840,15 +841,16 @@ func basicSelection(memberName, memberFieldData):# this just keeps getting passe
 	elif currentSelection == 2:
 		$Select.play()
 		currentAttackPacket["ACTION"]["PRIMARY_ACTION"] = "SkillAttack"
-		selectSkill(memberName, memberFieldData)
+		selectSkillset(memberName, memberFieldData)
 	else:
 		basicSelection(memberName, memberFieldData)
 	
 
 # some useful skill assets.
 
+var amountOfSkillets = 0
 
-func selectSkill(memberName, memberFieldData):
+func selectSkillset(memberName, memberFieldData):
 	$OptionsPanel/SubMenu.visible = true
 	$OptionsPanel/SubMenu/DisplayMoveInfo.visible = true
 	battlePhase = battlePhases.SelectingSkillsets
@@ -857,6 +859,9 @@ func selectSkill(memberName, memberFieldData):
 	
 	var sampleMoveInfo = $OptionsPanel/SubMenu/DisplayMoveInfo/SampleMoveInfo
 	var skillsets = PartyStats.partyDatabase[memberName]["SKILLSETS"]
+	amountOfSkillets = skillsets.keys().size()
+	
+	var index = 1
 	
 	for skillset in skillsets:
 		var newMoveInfo = sampleMoveInfo.duplicate()
@@ -864,7 +869,11 @@ func selectSkill(memberName, memberFieldData):
 		newMoveInfo.get_child(1).text = skillset
 		
 		$OptionsPanel/SubMenu/DisplayMoveInfo.add_child(newMoveInfo)
+		
+		newMoveInfo.set_meta("placement", index)
 		newMoveInfo.visible = true
+		
+		index += 1
 		
 
 func selectEnemy(memberName, memberFieldData):
@@ -1321,7 +1330,17 @@ func refreshEnemySelectionHighlights(): # void
 			else:
 				enemyFieldDisplayHighlight.color = Color(1, 1, 1, 0)
 				panelText.text = panel.name
-				
+
+func refreshSkillsetSelectionHighlights():
+	var displaySkillsets = $OptionsPanel/SubMenu/DisplayMoveInfo
+	for panel in displaySkillsets.get_children():
+		if panel.name != "SampleMoveInfo":
+			var panelText = panel.get_child(1)
+			if panel.get_meta("placement") == selectionTracker["SKILLSET_SELECTION"]:
+				panelText.text = "[color=yellow]" + panel.name + "[/color]"
+			else:
+				panelText.text = panel.name
+
 func clearEnemyHighlights():
 	for enemy in currentEnemies:
 		var enemyFieldDisplayHighlight = get_node(str(fieldData[enemy]["BATTLE_DISPLAY"].get_path()) + "/PSprite/Highlight")
@@ -1403,6 +1422,13 @@ func _process(_delta): # void
 				else:
 					selectionTracker["ENEMY_SELECTION"] -= 1
 				refreshEnemySelectionHighlights()
+			battlePhase.SelectingSkillsets:
+				$MenuMovement.play()
+				if selectionTracker["SKILLSET_SELECTION"] < 2:
+					selectionTracker["SKILLSET_SELECTION"] = amountOfSkillets
+				else:
+					selectionTracker["SKILLSET_SELECTION"] -= 1
+				refreshSkillsetSelectionHighlights()
 			battlePhases.SwordMinigame:
 				minigameHasConfirmed = true
 				if currentMinigameData["framesSinceMiss"] > missCoyoteFrames:
@@ -1421,6 +1447,14 @@ func _process(_delta): # void
 				else:
 					selectionTracker["ENEMY_SELECTION"] += 1
 				refreshEnemySelectionHighlights()
+			battlePhase.SelectingSkillsets:
+				$MenuMovement.play()
+				if selectionTracker["SKILLSET_SELECTION"] + 1 > amountOfSkillets:
+					selectionTracker["SKILLSET_SELECTION"] = 1
+				else:
+					selectionTracker["SKILLSET_SELECTION"] += 1
+				refreshSkillsetSelectionHighlights()
+				
 			battlePhases.SwordMinigame:
 				minigameHasConfirmed = true
 				if currentMinigameData["framesSinceMiss"] > missCoyoteFrames:

@@ -42,9 +42,11 @@ var partyDatabase = {
 	}
 }
 
+
 var wholePartyStats = {
 	"GOLD" = 0
 }
+
 
 var storyFlags = {} #flags that are either true or false that effect save data
 
