@@ -151,6 +151,7 @@ offset_bottom = 64.0
 texture = ExtResource("4_likxi")
 
 [node name="SubMenu" type="Panel" parent="OptionsPanel"]
+visible = false
 z_index = 2
 layout_mode = 0
 offset_top = 152.0
@@ -214,6 +215,7 @@ offset_right = 392.0
 offset_bottom = 30.0
 theme = ExtResource("3_7ko0y")
 theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
 text = "Dream"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="OptionsPanel/SubMenu/DisplayMoveInfo/SampleMoveInfo"]

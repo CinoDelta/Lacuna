@@ -82,7 +82,7 @@ var selectionTracker = { # this is so that it saves when you go back to the sele
 	"ENEMY_SELECTION" = 1,
 	"ITEM_SELECTION" = Vector2(0,0),
 	"SPECIAL_SELECTION" = 1,
-	"SKILLSET_SELECTION" = 0,
+	"SKILLSET_SELECTION" = 1,
 } 
 
 var optionStatus = false
@@ -849,10 +849,12 @@ func basicSelection(memberName, memberFieldData):# this just keeps getting passe
 # some useful skill assets.
 
 var amountOfSkillets = 0
+var amountOfSkills = 0
 
 func selectSkillset(memberName, memberFieldData):
 	$OptionsPanel/SubMenu.visible = true
 	$OptionsPanel/SubMenu/DisplayMoveInfo.visible = true
+	$OptionsPanel/SubMenu/DisplayEnemyInfo.visible = false
 	battlePhase = battlePhases.SelectingSkillsets
 	
 	# Set up moves
@@ -871,14 +873,68 @@ func selectSkillset(memberName, memberFieldData):
 		$OptionsPanel/SubMenu/DisplayMoveInfo.add_child(newMoveInfo)
 		
 		newMoveInfo.set_meta("placement", index)
+		newMoveInfo.name = skillset
 		newMoveInfo.visible = true
 		
 		index += 1
 		
-
+	refreshSkillsetSelectionHighlights()
+	
+	await optionSelected
+	
+	if optionStatus == true:
+		selectSkill(memberName, memberFieldData, getSkillsetFromPlacement(selectionTracker["SKILLSET_SELECTION"]))
+	else:
+		basicSelection(memberName, memberFieldData) 
+		$OptionsPanel/SubMenu/DisplayMoveInfo.visible = false
+		$OptionsPanel/SubMenu.visible = false
+	
+	
+func selectSkill(memberName, memberFieldData, skillset):
+	battlePhase = battlePhases.SelectingSkills
+	# Set up moves
+	
+	var sampleMoveInfo = $OptionsPanel/SubMenu/DisplayMoveInfo/SampleMoveInfo
+	var memberSkillset = PartyStats.partyDatabase[memberName]["SKILLSETS"][skillset]
+	amountOfSkills = memberSkillset.keys().size()
+	
+	var index = 1
+	
+	for skill in memberSkillset:
+		# more stuff will be changed about the appearance of the element tommorow. 9/10/25
+		var newMoveInfo = sampleMoveInfo.duplicate()
+		newMoveInfo.get_child(0).texture = null
+		newMoveInfo.get_child(1).text = skill
+		
+		$OptionsPanel/SubMenu/DisplayMoveInfo.add_child(newMoveInfo)
+		
+		newMoveInfo.set_meta("placement", index)
+		newMoveInfo.name = skillset
+		newMoveInfo.visible = true
+		
+		index += 1
+		
+	#refreshSkillsetSelectionHighlights()
+	
+	await optionSelected
+	
+	if optionStatus == true:
+		# turn should always end with selecting an enmy/player.
+		pass
+		
+	else:
+		basicSelection(memberName, memberFieldData) 
+		
+	$OptionsPanel/SubMenu.visible = false
+	
+	clearEnemyHighlights()
+	
+	
 func selectEnemy(memberName, memberFieldData):
 	
 	$OptionsPanel/SubMenu.visible = true
+	$OptionsPanel/SubMenu/DisplayEnemyInfo.visible = true
+	$OptionsPanel/SubMenu/DisplayMoveInfo.visible = false
 	optionStatus = false
 	battlePhase = battlePhases.SelectingEnemyParticipator
 	
@@ -907,7 +963,13 @@ func getResourceNameFromFieldData(dataName, fData):
 		return currentEnemies[dataName]["REAL_NAME"]
 	else:
 		return dataName
-
+func getSkillsetFromPlacement(placement):
+	var displaySkillsets = $OptionsPanel/SubMenu/DisplayMoveInfo
+	for panel in displaySkillsets.get_children():
+		if panel.name != "SampleMoveInfo":
+			if panel.get_meta("placement") == selectionTracker["SKILLSET_SELECTION"]:
+				return panel.name
+				
 func calculatebaseAttackDamage(attackStat, defense, attackLevel, attackerFieldData, defenderFieldData, allowCriticalAttack):
 	var attackerBuffs = attackerFieldData["STAT_BUFFS"]
 	var defenderBuffs = defenderFieldData["STAT_BUFFS"]
@@ -1369,6 +1431,7 @@ func _process(_delta): # void
 			$Select.play()
 		elif $TextBoxPanel.visible == true:
 			emit_signal("textbox_continued")
+		$Select.play()
 		match battlePhase:
 			battlePhases.SelectingBasics:
 				optionStatus = true
@@ -1376,11 +1439,17 @@ func _process(_delta): # void
 			battlePhases.SelectingEnemyParticipator:
 				optionStatus = true
 				emit_signal("optionSelected")
+			battlePhases.SelectingSkillsets:
+				optionStatus = true
+				emit_signal("optionSelected")
 	# CANCEL
 	if Input.is_action_just_pressed("Cancel"):
+		$Select.play()
 		match battlePhase:
 			battlePhases.SelectingEnemyParticipator: # if below is the same for each phase im going to uniform it
-				$Select.play()
+				emit_signal("optionSelected")
+				optionStatus = false
+			battlePhases.SelectingSkillsets:
 				emit_signal("optionSelected")
 				optionStatus = false
 	# LEFT
@@ -1422,7 +1491,7 @@ func _process(_delta): # void
 				else:
 					selectionTracker["ENEMY_SELECTION"] -= 1
 				refreshEnemySelectionHighlights()
-			battlePhase.SelectingSkillsets:
+			battlePhases.SelectingSkillsets:
 				$MenuMovement.play()
 				if selectionTracker["SKILLSET_SELECTION"] < 2:
 					selectionTracker["SKILLSET_SELECTION"] = amountOfSkillets
@@ -1447,7 +1516,7 @@ func _process(_delta): # void
 				else:
 					selectionTracker["ENEMY_SELECTION"] += 1
 				refreshEnemySelectionHighlights()
-			battlePhase.SelectingSkillsets:
+			battlePhases.SelectingSkillsets:
 				$MenuMovement.play()
 				if selectionTracker["SKILLSET_SELECTION"] + 1 > amountOfSkillets:
 					selectionTracker["SKILLSET_SELECTION"] = 1
