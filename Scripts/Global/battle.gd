@@ -1444,7 +1444,7 @@ func clearEnemyHighlights():
 		enemyFieldDisplayHighlight.color = Color(1, 1, 1, 0)
 		
 
-# Minigame constants
+# Minigame constants yipee
 var missCoyoteFrames = 45
 		
 func _process(_delta): # void 

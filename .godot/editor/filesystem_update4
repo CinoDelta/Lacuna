@@ -9,8 +9,3 @@ res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres
 res://Assets/Sprites/Battle/DisplaySprites/Enemies/Husk.tres
 res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres
 res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian.tres
-res://Scripts/Global/skill_database.gd
-res://Scripts/Global/PartyStats.gd
-res://Scenes/starting_area.tscn
-res://Scenes/Player.tscn
-res://Scenes/MainMusicChannel.tscn
