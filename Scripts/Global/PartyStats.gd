@@ -35,7 +35,7 @@ var partyDatabase = {
 		"SKILLSETS" = {
 			"Swordsmanship" = {
 				"Active" = true,
-				"Skills" = ["X-Slash"]
+				"Skills" = ["X-Slash", "Pierce the Veil", "Disarm", "Flash Advance", "Sweeping Cut"]
 			}
 		},
 		"DISTRIBUTION" = "Fighter"

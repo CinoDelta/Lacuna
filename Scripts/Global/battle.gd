@@ -41,6 +41,7 @@ var indexToBattlePosition = [
 	Vector2(664, 272),
 	Vector2(648, 32)
 	]
+	
 var battleData = {}
 
 var currentAttackPacket = {
@@ -78,11 +79,11 @@ var currentAttackPacket = {
 var currentAttacker = ""
 var currentSelection = 1 # For basic selection picking
 
-var selectionTracker = { # this is so that it saves when you go back to the selection :>
+var selectionTracker = { # this is so that it saves when you go back to the selection :> 
 	"ENEMY_SELECTION" = 1,
 	"ITEM_SELECTION" = Vector2(0,0),
 	"SPECIAL_SELECTION" = 1,
-	"SKILLSET_SELECTION" = 1,
+	"SKILLSET_SELECTION" = 1, # (only for skillsets, not skills)
 } 
 
 var optionStatus = false
@@ -299,8 +300,8 @@ func tweenOptions(goIn, duration):
 	
 func setUpBattle(_battleId): # void
 	
-		
 	
+	$OptionsPanel/SubMenu.visible = false
 	battleData = BattleDatabase.battleIdInfo[str(get_meta("battleId"))]
 	
 	get_node("BackgroundOverlay/" + battleData["BACKGROUND"]).visible = true
@@ -839,9 +840,18 @@ func basicSelection(memberName, memberFieldData):# this just keeps getting passe
 		currentAttackPacket["ACTION"]["PRIMARY_ACTION"] = "BasicAttack"
 		selectEnemy(memberName, memberFieldData)
 	elif currentSelection == 2:
-		$Select.play()
-		currentAttackPacket["ACTION"]["PRIMARY_ACTION"] = "SkillAttack"
-		selectSkillset(memberName, memberFieldData)
+		var hasActiveSkillset
+		for skillset in PartyStats.partyDatabase[memberName]["SKILLSETS"]:
+			if PartyStats.partyDatabase[memberName]["SKILLSETS"][skillset]["Active"] == true:
+				hasActiveSkillset = true 
+				break
+		if hasActiveSkillset:
+			$Select.play()
+			currentAttackPacket["ACTION"]["PRIMARY_ACTION"] = "SkillAttack"
+			selectSkillset(memberName, memberFieldData)
+		else:
+			$Select.play()
+			basicSelection(memberName, memberFieldData)
 	else:
 		basicSelection(memberName, memberFieldData)
 	
@@ -861,9 +871,14 @@ func selectSkillset(memberName, memberFieldData):
 	
 	var sampleMoveInfo = $OptionsPanel/SubMenu/DisplayMoveInfo/SampleMoveInfo
 	var skillsets = PartyStats.partyDatabase[memberName]["SKILLSETS"]
+	print("member skillsets " + str(skillsets))
 	amountOfSkillets = skillsets.keys().size()
 	
 	var index = 1
+	
+	for child in $OptionsPanel/SubMenu/DisplayMoveInfo.get_children():
+		if child.name != "SampleMoveInfo":
+			$OptionsPanel/SubMenu/DisplayMoveInfo.remove_child(child)
 	
 	for skillset in skillsets:
 		var newMoveInfo = sampleMoveInfo.duplicate()
@@ -882,6 +897,7 @@ func selectSkillset(memberName, memberFieldData):
 	
 	await optionSelected
 	
+	
 	if optionStatus == true:
 		selectSkill(memberName, memberFieldData, getSkillsetFromPlacement(selectionTracker["SKILLSET_SELECTION"]))
 	else:
@@ -895,40 +911,47 @@ func selectSkill(memberName, memberFieldData, skillset):
 	# Set up moves
 	
 	var sampleMoveInfo = $OptionsPanel/SubMenu/DisplayMoveInfo/SampleMoveInfo
-	var memberSkillset = PartyStats.partyDatabase[memberName]["SKILLSETS"][skillset]
-	amountOfSkills = memberSkillset.keys().size()
+	var memberSkills = PartyStats.partyDatabase[memberName]["SKILLSETS"][skillset]["Skills"]
+	var selectionBefore = currentSelection
+	
+	currentSelection = 1
+	
+	amountOfSkills = memberSkills.size()
 	
 	var index = 1
 	
-	for skill in memberSkillset:
+	for child in $OptionsPanel/SubMenu/DisplayMoveInfo.get_children():
+		if child.name != "SampleMoveInfo":
+			$OptionsPanel/SubMenu/DisplayMoveInfo.remove_child(child)
+	
+	for skill in memberSkills:
 		# more stuff will be changed about the appearance of the element tommorow. 9/10/25
 		var newMoveInfo = sampleMoveInfo.duplicate()
-		newMoveInfo.get_child(0).texture = null
+		
+		newMoveInfo.get_child(0).texture = SkillDatabase.SKILL_DATABASE[skillset]["Icon"]
 		newMoveInfo.get_child(1).text = skill
 		
 		$OptionsPanel/SubMenu/DisplayMoveInfo.add_child(newMoveInfo)
 		
 		newMoveInfo.set_meta("placement", index)
-		newMoveInfo.name = skillset
+		newMoveInfo.name = skill
 		newMoveInfo.visible = true
+		
 		
 		index += 1
 		
 	#refreshSkillsetSelectionHighlights()
 	
+	refreshSkillsetSelectionHighlights(true)
+	
 	await optionSelected
 	
 	if optionStatus == true:
-		# turn should always end with selecting an enmy/player.
 		pass
-		
 	else:
-		basicSelection(memberName, memberFieldData) 
+		selectSkillset(memberName, memberFieldData) 
 		
-	$OptionsPanel/SubMenu.visible = false
-	
-	clearEnemyHighlights()
-	
+	currentSelection = selectionBefore
 	
 func selectEnemy(memberName, memberFieldData):
 	
@@ -1393,16 +1416,28 @@ func refreshEnemySelectionHighlights(): # void
 				enemyFieldDisplayHighlight.color = Color(1, 1, 1, 0)
 				panelText.text = panel.name
 
-func refreshSkillsetSelectionHighlights():
+func refreshSkillsetSelectionHighlights(skills = false):
 	var displaySkillsets = $OptionsPanel/SubMenu/DisplayMoveInfo
 	for panel in displaySkillsets.get_children():
 		if panel.name != "SampleMoveInfo":
 			var panelText = panel.get_child(1)
-			if panel.get_meta("placement") == selectionTracker["SKILLSET_SELECTION"]:
-				panelText.text = "[color=yellow]" + panel.name + "[/color]"
+			if !skills:
+				$OptionsPanel/SubMenu/DisplayMoveInfo.position = Vector2(8, 8)
+				if panel.get_meta("placement") == selectionTracker["SKILLSET_SELECTION"]:
+					panelText.text = "[color=yellow]" + panel.name + "[/color]"
+				else:
+					panelText.text = panel.name
 			else:
-				panelText.text = panel.name
-
+				var yVal = 8
+				if currentSelection > 4:
+					#At x <= 4, y = 8
+					#At x > 4, y = 8 + (-53 * (x - 4))
+					yVal += (-50 * (currentSelection - 4))
+				$OptionsPanel/SubMenu/DisplayMoveInfo.position = Vector2(8, yVal)
+				if panel.get_meta("placement") == currentSelection:
+					panelText.text = "[color=yellow]" + panel.name + "[/color]"
+				else:
+					panelText.text = panel.name
 func clearEnemyHighlights():
 	for enemy in currentEnemies:
 		var enemyFieldDisplayHighlight = get_node(str(fieldData[enemy]["BATTLE_DISPLAY"].get_path()) + "/PSprite/Highlight")
@@ -1442,16 +1477,22 @@ func _process(_delta): # void
 			battlePhases.SelectingSkillsets:
 				optionStatus = true
 				emit_signal("optionSelected")
+			battlePhases.SelectingSkills:
+				optionStatus = true
+				emit_signal("optionSelected")
 	# CANCEL
 	if Input.is_action_just_pressed("Cancel"):
 		$Select.play()
 		match battlePhase:
 			battlePhases.SelectingEnemyParticipator: # if below is the same for each phase im going to uniform it
-				emit_signal("optionSelected")
 				optionStatus = false
+				emit_signal("optionSelected")
 			battlePhases.SelectingSkillsets:
-				emit_signal("optionSelected")
 				optionStatus = false
+				emit_signal("optionSelected")
+			battlePhases.SelectingSkills:
+				optionStatus = false
+				emit_signal("optionSelected")
 	# LEFT
 	elif Input.is_action_just_pressed("ui_left"):
 		match battlePhase:
@@ -1498,6 +1539,13 @@ func _process(_delta): # void
 				else:
 					selectionTracker["SKILLSET_SELECTION"] -= 1
 				refreshSkillsetSelectionHighlights()
+			battlePhases.SelectingSkills:
+				$MenuMovement.play()
+				if currentSelection < 2:
+					currentSelection = amountOfSkills
+				else:
+					currentSelection -= 1
+				refreshSkillsetSelectionHighlights(true)
 			battlePhases.SwordMinigame:
 				minigameHasConfirmed = true
 				if currentMinigameData["framesSinceMiss"] > missCoyoteFrames:
@@ -1523,7 +1571,13 @@ func _process(_delta): # void
 				else:
 					selectionTracker["SKILLSET_SELECTION"] += 1
 				refreshSkillsetSelectionHighlights()
-				
+			battlePhases.SelectingSkills:
+				$MenuMovement.play()
+				if currentSelection + 1 > amountOfSkills:
+					currentSelection = 1
+				else:
+					currentSelection += 1
+				refreshSkillsetSelectionHighlights(true)
 			battlePhases.SwordMinigame:
 				minigameHasConfirmed = true
 				if currentMinigameData["framesSinceMiss"] > missCoyoteFrames:

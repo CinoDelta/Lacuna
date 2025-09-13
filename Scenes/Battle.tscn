@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://dffw7ogio4hw6"]
+[gd_scene load_steps=39 format=3 uid="uid://dffw7ogio4hw6"]
 
 [ext_resource type="Script" path="res://Scripts/Global/battle.gd" id="1_s088x"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
@@ -13,7 +13,6 @@
 [ext_resource type="Texture2D" uid="uid://3sjnjewec3ba" path="res://Assets/Sprites/Battle/DisplaySprites/Selections/DefendSelection.png" id="7_rey6m"]
 [ext_resource type="Texture2D" uid="uid://ds8l87qec8y6i" path="res://Assets/Sprites/MiscSprites/PrototypeBattleBox.png" id="9_bshqe"]
 [ext_resource type="Material" uid="uid://b0mad586t5q10" path="res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres" id="10_karwh"]
-[ext_resource type="Texture2D" uid="uid://csskjhjlfdtqb" path="res://Assets/Sprites/Battle/DisplaySprites/Selections/AetherSymbol.png" id="10_yw6a5"]
 [ext_resource type="AudioStream" uid="uid://bsuu6vxtit4ai" path="res://Assets/Sounds/DefaultTextBox.mp3" id="11_jo0um"]
 [ext_resource type="Texture2D" uid="uid://clag4g8vc46m3" path="res://Assets/Sprites/Battle/DisplaySprites/Selections/FirstLevel.png" id="11_opy2d"]
 [ext_resource type="Texture2D" uid="uid://4k5mwk75k2ww" path="res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/HealthBorder.png" id="12_8q3u2"]
@@ -153,6 +152,7 @@ texture = ExtResource("4_likxi")
 [node name="SubMenu" type="Panel" parent="OptionsPanel"]
 visible = false
 z_index = 2
+clip_contents = true
 layout_mode = 0
 offset_top = 152.0
 offset_right = 412.0
@@ -181,16 +181,21 @@ offset_left = 8.0
 offset_right = 248.0
 offset_bottom = 48.0
 theme = ExtResource("3_7ko0y")
+theme_override_font_sizes/normal_font_size = 32
 bbcode_enabled = true
 text = "Enemy1
 "
 
 [node name="DisplayMoveInfo" type="VBoxContainer" parent="OptionsPanel/SubMenu"]
+visible = false
+clip_children = 2
+clip_contents = true
 layout_mode = 0
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 404.0
-offset_bottom = 196.0
+offset_bottom = 298.0
+theme_override_constants/separation = 10
 
 [node name="SampleMoveInfo" type="Panel" parent="OptionsPanel/SubMenu/DisplayMoveInfo"]
 visible = false
@@ -203,7 +208,6 @@ texture_filter = 1
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-texture = ExtResource("10_yw6a5")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="OptionsPanel/SubMenu/DisplayMoveInfo/SampleMoveInfo"]
 texture_filter = 1
@@ -216,7 +220,7 @@ offset_bottom = 30.0
 theme = ExtResource("3_7ko0y")
 theme_override_font_sizes/normal_font_size = 32
 bbcode_enabled = true
-text = "Dream"
+text = "Dream missle"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="OptionsPanel/SubMenu/DisplayMoveInfo/SampleMoveInfo"]
 layout_mode = 0
