@@ -1,5 +1,9 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 [gd_scene load_steps=39 format=3 uid="uid://dffw7ogio4hw6"]
+=======
+[gd_scene load_steps=43 format=3 uid="uid://dffw7ogio4hw6"]
+>>>>>>> Stashed changes
 =======
 [gd_scene load_steps=43 format=3 uid="uid://dffw7ogio4hw6"]
 >>>>>>> Stashed changes
@@ -132,9 +136,12 @@ stretch_mode = 4
 [node name="Highlight" type="TextureRect" parent="OptionsPanel/OptionsContainer/Special"]
 layout_mode = 0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 offset_right = 64.0
 offset_bottom = 64.0
 =======
+=======
+>>>>>>> Stashed changes
 offset_right = 56.0
 offset_bottom = 48.0
 >>>>>>> Stashed changes
@@ -150,9 +157,12 @@ stretch_mode = 4
 [node name="Highlight" type="TextureRect" parent="OptionsPanel/OptionsContainer/Item"]
 layout_mode = 0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 offset_right = 64.0
 offset_bottom = 64.0
 =======
+=======
+>>>>>>> Stashed changes
 offset_right = 56.0
 offset_bottom = 48.0
 >>>>>>> Stashed changes
@@ -168,9 +178,12 @@ stretch_mode = 4
 [node name="Highlight" type="TextureRect" parent="OptionsPanel/OptionsContainer/Defend"]
 layout_mode = 0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 offset_right = 64.0
 offset_bottom = 64.0
 =======
+=======
+>>>>>>> Stashed changes
 offset_right = 56.0
 offset_bottom = 48.0
 >>>>>>> Stashed changes
@@ -343,6 +356,9 @@ rotation = 1.5708
 scale = Vector2(2, 2)
 texture = ExtResource("17_h76v3")
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 [node name="PlayerPanels" type="Panel" parent="."]
 layout_mode = 0
@@ -493,6 +509,7 @@ texture = ExtResource("13_wvbfm")
 metadata/_edit_lock_ = true
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 [node name="OrderPanel" type="Panel" parent="."]
 layout_mode = 0
 offset_left = -80.0
@@ -564,6 +581,8 @@ theme_override_font_sizes/normal_font_size = 25
 text = "1
 "
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 [node name="PlayerDisplay" type="Panel" parent="."]
