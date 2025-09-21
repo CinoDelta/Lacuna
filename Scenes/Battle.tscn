@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 [gd_scene load_steps=39 format=3 uid="uid://dffw7ogio4hw6"]
+=======
+[gd_scene load_steps=43 format=3 uid="uid://dffw7ogio4hw6"]
+>>>>>>> Stashed changes
 
 [ext_resource type="Script" path="res://Scripts/Global/battle.gd" id="1_s088x"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
@@ -33,6 +37,12 @@
 [ext_resource type="AudioStream" uid="uid://3y3na1wmph0a" path="res://Assets/Sounds/WallowingWisps.ogg" id="22_m28db"]
 [ext_resource type="AudioStream" uid="uid://cjqbjgy1yg2ot" path="res://Assets/Sounds/YouWon.ogg" id="27_cjr1v"]
 [ext_resource type="Texture2D" uid="uid://d3d4fb8x1vrop" path="res://Assets/Sprites/Battle/Minigames/Sword/Accuracy.png" id="27_pu18d"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ahwwc"]
+bg_color = Color(0.180392, 0.0666667, 0.00392157, 1)
+
+[sub_resource type="Theme" id="Theme_ym350"]
+Panel/styles/panel = SubResource("StyleBoxFlat_ahwwc")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l2sq6"]
 bg_color = Color(0, 0, 0, 1)
@@ -72,6 +82,7 @@ size_flags_vertical = 4
 script = ExtResource("1_s088x")
 metadata/battleId = 1
 metadata/_edit_horizontal_guides_ = [-144.0]
+metadata/_edit_lock_ = true
 
 [node name="--- MAIN PANELS ---" type="Control" parent="."]
 anchors_preset = 0
@@ -79,6 +90,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="OptionsPanel" type="Panel" parent="."]
+z_index = 1
 layout_mode = 0
 offset_top = -152.0
 offset_right = 712.0
@@ -119,8 +131,13 @@ stretch_mode = 4
 
 [node name="Highlight" type="TextureRect" parent="OptionsPanel/OptionsContainer/Special"]
 layout_mode = 0
+<<<<<<< Updated upstream
 offset_right = 64.0
 offset_bottom = 64.0
+=======
+offset_right = 56.0
+offset_bottom = 48.0
+>>>>>>> Stashed changes
 texture = ExtResource("4_likxi")
 
 [node name="Item" type="TextureRect" parent="OptionsPanel/OptionsContainer"]
@@ -132,8 +149,13 @@ stretch_mode = 4
 
 [node name="Highlight" type="TextureRect" parent="OptionsPanel/OptionsContainer/Item"]
 layout_mode = 0
+<<<<<<< Updated upstream
 offset_right = 64.0
 offset_bottom = 64.0
+=======
+offset_right = 56.0
+offset_bottom = 48.0
+>>>>>>> Stashed changes
 texture = ExtResource("4_likxi")
 
 [node name="Defend" type="TextureRect" parent="OptionsPanel/OptionsContainer"]
@@ -145,8 +167,13 @@ stretch_mode = 4
 
 [node name="Highlight" type="TextureRect" parent="OptionsPanel/OptionsContainer/Defend"]
 layout_mode = 0
+<<<<<<< Updated upstream
 offset_right = 64.0
 offset_bottom = 64.0
+=======
+offset_right = 56.0
+offset_bottom = 48.0
+>>>>>>> Stashed changes
 texture = ExtResource("4_likxi")
 
 [node name="SubMenu" type="Panel" parent="OptionsPanel"]
@@ -236,6 +263,87 @@ custom_minimum_size = Vector2(30, 20)
 layout_mode = 2
 texture = ExtResource("11_opy2d")
 
+<<<<<<< Updated upstream
+=======
+[node name="backText" type="TextureRect" parent="OptionsPanel"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 457.0
+offset_bottom = 107.0
+texture = ExtResource("11_r5mgr")
+stretch_mode = 1
+
+[node name="OrderPanel" type="Panel" parent="OptionsPanel"]
+z_index = -1
+layout_mode = 0
+offset_left = 460.0
+offset_top = 7.0
+offset_right = 771.0
+offset_bottom = 83.0
+theme = SubResource("Theme_ym350")
+
+[node name="SecondaryPanel" type="Panel" parent="OptionsPanel/OrderPanel"]
+clip_contents = true
+layout_mode = 0
+offset_right = 313.0
+offset_bottom = 80.0
+theme = ExtResource("4_6af57")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OptionsPanel/OrderPanel/SecondaryPanel"]
+layout_direction = 3
+layout_mode = 0
+offset_left = 193.0
+offset_top = 4.0
+offset_right = 381.0
+offset_bottom = 38.0
+scale = Vector2(2, 2)
+theme_override_constants/separation = 7
+
+[node name="Sample" type="Panel" parent="OptionsPanel/OrderPanel/SecondaryPanel/HBoxContainer"]
+visible = false
+clip_children = 2
+z_index = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+theme = ExtResource("2_edys4")
+theme_override_styles/panel = ExtResource("12_yrbju")
+metadata/placement = 0
+
+[node name="Portrait" type="TextureRect" parent="OptionsPanel/OrderPanel/SecondaryPanel/HBoxContainer/Sample"]
+z_index = 1
+texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("13_j68nw")
+expand_mode = 1
+
+[node name="Placement" type="RichTextLabel" parent="OptionsPanel/OrderPanel/SecondaryPanel/HBoxContainer/Sample"]
+modulate = Color(1, 1, 0.258824, 1)
+z_index = 2
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_font_sizes/normal_font_size = 25
+text = "1
+"
+
+[node name="BackTexture" type="TextureRect" parent="OptionsPanel/OrderPanel"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 330.0
+offset_top = 4.00002
+offset_right = 370.0
+offset_bottom = 184.0
+rotation = 1.5708
+scale = Vector2(2, 2)
+texture = ExtResource("17_h76v3")
+
+>>>>>>> Stashed changes
 [node name="PlayerPanels" type="Panel" parent="."]
 layout_mode = 0
 offset_top = 696.0
@@ -384,6 +492,7 @@ offset_bottom = 77.0
 texture = ExtResource("13_wvbfm")
 metadata/_edit_lock_ = true
 
+<<<<<<< Updated upstream
 [node name="OrderPanel" type="Panel" parent="."]
 layout_mode = 0
 offset_left = -80.0
@@ -455,6 +564,8 @@ theme_override_font_sizes/normal_font_size = 25
 text = "1
 "
 
+=======
+>>>>>>> Stashed changes
 [node name="PlayerDisplay" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 280.0
@@ -492,6 +603,7 @@ offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
+metadata/_edit_lock_ = true
 
 [node name="EffectsSprite" type="AnimatedSprite2D" parent="PlayerDisplay/Sample"]
 texture_filter = 1
