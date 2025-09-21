@@ -1,6 +1,10 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 [gd_scene load_steps=39 format=3 uid="uid://dffw7ogio4hw6"]
+=======
+[gd_scene load_steps=43 format=3 uid="uid://dffw7ogio4hw6"]
+>>>>>>> Stashed changes
 =======
 [gd_scene load_steps=43 format=3 uid="uid://dffw7ogio4hw6"]
 >>>>>>> Stashed changes
@@ -137,9 +141,12 @@ stretch_mode = 4
 layout_mode = 0
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 offset_right = 64.0
 offset_bottom = 64.0
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 offset_right = 56.0
@@ -158,9 +165,12 @@ stretch_mode = 4
 layout_mode = 0
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 offset_right = 64.0
 offset_bottom = 64.0
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 offset_right = 56.0
@@ -179,9 +189,12 @@ stretch_mode = 4
 layout_mode = 0
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 offset_right = 64.0
 offset_bottom = 64.0
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 offset_right = 56.0
@@ -357,6 +370,9 @@ scale = Vector2(2, 2)
 texture = ExtResource("17_h76v3")
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -510,6 +526,7 @@ metadata/_edit_lock_ = true
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 [node name="OrderPanel" type="Panel" parent="."]
 layout_mode = 0
 offset_left = -80.0
@@ -581,6 +598,8 @@ theme_override_font_sizes/normal_font_size = 25
 text = "1
 "
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
