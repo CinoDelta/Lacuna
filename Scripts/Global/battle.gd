@@ -263,17 +263,12 @@ var playerPanelsTween = [
 	Vector2(0, 696),
 	Vector2(0,528)
 ]
-var orderPanelTween = [
-	Vector2(-80, 192),
-	Vector2(0,192)
-]
-	
+
 func playSetupTweens(duration): # void
 	
 
 	$OptionsPanel.position = optionPanelTween[0]
 	$PlayerPanels.position = playerPanelsTween[0]
-	$OrderPanel.position = orderPanelTween[0]
 
 	var tweenOptionsPanel = get_tree().create_tween()
 	tweenOptionsPanel.tween_property($OptionsPanel, "position", optionPanelTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
@@ -281,12 +276,8 @@ func playSetupTweens(duration): # void
 	
 	var tweenPlayerInfo = get_tree().create_tween()
 	tweenPlayerInfo.tween_property($PlayerPanels, "position", playerPanelsTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-
 	
-	var tweenOrderPanel = get_tree().create_tween()
-	tweenOrderPanel.tween_property($OrderPanel, "position", orderPanelTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-
-	await tweenOrderPanel.finished
+	await tweenOptionsPanel.finished
 	
 func tweenOptions(goIn, duration):
 	if goIn == true:
@@ -1251,8 +1242,9 @@ func battleStarted(id): # void, main battle loop as well.
 		
 		
 		isFirstTurn = false
-		updateOrderPanel()
+		updateOrderPanel(.5)
 		turnOrder.remove_at(turnOrder.size() - 1)
+		
 	if isBattleWon == true:
 		$DarknessOverlay.visible = true
 		for player in PartyStats.currentPartyMembers:
@@ -1273,14 +1265,16 @@ func battleStarted(id): # void, main battle loop as well.
 
 var firstOrderUpdate = true 
 
-func updateOrderPanel():
-	var container = $OrderPanel/SecondaryPanel/VBoxContainer
-	var sample = $OrderPanel/SecondaryPanel/VBoxContainer/Sample
-	var yOffset = 0
+func updateOrderPanel(delay = 0):
+	var container = $OptionsPanel/OrderPanel/SecondaryPanel/HBoxContainer
+	var sample = $OptionsPanel/OrderPanel/SecondaryPanel/HBoxContainer/Sample
+	var xOffset = 0
+	
+	await get_tree().create_timer(delay).timeout
 	
 	if !firstOrderUpdate:
 		var tweenExistingOrder = get_tree().create_tween()
-		tweenExistingOrder.tween_property(container, "position", Vector2(8, -64 + yOffset), 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT) # make it look like the order is moving up
+		tweenExistingOrder.tween_property(container, "position", Vector2(-68, 4), 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT) # make it look like the order is moving up
 		
 		await get_tree().create_timer(0.55).timeout
 	else:
@@ -1295,6 +1289,7 @@ func updateOrderPanel():
 	
 	print(turnOrder)
 	
+	
 	for person in turnOrder:
 		var pFieldData = fieldData[person]
 		var actualName = getResourceNameFromFieldData(person, pFieldData)
@@ -1306,7 +1301,7 @@ func updateOrderPanel():
 		newPortrait.get_child(0).texture = portraitPng
 		newPortrait.get_child(1).text = str(placement) # debug onlt
 		
-		newPortrait.name = actualName
+		newPortrait.name = actualName + str(randf_range(1, 1000))
 		
 		container.add_child(newPortrait)
 		newPortrait.set_meta("placement", placement)
@@ -1320,13 +1315,15 @@ func updateOrderPanel():
 	for panel in container.get_children():
 		if panel.name != "Sample":
 			container.move_child(panel, panel.get_meta("placement"))
+	
 
 #	for panel in container.get_children():
 #		if panel.name != "Sample":
 #			print(panel.name)
 #			panel.visible = true
 			
-	container.position = Vector2(8, 16 + yOffset)
+	container.position = Vector2(10 + -78 * ((turnOrder.size() - 4) if turnOrder.size() > 4 else 0), 4) # do not fucking ask me how this works.
+	print(container.position)
 func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):
 	
 	var totalText = textArray.size()

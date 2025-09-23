@@ -1,5 +1,6 @@
-TextureRect
+Control
 HBoxContainer
+TextureRect
 RichTextLabel
 Panel
 VBoxContainer
@@ -8,7 +9,6 @@ Label
 GPUParticles2D
 AnimatedSprite2D
 Camera2D
-Control
 Sprite2D
 AudioStreamPlayer
 NinePatchRect
