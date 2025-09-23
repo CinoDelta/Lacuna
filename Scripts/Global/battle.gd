@@ -961,7 +961,7 @@ func selectEnemy(memberName, memberFieldData):
 		# turn should always end with selecting an enmy/player.
 		currentAttackPacket["ACTION"]["TARGET"] = getEnemyFromSelection()
 		emit_signal("actionDecided")
-		tweenOptions(false, .5)
+		# tweenOptions(false, .5)
 	else:
 		basicSelection(memberName, memberFieldData) 
 		
@@ -1242,7 +1242,7 @@ func battleStarted(id): # void, main battle loop as well.
 		
 		
 		isFirstTurn = false
-		updateOrderPanel(.5)
+		updateOrderPanel()
 		turnOrder.remove_at(turnOrder.size() - 1)
 		
 	if isBattleWon == true:
@@ -1274,11 +1274,10 @@ func updateOrderPanel(delay = 0):
 	
 	if !firstOrderUpdate:
 		var tweenExistingOrder = get_tree().create_tween()
-		tweenExistingOrder.tween_property(container, "position", Vector2(-68, 4), 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT) # make it look like the order is moving up
+		tweenExistingOrder.tween_property(container, "position", Vector2(-68, 4), .5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT) # make it look like the order is moving up
 		
-		await get_tree().create_timer(0.55).timeout
-	else:
-		firstOrderUpdate = false
+		await get_tree().create_timer(.5).timeout
+	
 	
 	for panel in container.get_children():
 		if panel.name != "Sample":
@@ -1321,8 +1320,12 @@ func updateOrderPanel(delay = 0):
 #		if panel.name != "Sample":
 #			print(panel.name)
 #			panel.visible = true
-			
-	container.position = Vector2(10 + -78 * ((turnOrder.size() - 4) if turnOrder.size() > 4 else 0), 4) # do not fucking ask me how this works.
+	
+	if !firstOrderUpdate:
+		container.position = Vector2((10 + -78 * 2), 4) 
+	else:
+		container.position = Vector2((10 + -38 + -78), 4) 
+	firstOrderUpdate = false
 	print(container.position)
 func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):
 	
