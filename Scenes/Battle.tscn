@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://dffw7ogio4hw6"]
+[gd_scene load_steps=42 format=3 uid="uid://b0vvqbpnf1rvi"]
 
 [ext_resource type="Script" path="res://Scripts/Global/battle.gd" id="1_s088x"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
@@ -23,7 +23,7 @@
 [ext_resource type="SpriteFrames" uid="uid://c6h4qmojqggf7" path="res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres" id="14_gecb5"]
 [ext_resource type="SpriteFrames" uid="uid://cfurixtwnp536" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian.tres" id="14_uqc57"]
 [ext_resource type="AudioStream" uid="uid://bl6gi1l2jipge" path="res://Assets/Sounds/Select.ogg" id="15_2i87i"]
-[ext_resource type="Texture2D" uid="uid://cwh6117nvbgsr" path="res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/OrderPanel.png" id="17_h76v3"]
+[ext_resource type="Texture2D" uid="uid://bcghec3drr8wf" path="res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/OrderPanel.png" id="17_h76v3"]
 [ext_resource type="Texture2D" uid="uid://bsdyj06ltutvd" path="res://Assets/Sprites/Battle/Backgrounds/Background2.png" id="18_upfd3"]
 [ext_resource type="AudioStream" uid="uid://k3npac10xllp" path="res://Assets/Sounds/menuMovement.ogg" id="19_b4msy"]
 [ext_resource type="AudioStream" uid="uid://b5hwl1wyq1t6e" path="res://Assets/Sounds/ComboHit.mp3" id="19_vkxma"]
