@@ -1,10 +1,10 @@
+ColorRect
 Control
 HBoxContainer
 TextureRect
 RichTextLabel
 Panel
 VBoxContainer
-ColorRect
 Label
 GPUParticles2D
 AnimatedSprite2D
