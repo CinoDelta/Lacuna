@@ -346,6 +346,13 @@ rotation = 1.5708
 scale = Vector2(2, 2)
 texture = ExtResource("17_h76v3")
 
+[node name="Flash" type="ColorRect" parent="OptionsPanel/OrderPanel"]
+z_index = 5
+layout_mode = 0
+offset_right = 313.0
+offset_bottom = 80.0
+color = Color(1, 0.890196, 0.815686, 0)
+
 [node name="PlayerPanels" type="Panel" parent="."]
 layout_mode = 0
 offset_left = -19.0

@@ -32,6 +32,7 @@ window/size/resizable=false
 
 [editor]
 
+movie_writer/fps=30
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
 

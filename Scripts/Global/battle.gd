@@ -1265,7 +1265,7 @@ func battleStarted(id): # void, main battle loop as well.
 
 var firstOrderUpdate = true 
 
-func updateOrderPanel(delay = 0):
+func updateOrderPanel(delay = 0, refresh = false):
 	var container = $OptionsPanel/OrderPanel/SecondaryPanel/HBoxContainer
 	var sample = $OptionsPanel/OrderPanel/SecondaryPanel/HBoxContainer/Sample
 	var xOffset = 0
@@ -1274,45 +1274,83 @@ func updateOrderPanel(delay = 0):
 	
 	if !firstOrderUpdate:
 		var tweenExistingOrder = get_tree().create_tween()
-		tweenExistingOrder.tween_property(container, "position", Vector2(-68, 4), .5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT) # make it look like the order is moving up
+		tweenExistingOrder.tween_property(container, "position", Vector2(-68, 4), .7).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT) # make it look like the order is moving up
 		
-		await get_tree().create_timer(.5).timeout
+		await get_tree().create_timer(.75).timeout
 	
 	
-	for panel in container.get_children():
-		if panel.name != "Sample":
-			panel.queue_free()
+	if refresh or firstOrderUpdate:
+		for panel in container.get_children():
+			if panel.name != "Sample":
+				panel.queue_free()
 	
 	
 	var index = 0
 	
-	print(turnOrder)
-	
-	
-	for person in turnOrder:
-		var pFieldData = fieldData[person]
-		var actualName = getResourceNameFromFieldData(person, pFieldData)
-		var portraitPng = load("res://Assets/Sprites/Battle/DisplaySprites/Portraits/" + actualName + ".png")
-		var placement = turnOrder.size() - index -1
+	if firstOrderUpdate:
+		for person in turnOrder:
+			var pFieldData = fieldData[person]
+			var actualName = getResourceNameFromFieldData(person, pFieldData)
+			var portraitPng = load("res://Assets/Sprites/Battle/DisplaySprites/Portraits/" + actualName + ".png")
+			var placement = turnOrder.size() - index -1
+			
+			var newPortrait = sample.duplicate()
+			
+			newPortrait.get_child(0).texture = portraitPng
+			newPortrait.get_child(1).text = str(placement) # debug onlt
+			
+			newPortrait.name = actualName + str(randf_range(1, 1000))
+			
+			container.add_child(newPortrait)
+			newPortrait.set_meta("placement", placement)
+			newPortrait.visible = true
+			
+			
+			index += 1
+			container.position = Vector2((10 + -38 + -78), 4) 
+	else:
+		# first we need to remove the placement 0 of the thingy and add the placement x (amount of children + 1)
+		for panel in $OptionsPanel/OrderPanel/SecondaryPanel/HBoxContainer.get_children():
+			if panel.name != "Sample" and panel.get_meta("placement") == 0:
+				panel.queue_free()
+				print('panel deleted')
+				break
 		
+		# Reassigning placementValues
+		var highestPlacement = 0
+		for panel in $OptionsPanel/OrderPanel/SecondaryPanel/HBoxContainer.get_children():
+			if panel.name != "Sample":
+				panel.set_meta("placement", panel.get_meta("placement") - 1)
+				panel.get_child(1).text = str(panel.get_meta("placement"))
+				print("the placement is now " + str(panel.get_meta("placement")))
+				if panel.get_meta("placement") > highestPlacement:
+					highestPlacement = panel.get_meta("placement")
+		var newPerson = turnOrder[highestPlacement]
+		
+		var pFieldData = fieldData[newPerson]
+		var actualName = getResourceNameFromFieldData(newPerson, pFieldData)
+		var portraitPng = load("res://Assets/Sprites/Battle/DisplaySprites/Portraits/" + actualName + ".png")
+			
 		var newPortrait = sample.duplicate()
 		
 		newPortrait.get_child(0).texture = portraitPng
-		newPortrait.get_child(1).text = str(placement) # debug onlt
+		newPortrait.get_child(1).text = str(highestPlacement + 1) # debug onlt
 		
 		newPortrait.name = actualName + str(randf_range(1, 1000))
 		
 		container.add_child(newPortrait)
-		newPortrait.set_meta("placement", placement)
+		newPortrait.set_meta("placement", highestPlacement + 1)
+		$OptionsPanel/OrderPanel/Flash.color = Color(1, 0.89, 0.82, 1)
+		container.position = Vector2((10 + -78 * 2), 4) 
 		newPortrait.visible = true
 		
-		print("this placement of panel is " + str(placement))
+		get_tree().create_tween().tween_property($OptionsPanel/OrderPanel/Flash, "color", Color(1, 0.89, 0.82, 0), .3)
 		
-		
-		index += 1
+	firstOrderUpdate = false
 	
 	for panel in container.get_children():
 		if panel.name != "Sample":
+			print(panel.get_meta("placement"))
 			container.move_child(panel, panel.get_meta("placement"))
 	
 
@@ -1321,12 +1359,7 @@ func updateOrderPanel(delay = 0):
 #			print(panel.name)
 #			panel.visible = true
 	
-	if !firstOrderUpdate:
-		container.position = Vector2((10 + -78 * 2), 4) 
-	else:
-		container.position = Vector2((10 + -38 + -78), 4) 
-	firstOrderUpdate = false
-	print(container.position)
+
 func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):
 	
 	var totalText = textArray.size()
