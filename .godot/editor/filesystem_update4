@@ -10,3 +10,4 @@ res://Assets/Sprites/Battle/DisplaySprites/Enemies/Husk.tres
 res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres
 res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian.tres
 res://Scenes/starting_area.tscn
+res://Scripts/Global/PartyStats.gd

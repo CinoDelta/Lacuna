@@ -155,39 +155,40 @@ func playerSetup(): #I'll add aniamtion when i feel like it. void.
 	var count = 0
 	
 	for member in PartyStats.currentPartyMembers:
-		var newDisplay = $PlayerDisplay/Sample.duplicate()
-		
-		newDisplay.visible = true
-		newDisplay.name = member 
-		
-		$PlayerDisplay.add_child(newDisplay)
-		
-		var displayAnimatedSprite:AnimatedSprite2D = get_node("PlayerDisplay/" + member + "/" + "PSprite")
-		
-		displayAnimatedSprite.sprite_frames = load("res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/" + member + ".tres")
-				
-		displayAnimatedSprite.play(StringName("Idle")) # comment when we actually get animations PLACEHOLDER
-		
-		newDisplay.position = indexToBattlePosition[count]
-		
-		count += 1
-		
-		var newStatDisplay = $PlayerPanels/PlayerPanelsContainer/SampleMember.duplicate()
-		
-		newStatDisplay.visible = true
-		newStatDisplay.name = member
-		
-		$PlayerPanels/PlayerPanelsContainer.add_child(newStatDisplay)
-		
-		var nameDisplay = get_node("PlayerPanels/PlayerPanelsContainer/" + member + "/" + "Name")
-		nameDisplay.text = PartyStats.partyDatabase[member]["NAME"]
+		if PartyStats.partyDatabase[member]["CURRENT_PARTY_POSITION"] != "NONE":
+			var newDisplay = $PlayerDisplay/Sample.duplicate()
+			
+			newDisplay.visible = true
+			newDisplay.name = member 
+			
+			$PlayerDisplay.add_child(newDisplay)
+			
+			var displayAnimatedSprite:AnimatedSprite2D = get_node("PlayerDisplay/" + member + "/" + "PSprite")
+			
+			displayAnimatedSprite.sprite_frames = load("res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/" + member + ".tres")
+					
+			displayAnimatedSprite.play(StringName("Idle")) # comment when we actually get animations PLACEHOLDER
+			
+			newDisplay.position = indexToBattlePosition[count]
+			
+			count += 1
+			
+			var newStatDisplay = $PlayerPanels/PlayerPanelsContainer/SampleMember.duplicate()
+			
+			newStatDisplay.visible = true
+			newStatDisplay.name = member
+			
+			$PlayerPanels/PlayerPanelsContainer.add_child(newStatDisplay)
+			
+			var nameDisplay = get_node("PlayerPanels/PlayerPanelsContainer/" + member + "/" + "Name")
+			nameDisplay.text = PartyStats.partyDatabase[member]["NAME"]
 
-		var portraitPng = load("res://Assets/Sprites/Battle/DisplaySprites/Portraits/" + member + ".png")
-		
-		var portraitDisplay = get_node("PlayerPanels/PlayerPanelsContainer/" + member + "/" + "MemberPortrait")
-		portraitDisplay.texture = portraitPng
-		
-		createNewFieldData(member, false, newDisplay)
+			var portraitPng = load("res://Assets/Sprites/Battle/DisplaySprites/Portraits/" + member + ".png")
+			
+			var portraitDisplay = get_node("PlayerPanels/PlayerPanelsContainer/" + member + "/" + "MemberPortrait")
+			portraitDisplay.texture = portraitPng
+			
+			createNewFieldData(member, false, newDisplay)
 		
 		
 		
