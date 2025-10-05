@@ -796,7 +796,34 @@ func attack(attacker, attackDataPacket):
 				
 				attackerSprite.play("Idle")
 				targetSprite.play("Idle")
-				
+		"SpecialAttack":
+			match attackerAction["EXTRA_DATA"]["Move"]:
+				"X-Slash":
+					for i in range(0, 2):
+						attackerSprite.play("Attack")
+						$SlashHit.play()
+						targetEffects.play("Slash")
+						
+						await get_tree().create_timer(0.3).timeout
+						
+						targetSprite.play("Hurt")
+						shakeAnimatedSprite(targetSprite, 6, 20, 0.02)
+						
+						$EnemyDamaged.stream = load("res://Assets/Sounds/Enemies/" + currentEnemies[target]["REAL_NAME"] + "/Hurt.mp3")
+						$EnemyDamaged.play()
+						
+						var damageInfo = calculatebaseAttackDamage(PartyStats.getPartyMemberTrueStats(attacker)["ATTACK"], currentEnemies[target]["DEFENSE"], 2.5, attackerFieldData, targetFieldData, false)
+
+						currentEnemies[target]["HP"] -= damageInfo[0]
+						displayStatus(damageInfo[0], targetDisplay.global_position, "damage", 1, (damageInfo[1] == 2))
+						await get_tree().create_timer((0.1 if i == 0 else 0.25)).timeout
+					
+					attackerSprite.play("Idle")
+					targetSprite.play("Idle")
+					
+					targetEffects.play("Nothing")
+					await checkEnemyDefeated(target, targetSprite)
+					# Double slash, super damaging
 # functions that are run until an action is decided! Only for the player's party.
 
 func basicSelection(memberName, memberFieldData):# this just keeps getting passed down (parameters) for special and item selection specifically
@@ -939,7 +966,21 @@ func selectSkill(memberName, memberFieldData, skillset):
 	await optionSelected
 	
 	if optionStatus == true:
-		pass
+		var selectedSkillData
+		for child in $OptionsPanel/SubMenu/DisplayMoveInfo.get_children():
+			if child.name != "SampleMoveInfo":
+				if child.get_meta("placement") == currentSelection:
+					print("hahahaha")
+					selectedSkillData = SkillDatabase.SKILL_DATABASE[skillset][child.name]
+		currentAttackPacket["ACTION"]["PRIMARY_ACTION"] = "SpecialAttack"
+		currentAttackPacket["ACTION"]["EXTRA_DATA"] = {"Move" = selectedSkillData.DisplayName}
+		if PartyStats.partyDatabase[memberName]["AETHER"] > selectedSkillData["AetherData"][1]:
+			match selectedSkillData["TargetType"]:
+				"Enemy":
+					print("selecting an enemy")
+					selectEnemy(memberName, memberFieldData)
+				"AllEnemy":
+					emit_signal("actionDecided")
 	else:
 		selectSkillset(memberName, memberFieldData) 
 		
@@ -1269,7 +1310,7 @@ var firstOrderUpdate = true
 func updateOrderPanel(delay = 0, refresh = false):
 	var container = $OptionsPanel/OrderPanel/SecondaryPanel/HBoxContainer
 	var sample = $OptionsPanel/OrderPanel/SecondaryPanel/HBoxContainer/Sample
-	var xOffset = 0
+	var _xOffset = 0
 	
 	await get_tree().create_timer(delay).timeout
 	

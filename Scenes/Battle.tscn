@@ -1,6 +1,6 @@
 [gd_scene load_steps=43 format=3 uid="uid://b0vvqbpnf1rvi"]
 
-[ext_resource type="Script" path="res://Scripts/Global/battle.gd" id="1_s088x"]
+[ext_resource type="Script" uid="uid://ba8u8140hxapf" path="res://Scripts/Global/battle.gd" id="1_s088x"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
 [ext_resource type="Theme" uid="uid://bli24837s4wbp" path="res://Assets/Themes/Thamoiras.tres" id="2_edys4"]
 [ext_resource type="Theme" uid="uid://25nh0v5d7y1b" path="res://Assets/Themes/basicText.tres" id="3_7ko0y"]
@@ -21,9 +21,9 @@
 [ext_resource type="Texture2D" uid="uid://be3j2kyup38lq" path="res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/AetherBorder.png" id="13_wvbfm"]
 [ext_resource type="SpriteFrames" uid="uid://bsfw85cjfjyvg" path="res://Assets/Sprites/Battle/DisplaySprites/Enemies/Husk.tres" id="14_8abmu"]
 [ext_resource type="SpriteFrames" uid="uid://c6h4qmojqggf7" path="res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres" id="14_gecb5"]
-[ext_resource type="SpriteFrames" uid="uid://cfurixtwnp536" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian.tres" id="14_uqc57"]
 [ext_resource type="AudioStream" uid="uid://bl6gi1l2jipge" path="res://Assets/Sounds/Select.ogg" id="15_2i87i"]
-[ext_resource type="Texture2D" uid="uid://bcghec3drr8wf" path="res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/OrderPanel.png" id="17_h76v3"]
+[ext_resource type="Texture2D" uid="uid://cwh6117nvbgsr" path="res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/OrderPanel.png" id="17_h76v3"]
+[ext_resource type="SpriteFrames" uid="uid://by6l0i2tcv36x" path="res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa.tres" id="18_hibfo"]
 [ext_resource type="Texture2D" uid="uid://bsdyj06ltutvd" path="res://Assets/Sprites/Battle/Backgrounds/Background2.png" id="18_upfd3"]
 [ext_resource type="AudioStream" uid="uid://k3npac10xllp" path="res://Assets/Sounds/menuMovement.ogg" id="19_b4msy"]
 [ext_resource type="AudioStream" uid="uid://b5hwl1wyq1t6e" path="res://Assets/Sounds/ComboHit.mp3" id="19_vkxma"]
@@ -42,10 +42,8 @@ bg_color = Color(0.180392, 0.0666667, 0.00392157, 1)
 Panel/styles/panel = SubResource("StyleBoxFlat_ahwwc")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_io3f1"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_width_left = 4
+bg_color = Color(0.6, 0.3372549, 0.6, 0.29411766)
 border_width_top = 4
-border_width_right = 4
 border_width_bottom = 4
 border_color = Color(0.862745, 0.996078, 0.839216, 1)
 
@@ -208,7 +206,7 @@ metadata/selectionOrder = 0
 [node name="EnemyName" type="RichTextLabel" parent="OptionsPanel/SubMenu/DisplayEnemyInfo/SampleEnemyInfo"]
 texture_filter = 1
 custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
+layout_mode = 0
 offset_left = 8.0
 offset_right = 248.0
 offset_bottom = 48.0
@@ -317,7 +315,7 @@ metadata/placement = 0
 z_index = 1
 texture_filter = 1
 custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
+layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 texture = ExtResource("13_j68nw")
@@ -355,7 +353,7 @@ color = Color(1, 0.890196, 0.815686, 0)
 
 [node name="PlayerPanels" type="Panel" parent="."]
 layout_mode = 0
-offset_left = -19.0
+offset_left = -12.0
 offset_top = 696.0
 offset_right = 1175.0
 offset_bottom = 820.0
@@ -373,7 +371,6 @@ theme_override_constants/separation = 15
 alignment = 1
 
 [node name="SampleMember" type="Panel" parent="PlayerPanels/PlayerPanelsContainer"]
-visible = false
 z_index = 1
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
@@ -524,8 +521,8 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_f8xi8")
 clip_children = 2
 texture_filter = 1
 scale = Vector2(2, 2)
-sprite_frames = ExtResource("14_uqc57")
-animation = &"Attack"
+sprite_frames = ExtResource("18_hibfo")
+animation = &"Idle"
 
 [node name="Highlight" type="ColorRect" parent="PlayerDisplay/Sample/PSprite"]
 anchors_preset = 8
@@ -678,6 +675,7 @@ offset_top = 265.0
 offset_right = 1241.0
 offset_bottom = 625.0
 color = Color(0.129412, 0.129412, 0.129412, 1)
+metadata/_edit_lock_ = true
 
 [node name="ColorRect2" type="ColorRect" parent="BackgroundOverlay/Debug"]
 layout_mode = 0
@@ -689,7 +687,6 @@ color = Color(0.0745098, 0.0745098, 0.0745098, 1)
 metadata/_edit_lock_ = true
 
 [node name="--- SOUNDS ---" type="Control" parent="."]
-layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -740,7 +737,6 @@ volume_db = 8.0
 stream = ExtResource("20_0jskv")
 
 [node name="--- MINIGAME STUFF ---" type="Control" parent="."]
-layout_mode = 3
 anchors_preset = 0
 offset_left = 10.0
 offset_right = 40.0
