@@ -54,7 +54,7 @@ var partyDatabase = {
 		"LEVEL" = 1,
 		"MAX_EXP" = 20,
 		"CURRENT_EXP" = 0,
-		"CURRENT_PARTY_POSITION" = "NONE", 
+		"CURRENT_PARTY_POSITION" = "Second", 
 		"EQUIPMENT" = {
 			"WEAPON" = "SILVER_STAFF", 
 			"ARMOUR" = "NONE",
@@ -123,7 +123,7 @@ var levelUpStatDistribution = {
 
 var inventory = {}
 
-var currentPartyMembers = ["Cassian"] # yes ik party position exists this is for easy access instead of converting to an array the whole time
+var currentPartyMembers = ["Cassian", "Isa"] # yes ik party position exists this is for easy access instead of converting to an array the whole time
 
 var inBattle = false
 

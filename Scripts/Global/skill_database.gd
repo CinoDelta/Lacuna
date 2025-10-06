@@ -45,7 +45,7 @@ var SKILL_DATABASE = {
 			"TargetType" = "AllEnemy"
 		},
 	},
-	"Spells" = {
+	"Aether" = {
 		"Icon" = preload("res://Assets/Sprites/Battle/DisplaySprites/Selections/SkillTypeGraphics/Spells.png"),
 		"FocusBlast" = {
 			"Levels" = true,

@@ -34,7 +34,7 @@ enum battlePhases {
 var battlePhase = battlePhases.Starting
 var indexToBattlePosition = [
 	Vector2(32, 16), 
-	Vector2(-48, 128), 
+	Vector2(-48, 100), 
 	Vector2(-56, -80), 
 	Vector2(-128, 16), 
 	Vector2(592, 160),
