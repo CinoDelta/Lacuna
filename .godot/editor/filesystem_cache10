@@ -1,5 +1,5 @@
 63f7b34db8d8cdea90c76aacccf841ec
-::res://::1759687565
+::res://::1760324577
 icon.svg::CompressedTexture2D::401243560014524161::1753672528::1753672594::1::::<><><>0<>0<>4f6f28287792f269f0f495e3fdbc2815<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 README.md::TextFile::-1::1757465951::0::1::::<><><>0<>0<><>::
 ::res://addons/::1753734982
@@ -14,7 +14,7 @@ plugin.cfg::TextFile::-1::1753672528::0::1::::<><><>0<>0<><>::
 THIRDPARTY.md::TextFile::-1::1753672528::0::1::::<><><>0<>0<><>::
 ::res://addons/godot-git-plugin/linux/::1753672528
 ::res://addons/godot-git-plugin/macos/::1753672528
-::res://addons/godot-git-plugin/win64/::1759687558
+::res://addons/godot-git-plugin/win64/::1760324570
 ::res://Assets/::1754963215
 ::res://Assets/Aseprite/::1753672528
 ::res://Assets/Fonts/::1756514871
@@ -63,9 +63,9 @@ DebugBoyOuch.png::CompressedTexture2D::6981587458571434771::1754964172::17549641
 ::res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy/Idle/::1755901595
 Idle.png::CompressedTexture2D::6436255751690509315::1755901593::1755901595::1::::<><><>0<>0<>b37ae1a673a23f1722037ae95610089e<>res://.godot/imported/Idle.png-554fed5dd64b627fbd813251bbd85dc1.ctex::
 PlaceholderEnemy.png::CompressedTexture2D::390289150761438149::1753908504::1754866105::1::::<><><>0<>0<>1a29529dfc1a7ca2da8e6341f56af2df<>res://.godot/imported/PlaceholderEnemy.png-ed1bb4da356d4a2b3aed2416c8134152.ctex::
-::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/::1759712394
+::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/::1759712900
 Cassian.tres::SpriteFrames::5166120854291742743::1759712394::0::1::::<><><>0<>0<><>::uid://c13o3h1k7xoxh::::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/BasicAttack/AttackAnim-Sheet.png<>uid://c3tqvkrwhhhkv::::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/BasicAttack/Attackhold.png<>uid://c4uyugovvb7d4::::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/Hurt/Hurt.png<>uid://e22r6qt8n815::::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/Idle/Idle-Sheet.png<>uid://cyhnn3daa8j1p::::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/Win/Win.png
-Isa.tres::SpriteFrames::4135661635913109773::1759712393::0::1::::<><><>0<>0<><>::uid://8vdc5bfjbwa5::::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa/Idle/IsaIdle-Sheet.png
+Isa.tres::SpriteFrames::4135661635913109773::1759712900::0::1::::<><><>0<>0<><>::uid://8vdc5bfjbwa5::::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa/Idle/IsaIdle-Sheet.png<>uid://cymkb81ln0jkr::::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa/Hurt/IsaHurt.png
 ::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/::1756159074
 ::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/BasicAttack/::1756159556
 AttackAnim-Sheet.png::CompressedTexture2D::6656454327543189189::1754866053::1756159556::1::::<><><>0<>0<>57254b75ba95384ada899da41b50f94d<>res://.godot/imported/AttackAnim-Sheet.png-2c132e31348a457fedd985a3c94d1479.ctex::
@@ -78,7 +78,7 @@ PlaceholderPlayer.png::CompressedTexture2D::2447832881747973878::1754334159::175
 ::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Cassian/Win/::1756159556
 Win.png::CompressedTexture2D::6472638270493651055::1756159545::1756159556::1::::<><><>0<>0<>67a70c3e9d04df70db34a87aabb17f62<>res://.godot/imported/Win.png-e10e64ec3c92d7bbb484c8b7479f6b79.ctex::
 ::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa/::1759712424
-::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa/Hurt/::1759712844
+::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa/Hurt/::1759712857
 IsaHurt.png::CompressedTexture2D::6482756877422891137::1759712855::1759712857::1::::<><><>0<>0<>78e5042201c8372a23bcd4ea89de3e79<>res://.godot/imported/IsaHurt.png-22722079063b240b4112d599c19e6d99.ctex::
 ::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa/Idle/::1759712320
 IsaIdle-Sheet.png::CompressedTexture2D::2359771072941010798::1759712318::1759712320::1::::<><><>0<>0<>700819c5d6f5036193dd993f070959b4<>res://.godot/imported/IsaIdle-Sheet.png-b1b8d9cfc93a545dc5cbbdf0f0715a97.ctex::
@@ -140,8 +140,8 @@ OrangeBox.tres::StyleBoxFlat::8965620302003971753::1758669970::0::1::::<><><>0<>
 Thamoiras.tres::Theme::3176705910576103313::1759707461::0::1::::<><><>0<>0<><>::uid://dt0lgyrfwbbgt::::res://Assets/Themes/BasicBox.tres<>uid://d00aprxrkosov::::res://Assets/Themes/OrangeBox.tres
 transparentstuff.tres::Theme::4115471039022752623::1753672528::0::1::::<><><>0<>0<><>::uid://bwajrto7fby00::::res://Assets/Themes/transparentStuffFlat.tres
 transparentStuffFlat.tres::StyleBoxFlat::3931153076192692643::1753672528::0::1::::<><><>0<>0<><>::
-::res://Scenes/::1759712393
-Battle.tscn::PackedScene::4185797413323540886::1759712393::0::1::::<><><>0<>0<><>::uid://ba8u8140hxapf::::res://Scripts/Global/battle.gd<>uid://chwry8w5riibi::::res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png<>uid://bli24837s4wbp::::res://Assets/Themes/Thamoiras.tres<>uid://25nh0v5d7y1b::::res://Assets/Themes/basicText.tres<>uid://cniflqpycfgax::::res://Assets/Sprites/Battle/StatusConditions/Poisoned.png<>uid://cfv01vil13hsq::::res://Assets/Sprites/Battle/DisplaySprites/Selections/AttackSelection.png<>uid://byvtha8ricedj::::res://Assets/Themes/transparentstuff.tres<>uid://c1bjve3ydfl3g::::res://Assets/Sprites/Battle/DisplaySprites/Selections/Selection.png<>uid://jg824fqmi1s2::::res://Assets/Sprites/Battle/DisplaySprites/Selections/SpecialSelection.png<>uid://bst3bmxxc8wup::::res://Assets/Sprites/Battle/DisplaySprites/Selections/ItemSelection.png<>uid://3sjnjewec3ba::::res://Assets/Sprites/Battle/DisplaySprites/Selections/DefendSelection.png<>uid://ds8l87qec8y6i::::res://Assets/Sprites/MiscSprites/PrototypeBattleBox.png<>uid://b0mad586t5q10::::res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres<>uid://bsuu6vxtit4ai::::res://Assets/Sounds/DefaultTextBox.mp3<>uid://clag4g8vc46m3::::res://Assets/Sprites/Battle/DisplaySprites/Selections/FirstLevel.png<>uid://4k5mwk75k2ww::::res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/HealthBorder.png<>uid://d00aprxrkosov::::res://Assets/Themes/OrangeBox.tres<>uid://dmu67d64hrw88::::res://Assets/Sprites/Battle/DisplaySprites/Portraits/Cassian.png<>uid://be3j2kyup38lq::::res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/AetherBorder.png<>uid://bsfw85cjfjyvg::::res://Assets/Sprites/Battle/DisplaySprites/Enemies/Husk.tres<>uid://c6h4qmojqggf7::::res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres<>uid://bl6gi1l2jipge::::res://Assets/Sounds/Select.ogg<>uid://cwh6117nvbgsr::::res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/OrderPanel.png<>uid://by6l0i2tcv36x::::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa.tres<>uid://bsdyj06ltutvd::::res://Assets/Sprites/Battle/Backgrounds/Background2.png<>uid://k3npac10xllp::::res://Assets/Sounds/menuMovement.ogg<>uid://b5hwl1wyq1t6e::::res://Assets/Sounds/ComboHit.mp3<>uid://badqmlix4xsgi::::res://Assets/Sounds/Encounter.ogg<>uid://b87tkiuf0ao5r::::res://Assets/Sounds/SlashHit.mp3<>uid://ck6bxoqr0dq3g::::res://Assets/Sprites/Battle/Minigames/UpCommand.png<>uid://c3xk6eyo1833r::::res://Assets/Sounds/Sfx/PlayerAttacks.ogg<>uid://3y3na1wmph0a::::res://Assets/Sounds/WallowingWisps.ogg<>uid://cjqbjgy1yg2ot::::res://Assets/Sounds/YouWon.ogg<>uid://d3d4fb8x1vrop::::res://Assets/Sprites/Battle/Minigames/Sword/Accuracy.png
+::res://Scenes/::1759713276
+Battle.tscn::PackedScene::4185797413323540886::1759713276::0::1::::<><><>0<>0<><>::uid://ba8u8140hxapf::::res://Scripts/Global/battle.gd<>uid://chwry8w5riibi::::res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png<>uid://bli24837s4wbp::::res://Assets/Themes/Thamoiras.tres<>uid://25nh0v5d7y1b::::res://Assets/Themes/basicText.tres<>uid://cniflqpycfgax::::res://Assets/Sprites/Battle/StatusConditions/Poisoned.png<>uid://cfv01vil13hsq::::res://Assets/Sprites/Battle/DisplaySprites/Selections/AttackSelection.png<>uid://byvtha8ricedj::::res://Assets/Themes/transparentstuff.tres<>uid://c1bjve3ydfl3g::::res://Assets/Sprites/Battle/DisplaySprites/Selections/Selection.png<>uid://jg824fqmi1s2::::res://Assets/Sprites/Battle/DisplaySprites/Selections/SpecialSelection.png<>uid://bst3bmxxc8wup::::res://Assets/Sprites/Battle/DisplaySprites/Selections/ItemSelection.png<>uid://3sjnjewec3ba::::res://Assets/Sprites/Battle/DisplaySprites/Selections/DefendSelection.png<>uid://ds8l87qec8y6i::::res://Assets/Sprites/MiscSprites/PrototypeBattleBox.png<>uid://b0mad586t5q10::::res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.tres<>uid://bsuu6vxtit4ai::::res://Assets/Sounds/DefaultTextBox.mp3<>uid://clag4g8vc46m3::::res://Assets/Sprites/Battle/DisplaySprites/Selections/FirstLevel.png<>uid://4k5mwk75k2ww::::res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/HealthBorder.png<>uid://d00aprxrkosov::::res://Assets/Themes/OrangeBox.tres<>uid://dmu67d64hrw88::::res://Assets/Sprites/Battle/DisplaySprites/Portraits/Cassian.png<>uid://be3j2kyup38lq::::res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/AetherBorder.png<>uid://bsfw85cjfjyvg::::res://Assets/Sprites/Battle/DisplaySprites/Enemies/Husk.tres<>uid://c6h4qmojqggf7::::res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres<>uid://bl6gi1l2jipge::::res://Assets/Sounds/Select.ogg<>uid://cwh6117nvbgsr::::res://Assets/Sprites/Battle/DisplaySprites/Ui/PlayerDisplay/OrderPanel.png<>uid://by6l0i2tcv36x::::res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa.tres<>uid://bsdyj06ltutvd::::res://Assets/Sprites/Battle/Backgrounds/Background2.png<>uid://k3npac10xllp::::res://Assets/Sounds/menuMovement.ogg<>uid://b5hwl1wyq1t6e::::res://Assets/Sounds/ComboHit.mp3<>uid://badqmlix4xsgi::::res://Assets/Sounds/Encounter.ogg<>uid://b87tkiuf0ao5r::::res://Assets/Sounds/SlashHit.mp3<>uid://ck6bxoqr0dq3g::::res://Assets/Sprites/Battle/Minigames/UpCommand.png<>uid://c3xk6eyo1833r::::res://Assets/Sounds/Sfx/PlayerAttacks.ogg<>uid://3y3na1wmph0a::::res://Assets/Sounds/WallowingWisps.ogg<>uid://cjqbjgy1yg2ot::::res://Assets/Sounds/YouWon.ogg<>uid://d3d4fb8x1vrop::::res://Assets/Sprites/Battle/Minigames/Sword/Accuracy.png
 Follower.tscn::PackedScene::6602658807865867992::1753672528::0::1::::<><><>0<>0<><>::
 MainMusicChannel.tscn::PackedScene::8414934580978669990::1758419500::0::1::::<><><>0<>0<><>::res://Scripts/Global/music_manager.gd
 Player.tscn::PackedScene::6456327247227741023::1758419500::0::1::::<><><>0<>0<><>::res://Scripts/Player.gd<>uid://defhw7jwsl3bp::::res://Assets/Sprites/Player/OverworldSprites/NoNameYet.tres
@@ -149,11 +149,11 @@ starting_area.tscn::PackedScene::4021882454229098866::1758673738::0::1::::<><><>
 ::res://Scripts/::1759189535
 Overworld.gd::GDScript::5061834966557208294::1755215080::0::1::::<>Node2D<><>0<>0<><>::
 Player.gd::GDScript::8454938046014262366::1758669970::0::1::::<>CharacterBody2D<><>0<>0<><>::
-::res://Scripts/Global/::1759708489
-battle.gd::GDScript::2455819832183840779::1759708489::0::1::::<>Control<><>0<>0<><>::
+::res://Scripts/Global/::1759713172
+battle.gd::GDScript::2455819832183840779::1759713139::0::1::::<>Control<><>0<>0<><>::
 battle_database.gd::GDScript::2391056701798716474::1755976458::0::1::::<>Node<><>0<>0<><>::
 enemy_database.gd::GDScript::5616464842371627657::1755987237::0::1::::<>Node<><>0<>0<><>::
 item_database.gd::GDScript::7314952485135776588::1755212420::0::1::::<>Node<><>0<>0<><>::
 music_manager.gd::GDScript::6317636221178900059::1756165976::0::1::::<>AudioStreamPlayer<><>0<>0<><>::
-PartyStats.gd::GDScript::401165217494545094::1759707650::0::1::::<>Node<><>0<>0<><>::
-skill_database.gd::GDScript::6945373366255352840::1757731404::0::1::::<>Node<><>0<>0<><>::
+PartyStats.gd::GDScript::401165217494545094::1759713030::0::1::::<>Node<><>0<>0<><>::
+skill_database.gd::GDScript::6945373366255352840::1759713172::0::1::::<>Node<><>0<>0<><>::

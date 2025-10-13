@@ -567,7 +567,7 @@ func attack(attacker, attackDataPacket):
 							$MinigamePanel.scale = Vector2(0, 1)
 							
 							var panelTween = get_tree().create_tween()
-							panelTween.tween_property($MinigamePanel, "scale", Vector2(1,1), 0.75).set_trans(Tween.TRANS_QUAD)
+							panelTween.tween_property($MinigamePanel, "scale", Vector2(1,1), 0.5).set_trans(Tween.TRANS_QUAD)
 							panelTween.parallel().tween_property($MinigamePanel, "modulate", Color(1, 1, 1, 1), 0.3)
 							
 							await panelTween.finished
@@ -782,6 +782,7 @@ func attack(attacker, attackDataPacket):
 						#1120 ms
 				
 				$SlashHit.play()
+				shakeCamera(6, 20, 0.02)
 				targetSprite.play("Hurt")
 				shakeAnimatedSprite(targetSprite, 6, 20, 0.02)
 				

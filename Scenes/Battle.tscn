@@ -184,9 +184,9 @@ visible = false
 z_index = 2
 clip_contents = true
 layout_mode = 0
-offset_top = 152.0
+offset_top = 107.0
 offset_right = 412.0
-offset_bottom = 356.0
+offset_bottom = 311.0
 
 [node name="DisplayEnemyInfo" type="VBoxContainer" parent="OptionsPanel/SubMenu"]
 custom_minimum_size = Vector2(0, 30)
@@ -675,7 +675,7 @@ offset_left = 79.0
 offset_top = 265.0
 offset_right = 1241.0
 offset_bottom = 625.0
-color = Color(0.37517193, 0.2317495, 0.3538045, 0.6666667)
+color = Color(0.3764706, 0.23137255, 0.3529412, 1)
 metadata/_edit_lock_ = true
 
 [node name="ColorRect2" type="ColorRect" parent="BackgroundOverlay/Debug"]
