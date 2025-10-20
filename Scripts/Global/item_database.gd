@@ -88,6 +88,27 @@ var ITEM_DATABASE = {
 				"ABILITIES" = {} # none
 			}
 		}
+	},
+	"SILVER_STAFF" = {
+		"NAME" = "Silver Staff",
+		"DESCRIPTION" = "A staff of silver stars.",
+		"ID" = 4, 
+		"TYPE" = 2,
+		"USE_TEXT" = "%u equipped the silver staff!",
+		"SPECIAL_DATA" = {
+			"Hand" = "mainHand",
+			"WeaponType" = "Sword",
+			"Buffs" = {
+				"ATTACK" = 3,
+				"DEFENSE" = 0,
+				"MAGIC" = 5,
+				"SPEED" = 0,
+				"RESISTANCES" = {
+					"FIRE" = 0
+				},
+				"ABILITIES" = {} # none
+			}
+		}
 	}
 }
 

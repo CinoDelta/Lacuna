@@ -854,9 +854,8 @@ func basicSelection(memberName, memberFieldData):# this just keeps getting passe
 	highlightTween.kill()
 	highlight.color = Color(1, 1, 1, 0)
 	# option status HAS to be true, there is no backing out of basic options
-	
+	$Select.play()
 	if currentSelection == 1:
-		$Select.play()
 		currentAttackPacket["ACTION"]["PRIMARY_ACTION"] = "BasicAttack"
 		selectEnemy(memberName, memberFieldData)
 	elif currentSelection == 2:
@@ -866,12 +865,13 @@ func basicSelection(memberName, memberFieldData):# this just keeps getting passe
 				hasActiveSkillset = true 
 				break
 		if hasActiveSkillset:
-			$Select.play()
 			currentAttackPacket["ACTION"]["PRIMARY_ACTION"] = "SkillAttack"
 			selectSkillset(memberName, memberFieldData)
 		else:
-			$Select.play()
 			basicSelection(memberName, memberFieldData)
+	elif currentSelection == 3:
+		if PartyStats.inventory.keys().size() != 0:
+			selectItem(memberName, memberFieldData)
 	else:
 		basicSelection(memberName, memberFieldData)
 	
@@ -880,6 +880,10 @@ func basicSelection(memberName, memberFieldData):# this just keeps getting passe
 
 var amountOfSkillets = 0
 var amountOfSkills = 0
+
+func selectItem(memberName, memberFieldData):
+	#what
+	pass
 
 func selectSkillset(memberName, memberFieldData):
 	$OptionsPanel/SubMenu.visible = true
@@ -924,7 +928,6 @@ func selectSkillset(memberName, memberFieldData):
 		basicSelection(memberName, memberFieldData) 
 		$OptionsPanel/SubMenu/DisplayMoveInfo.visible = false
 		$OptionsPanel/SubMenu.visible = false
-	
 	
 func selectSkill(memberName, memberFieldData, skillset):
 	battlePhase = battlePhases.SelectingSkills
