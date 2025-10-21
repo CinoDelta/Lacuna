@@ -17,8 +17,8 @@ var partyDatabase = {
 		"DEFENSE" = 2,
 		"SPEED" = 5,
 		"MAGIC" = 4,
-		"AETHER" = 1, # out of a percentage
-		"AETHER_GAIN" = 7, # min 2 below max 2 above, divided by 100 before gaining
+		"AETHER" = 200,
+		"MAX_AETHER" = 200, 
 		"LEVEL" = 1,
 		"MAX_EXP" = 20,
 		"CURRENT_EXP" = 0,
@@ -39,9 +39,40 @@ var partyDatabase = {
 			}
 		},
 		"DISTRIBUTION" = "Fighter"
+	},
+	"Isa" = {
+		"NAME" = "Isa",
+		"MAX_HP" = 20,
+		"HP" = 20,
+		"VITALITY" = 2,
+		"ATTACK" = 3,
+		"DEFENSE" = 2,
+		"SPEED" = 5,
+		"MAGIC" = 10,
+		"AETHER" = 1,
+		"MAX_AETHER" = 10, 
+		"LEVEL" = 1,
+		"MAX_EXP" = 20,
+		"CURRENT_EXP" = 0,
+		"CURRENT_PARTY_POSITION" = "Second", 
+		"EQUIPMENT" = {
+			"WEAPON" = "SILVER_STAFF", 
+			"ARMOUR" = "NONE",
+			"RINGS" = {
+				"FIRST" = "NONE",
+				"SECOND" = "NONE"
+			},
+			"AMULETS" = "NONE",
+		},
+		"SKILLSETS" = {
+			"Aether" = {
+				"Active" = true,
+				"Skills" = ["Focus Blast"]
+			}
+		},
+		"DISTRIBUTION" = "Wizard"
 	}
 }
-
 
 var wholePartyStats = {
 	"GOLD" = 0
@@ -80,12 +111,19 @@ var levelUpStatDistribution = {
 		"DEFENSE" = 10,
 		"MAGIC" = 3,
 		"SPEED" = 3
-	}
+	},
+	"Wizard" = {
+		"VITALITY" = 2,
+		"ATTACK" = 20,
+		"DEFENSE" = 8,
+		"MAGIC" = 6,
+		"SPEED" = 4
+	},
 }
 
 var inventory = {}
 
-var currentPartyMembers = ["Cassian"] # yes ik party position exists this is for easy access instead of converting to an array the whole time
+var currentPartyMembers = ["Cassian", "Isa"] # yes ik party position exists this is for easy access instead of converting to an array the whole time
 
 var inBattle = false
 
@@ -232,6 +270,14 @@ func purge_state(ids_that_start_with: String):
 
 	for key in to_erase:
 		states.erase(key)
+
+func _ready():
+	addItemToInv("POWER_BOMB")
+	addItemToInv("POWER_BOMB")
+	addItemToInv("POWER_BOMB")
+	addItemToInv("POWER_BOMB")
+	addItemToInv("POWER_BOMB")
+	print(inventory)
 
 func _process(_delta):
 	if Input.is_action_just_pressed("DebugLevelUp"):

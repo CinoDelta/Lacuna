@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b0mad586t5q10"]
 
-[ext_resource type="Shader" path="res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.gdshader" id="1_p3gqf"]
+[ext_resource type="Shader" uid="uid://dhjmehyl035f6" path="res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.gdshader" id="1_p3gqf"]
 
 [resource]
 shader = ExtResource("1_p3gqf")
