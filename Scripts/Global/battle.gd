@@ -321,8 +321,8 @@ func setUpBattle(_battleId): # void
 	
 	
 	
-	MusicManager.loadMusic("res://Assets/Sounds/BattleTwo.ogg")
-	MusicManager.setVolume(1.2)
+	MusicManager.loadMusic("res://Assets/Sounds/WallowingWisps.ogg")
+	MusicManager.setVolume(0.3)
 	MusicManager.play()
 	
 	
@@ -385,7 +385,9 @@ func calculateOrder(refreshOrder, numOfTurns):
 				peopleWaitingTooLong.append(participant)
 				
 		if peopleWaitingTooLong.size() > 0:
-			turnOrder.insert(0, peopleWaitingTooLong.pick_random()) # if theres one, it picks that no matter what. if theres more than that, it just picks random.
+			var randomPerson = peopleWaitingTooLong.pick_random()
+			turnOrder.insert(0, randomPerson) # if theres one, it picks that no matter what. if theres more than that, it just picks random.
+			peopleWaitingTooLong.erase(randomPerson)
 		else:
 			# main calculation
 			#print("main calculation")
@@ -840,6 +842,7 @@ func attack(attacker, attackDataPacket):
 				match thisItemData["NAME"]:
 					"Power Bomb":
 						print("used power bomb on " + target)
+						await get_tree().create_timer(1.0).timeout
 # functions that are run until an action is decided! Only for the player's party.
 
 func basicSelection(memberName, memberFieldData):# this just keeps getting passed down (parameters) for special and item selection specifically
@@ -1324,6 +1327,7 @@ func battleStarted(id): # void, main battle loop as well.
 		# At the start of each loop, figure out which person is supposed to move based on calculate order.
 		
 		if !isFirstTurn:
+			print("WE UPDATED THE TURN ORDER!!!")
 			calculateOrder(false, 1)
 			
 		#Update order panel
@@ -1483,7 +1487,6 @@ func updateOrderPanel(delay = 0, refresh = false):
 			if panel.name != "Sample":
 				panel.set_meta("placement", panel.get_meta("placement") - 1)
 				panel.get_child(1).text = str(panel.get_meta("placement"))
-				print("the placement is now " + str(panel.get_meta("placement")))
 				if panel.get_meta("placement") > highestPlacement:
 					highestPlacement = panel.get_meta("placement")
 		var newPerson = turnOrder[highestPlacement]
@@ -1644,7 +1647,7 @@ func refreshPlayerSelectionHighlights(clear = false): # void
 			var panelText = panel.get_child(0)
 			if panel.get_meta("SelectionOrder") == selectionTracker["PLAYER_SELECTION"] and !clear:
 				panelText.text = "[color=yellow]" + panel.name + "[/color]"
-				playerHighlight.color = Color(0.275, 1.0, 1.0, 0.714)
+				playerHighlight.color = Color(0.275, 1.0, 1.0, 0.608)
 			else:
 				playerHighlight.color = Color(1, 1, 1, 0)
 				panelText.text = panel.name
