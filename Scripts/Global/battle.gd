@@ -383,11 +383,13 @@ func calculateOrder(refreshOrder, numOfTurns):
 		for participant in fieldData:
 			if fieldData[participant]["TURNS_WAITING"] >= 5:
 				peopleWaitingTooLong.append(participant)
+				fieldData[participant]["TURNS_WAITING"] = 0 
 				
 		if peopleWaitingTooLong.size() > 0:
 			var randomPerson = peopleWaitingTooLong.pick_random()
 			turnOrder.insert(0, randomPerson) # if theres one, it picks that no matter what. if theres more than that, it just picks random.
 			peopleWaitingTooLong.erase(randomPerson)
+			print(peopleWaitingTooLong)
 		else:
 			# main calculation
 			#print("main calculation")
