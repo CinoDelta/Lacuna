@@ -9,3 +9,4 @@ res://Scripts/Global/battle.gd
 res://Scripts/Global/PartyStats.gd
 res://Scripts/Global/item_database.gd
 res://Scripts/Global/skill_database.gd
+res://Scenes/starting_area.tscn

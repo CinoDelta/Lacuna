@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bxkh201peh7p3"]
 
-[ext_resource type="Script" path="res://Scripts/Overworld.gd" id="1_lsp77"]
+[ext_resource type="Script" uid="uid://ced8xg2kxrlni" path="res://Scripts/Overworld.gd" id="1_lsp77"]
 [ext_resource type="PackedScene" uid="uid://b0vvqbpnf1rvi" path="res://Scenes/Battle.tscn" id="1_s27aq"]
 [ext_resource type="PackedScene" uid="uid://cx8q1cb0wger4" path="res://Scenes/Player.tscn" id="1_vyou3"]
 
@@ -31,7 +31,7 @@ z_index = 25
 offset_left = -50000.0
 offset_top = -50000.0
 offset_right = 950000.0
-offset_bottom = 9.995e+07
+offset_bottom = 99950000.0
 color = Color(0, 0, 0, 0)
 
 [node name="TransitionGreen" type="ColorRect" parent="."]
@@ -39,5 +39,5 @@ z_index = 20
 offset_left = -50000.0
 offset_top = -50000.0
 offset_right = 950000.0
-offset_bottom = 9.995e+07
+offset_bottom = 99950000.0
 color = Color(0.0941176, 0.666667, 0.298039, 0)

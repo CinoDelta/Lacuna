@@ -1070,6 +1070,7 @@ func selectItem(memberName, memberFieldData):
 	
 	
 	if optionStatus == true:
+		$OptionsPanel/SubMenu/DisplayItems.visible = false
 		var selectedItem = getItemFromVector(itemSelectionVector)
 		
 		currentAttackPacket["ACTION"]["EXTRA_DATA"] = {"Item" = selectedItem.get_meta("UID")}
@@ -1127,6 +1128,7 @@ func selectPlayer(memberName, memberFieldData):
 		currentAttackPacket["ACTION"]["TARGET"] = getPlayerFromSelection()
 		emit_signal("actionDecided")
 	else:
+		refreshPlayerSelectionHighlights(true)
 		basicSelection(memberName, memberFieldData) 
 	
 # util
@@ -1634,15 +1636,15 @@ func refreshEnemySelectionHighlights(): # void
 				enemyFieldDisplayHighlight.color = Color(1, 1, 1, 0)
 				panelText.text = panel.name
 				
-func refreshPlayerSelectionHighlights(): # void
+func refreshPlayerSelectionHighlights(clear = false): # void
 	var displayInfo = $OptionsPanel/SubMenu/DisplayEnemyInfo
 	for panel in displayInfo.get_children():
 		if panel.name != "SampleEnemyInfo":
-			var playerHighlight = fieldData[panel.name]["BATTLE_DISPLAY"]
+			var playerHighlight = fieldData[panel.name]["BATTLE_DISPLAY"].get_child(0).get_child(0)
 			var panelText = panel.get_child(0)
-			if panel.get_meta("SelectionOrder") == selectionTracker["PLAYER_SELECTION"]:
+			if panel.get_meta("SelectionOrder") == selectionTracker["PLAYER_SELECTION"] and !clear:
 				panelText.text = "[color=yellow]" + panel.name + "[/color]"
-				playerHighlight.color = Color(0.275, 1.0, 1.0, 0.918)
+				playerHighlight.color = Color(0.275, 1.0, 1.0, 0.714)
 			else:
 				playerHighlight.color = Color(1, 1, 1, 0)
 				panelText.text = panel.name
@@ -1699,32 +1701,23 @@ func _process(_delta): # void
 			emit_signal("textbox_continued")
 		$Select.play()
 		match battlePhase:
-			battlePhases.SelectingBasics:
+			battlePhases.Starting:
+				pass
+			battlePhases.SwordMinigame:
+				pass
+			_:
 				optionStatus = true
 				emit_signal("optionSelected")
-			battlePhases.SelectingEnemyParticipator:
-				optionStatus = true
-				emit_signal("optionSelected")
-			battlePhases.SelectingSkillsets:
-				optionStatus = true
-				emit_signal("optionSelected")
-			battlePhases.SelectingSkills:
-				optionStatus = true
-				emit_signal("optionSelected")
+				
 	# CANCEL
 	if Input.is_action_just_pressed("Cancel"):
 		$Select.play()
 		match battlePhase:
-			battlePhases.SelectingEnemyParticipator: # if below is the same for each phase im going to uniform it
-				optionStatus = false
-				emit_signal("optionSelected")
-			battlePhases.SelectingSkillsets:
-				optionStatus = false
-				emit_signal("optionSelected")
-			battlePhases.SelectingSkills:
-				optionStatus = false
-				emit_signal("optionSelected")
-			battlePhases.SelectingItems:
+			battlePhases.Starting:
+				pass
+			battlePhases.SwordMinigame:
+				pass
+			_:
 				optionStatus = false
 				emit_signal("optionSelected")
 	# LEFT
@@ -1784,7 +1777,7 @@ func _process(_delta): # void
 			battlePhases.SelectingPartyParticipator:
 				$MenuMovement.play()
 				if selectionTracker["PLAYER_SELECTION"] < 2:
-					selectionTracker["PLAYER_SELECTION"] = PartyStats.currentPartyMembers.keys().size()
+					selectionTracker["PLAYER_SELECTION"] = PartyStats.currentPartyMembers.size()
 				else:
 					selectionTracker["PLAYER_SELECTION"] -= 1
 				refreshPlayerSelectionHighlights()
@@ -1830,7 +1823,7 @@ func _process(_delta): # void
 				refreshEnemySelectionHighlights()
 			battlePhases.SelectingPartyParticipator:
 				$MenuMovement.play()
-				if selectionTracker["PLAYER_SELECTION"] + 1 >  PartyStats.currentPartyMembers.keys().size():
+				if selectionTracker["PLAYER_SELECTION"] + 1 > PartyStats.currentPartyMembers.size():
 					selectionTracker["PLAYER_SELECTION"] = 1
 				else:
 					selectionTracker["PLAYER_SELECTION"] += 1
