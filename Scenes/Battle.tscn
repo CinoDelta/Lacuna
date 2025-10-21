@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://b0vvqbpnf1rvi"]
+[gd_scene load_steps=44 format=3 uid="uid://b0vvqbpnf1rvi"]
 
 [ext_resource type="Script" uid="uid://ba8u8140hxapf" path="res://Scripts/Global/battle.gd" id="1_s088x"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
@@ -34,6 +34,7 @@
 [ext_resource type="AudioStream" uid="uid://3y3na1wmph0a" path="res://Assets/Sounds/WallowingWisps.ogg" id="22_m28db"]
 [ext_resource type="AudioStream" uid="uid://cjqbjgy1yg2ot" path="res://Assets/Sounds/YouWon.ogg" id="27_cjr1v"]
 [ext_resource type="Texture2D" uid="uid://d3d4fb8x1vrop" path="res://Assets/Sprites/Battle/Minigames/Sword/Accuracy.png" id="27_pu18d"]
+[ext_resource type="AudioStream" uid="uid://ck5scagrf5ptq" path="res://Assets/Sounds/Sfx/EnemyAttacks.ogg" id="28_hjq1m"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ahwwc"]
 bg_color = Color(0.180392, 0.0666667, 0.00392157, 1)
@@ -751,9 +752,13 @@ volume_db = 3.0
 pitch_scale = 0.8
 
 [node name="EnemyAttacking" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("22_5cb5q")
+stream = ExtResource("28_hjq1m")
 volume_db = 13.0
 pitch_scale = 0.8
+
+[node name="PlayerAttacking" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("22_5cb5q")
+volume_db = 1.0
 
 [node name="MenuMovement" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("19_b4msy")

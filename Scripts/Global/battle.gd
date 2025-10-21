@@ -539,7 +539,7 @@ func attack(attacker, attackDataPacket):
 				var specialWeapons = []
 				
 				var minigamePoints = 0
-				
+				$PlayerAttacking.play()
 				
 				attackerSprite.play(StringName("AttackHold"))
 				
@@ -1781,6 +1781,13 @@ func _process(_delta): # void
 				else:
 					selectionTracker["ENEMY_SELECTION"] -= 1
 				refreshEnemySelectionHighlights()
+			battlePhases.SelectingPartyParticipator:
+				$MenuMovement.play()
+				if selectionTracker["PLAYER_SELECTION"] < 2:
+					selectionTracker["PLAYER_SELECTION"] = PartyStats.currentPartyMembers.keys().size()
+				else:
+					selectionTracker["PLAYER_SELECTION"] -= 1
+				refreshPlayerSelectionHighlights()
 			battlePhases.SelectingSkillsets:
 				$MenuMovement.play()
 				if selectionTracker["SKILLSET_SELECTION"] < 2:
@@ -1821,6 +1828,13 @@ func _process(_delta): # void
 				else:
 					selectionTracker["ENEMY_SELECTION"] += 1
 				refreshEnemySelectionHighlights()
+			battlePhases.SelectingPartyParticipator:
+				$MenuMovement.play()
+				if selectionTracker["PLAYER_SELECTION"] + 1 >  PartyStats.currentPartyMembers.keys().size():
+					selectionTracker["PLAYER_SELECTION"] = 1
+				else:
+					selectionTracker["PLAYER_SELECTION"] += 1
+				refreshPlayerSelectionHighlights()
 			battlePhases.SelectingSkillsets:
 				$MenuMovement.play()
 				if selectionTracker["SKILLSET_SELECTION"] + 1 > amountOfSkillets:
