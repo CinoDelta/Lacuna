@@ -1123,12 +1123,12 @@ func selectPlayer(memberName, memberFieldData):
 	
 	await optionSelected
 	
+	refreshPlayerSelectionHighlights(true)
 	if optionStatus == true:
 		# turn should always end with selecting an enmy/player.
 		currentAttackPacket["ACTION"]["TARGET"] = getPlayerFromSelection()
 		emit_signal("actionDecided")
 	else:
-		refreshPlayerSelectionHighlights(true)
 		basicSelection(memberName, memberFieldData) 
 	
 # util
