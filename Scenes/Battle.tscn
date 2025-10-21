@@ -180,7 +180,6 @@ expand_mode = 3
 stretch_mode = 4
 
 [node name="SubMenu" type="Panel" parent="OptionsPanel"]
-visible = false
 z_index = 2
 clip_contents = true
 layout_mode = 0
@@ -265,6 +264,38 @@ texture_filter = 1
 custom_minimum_size = Vector2(30, 20)
 layout_mode = 2
 texture = ExtResource("11_opy2d")
+
+[node name="DisplayItems" type="GridContainer" parent="OptionsPanel/SubMenu"]
+layout_mode = 0
+offset_right = 413.0
+offset_bottom = 248.0
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="SampleItemDisplay" type="Panel" parent="OptionsPanel/SubMenu/DisplayItems"]
+visible = false
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+theme = ExtResource("4_6af57")
+
+[node name="MoveTypeTextureRect" type="TextureRect" parent="OptionsPanel/SubMenu/DisplayItems/SampleItemDisplay"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="OptionsPanel/SubMenu/DisplayItems/SampleItemDisplay"]
+texture_filter = 1
+clip_contents = false
+layout_mode = 0
+offset_left = 9.0
+offset_top = 7.0
+offset_right = 198.0
+offset_bottom = 37.0
+theme = ExtResource("3_7ko0y")
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "Dream missle"
 
 [node name="backText" type="TextureRect" parent="OptionsPanel"]
 texture_filter = 1

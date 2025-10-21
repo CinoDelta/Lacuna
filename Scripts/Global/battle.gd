@@ -81,10 +81,15 @@ var currentSelection = 1 # For basic selection picking
 
 var selectionTracker = { # this is so that it saves when you go back to the selection :> 
 	"ENEMY_SELECTION" = 1,
+	"PLAYER_SELECTION" = 1,
 	"ITEM_SELECTION" = Vector2(0,0),
 	"SPECIAL_SELECTION" = 1,
 	"SKILLSET_SELECTION" = 1, # (only for skillsets, not skills)
 } 
+
+var maxItemSelectionVectorX = []
+var maxItemSelectionVectorY = []
+var itemSelectionVector = Vector2(0, 0)
 
 var optionStatus = false
 
@@ -333,13 +338,15 @@ func getEnemyDisplayFromName(enemyName:String): # Panel
 	return fieldData[enemyName]["BATTLE_DISPLAY"]
 	
 func getEnemyFromSelection(): # String
-	print(selectionTracker["ENEMY_SELECTION"])
 	for child in $OptionsPanel/SubMenu/DisplayEnemyInfo.get_children():
 		if child.name != "SampleEnemyInfo":
-			print("not sample")
-			print(child.get_meta("SelectionOrder"))
 			if child.get_meta("SelectionOrder") == selectionTracker["ENEMY_SELECTION"]:
-				print("selected")
+				return child.name
+				
+func getPlayerFromSelection(): # String
+	for child in $OptionsPanel/SubMenu/DisplayEnemyInfo.get_children():
+		if child.name != "SampleEnemyInfo":
+			if child.get_meta("SelectionOrder") == selectionTracker["PLAYER_SELECTION"]:
 				return child.name
 # very very very important battle functions
 
@@ -798,6 +805,7 @@ func attack(attacker, attackDataPacket):
 				attackerSprite.play("Idle")
 				targetSprite.play("Idle")
 		"SpecialAttack":
+			
 			match attackerAction["EXTRA_DATA"]["Move"]:
 				"X-Slash":
 					for i in range(0, 2):
@@ -825,6 +833,13 @@ func attack(attacker, attackDataPacket):
 					targetEffects.play("Nothing")
 					await checkEnemyDefeated(target, targetSprite)
 					# Double slash, super damaging
+		"UseItem":
+			if !isEnemy:
+				var specialUid = attackerAction["EXTRA_DATA"]["Item"]
+				var thisItemData = PartyStats.inventory[specialUid]
+				match thisItemData["NAME"]:
+					"Power Bomb":
+						print("used power bomb on " + target)
 # functions that are run until an action is decided! Only for the player's party.
 
 func basicSelection(memberName, memberFieldData):# this just keeps getting passed down (parameters) for special and item selection specifically
@@ -871,6 +886,7 @@ func basicSelection(memberName, memberFieldData):# this just keeps getting passe
 			basicSelection(memberName, memberFieldData)
 	elif currentSelection == 3:
 		if PartyStats.inventory.keys().size() != 0:
+			currentAttackPacket["ACTION"]["PRIMARY_ACTION"] = "UseItem"
 			selectItem(memberName, memberFieldData)
 	else:
 		basicSelection(memberName, memberFieldData)
@@ -881,10 +897,58 @@ func basicSelection(memberName, memberFieldData):# this just keeps getting passe
 var amountOfSkillets = 0
 var amountOfSkills = 0
 
-func selectItem(memberName, memberFieldData):
-	#what
-	pass
 
+func refreshItemDisplay():
+	var xCounter = 1
+	var yCounter = 1
+	var displayGrid = $OptionsPanel/SubMenu/DisplayItems
+	var displayGridSample = $OptionsPanel/SubMenu/DisplayItems/SampleItemDisplay
+	
+	for child in displayGrid.get_children():
+		if child.name != "SampleItemDisplay": 
+			displayGrid.remove_child(child)
+	
+	for item in PartyStats.inventory:
+		var itemData = PartyStats.inventory[item]
+		if itemData["TYPE"] == 1:
+			var newItemNode = displayGridSample.duplicate()
+			
+			newItemNode.name = itemData["NAME"] + itemData["UID"]
+			newItemNode.set_meta("UID", itemData["UID"])
+			newItemNode.get_child(1).text = itemData["NAME"]
+			newItemNode.set_meta("DESCRIPTION", itemData["DESCRIPTION"])
+			newItemNode.set_meta("NAME", itemData["NAME"])
+			newItemNode.set_meta("selectionVector", Vector2(xCounter, yCounter))
+			
+			if xCounter >= 2:
+				maxItemSelectionVectorX.insert(yCounter - 1, float(2))
+			else:
+				maxItemSelectionVectorX.insert(yCounter - 1, float(1))
+				
+			maxItemSelectionVectorY = yCounter
+			
+			displayGrid.add_child(newItemNode)
+			newItemNode.visible = true
+			
+			xCounter += 1
+			if xCounter > 2: #(3, 1) -> (1, 2)
+				yCounter += 1
+				xCounter = 1
+
+func getItemFromVector(selectionVector:Vector2):
+	for child in $OptionsPanel/SubMenu/DisplayItems.get_children():
+		if child.name != "SampleItemDisplay":
+			if child.get_meta("selectionVector") == selectionVector:
+				return child
+	return $OptionsPanel/SubMenu/DisplayItems/SampleItemDisplay
+func highlightCurrentItem():
+	for child in $OptionsPanel/SubMenu/DisplayItems.get_children():
+		if child.name != "SampleItemDisplay":
+			if getItemFromVector(itemSelectionVector) == child:
+				child.get_child(1).text = "[color=yellow]" + child.get_meta("NAME") + "[/color]"
+			else:
+				child.get_child(1).text = child.get_meta("NAME")
+				
 func selectSkillset(memberName, memberFieldData):
 	$OptionsPanel/SubMenu.visible = true
 	$OptionsPanel/SubMenu/DisplayMoveInfo.visible = true
@@ -967,6 +1031,8 @@ func selectSkill(memberName, memberFieldData, skillset):
 	
 	refreshSkillsetSelectionHighlights(true)
 	
+	optionStatus = false
+	
 	await optionSelected
 	
 	if optionStatus == true:
@@ -974,22 +1040,51 @@ func selectSkill(memberName, memberFieldData, skillset):
 		for child in $OptionsPanel/SubMenu/DisplayMoveInfo.get_children():
 			if child.name != "SampleMoveInfo":
 				if child.get_meta("placement") == currentSelection:
-					print("hahahaha")
 					selectedSkillData = SkillDatabase.SKILL_DATABASE[skillset][child.name]
 		currentAttackPacket["ACTION"]["PRIMARY_ACTION"] = "SpecialAttack"
 		currentAttackPacket["ACTION"]["EXTRA_DATA"] = {"Move" = selectedSkillData.DisplayName}
 		if PartyStats.partyDatabase[memberName]["AETHER"] > selectedSkillData["AetherData"][1]:
 			match selectedSkillData["TargetType"]:
-				"Enemy":
-					print("selecting an enemy")
+				"OneEnemy":
 					selectEnemy(memberName, memberFieldData)
-				"AllEnemy":
+				"OnePlayer":
+					selectPlayer(memberName, memberFieldData)
+				_:
 					emit_signal("actionDecided")
 	else:
 		selectSkillset(memberName, memberFieldData) 
 		
 	currentSelection = selectionBefore
+
+func selectItem(memberName, memberFieldData):
+	$OptionsPanel/SubMenu.visible = true
+	$OptionsPanel/SubMenu/DisplayMoveInfo.visible = false
+	$OptionsPanel/SubMenu/DisplayEnemyInfo.visible = false
+	$OptionsPanel/SubMenu/DisplayItems.visible = true
+	battlePhase = battlePhases.SelectingItems
+	#what
+	refreshItemDisplay()
+	itemSelectionVector = Vector2(1,1)
+	highlightCurrentItem()
+	await optionSelected
 	
+	
+	if optionStatus == true:
+		var selectedItem = getItemFromVector(itemSelectionVector)
+		
+		currentAttackPacket["ACTION"]["EXTRA_DATA"] = {"Item" = selectedItem.get_meta("UID")}
+		match PartyStats.inventory[selectedItem.get_meta("UID")]["SPECIAL_DATA"]["Target"]:
+			"OnePlayer":
+				selectPlayer(memberName, memberFieldData)
+			"OneEnemy":
+				selectEnemy(memberName, memberFieldData)
+			_:
+				emit_signal("actionDecided")
+	else:
+		basicSelection(memberName, memberFieldData) 
+		$OptionsPanel/SubMenu/DisplayItems.visible = false
+
+
 func selectEnemy(memberName, memberFieldData):
 	
 	$OptionsPanel/SubMenu.visible = true
@@ -1014,8 +1109,26 @@ func selectEnemy(memberName, memberFieldData):
 	$OptionsPanel/SubMenu.visible = false
 	
 	clearEnemyHighlights()
+func selectPlayer(memberName, memberFieldData):
+	#DisplayenemyInfo will also be used for this should probably rename it
+	$OptionsPanel/SubMenu.visible = true
+	$OptionsPanel/SubMenu/DisplayEnemyInfo.visible = true
+	$OptionsPanel/SubMenu/DisplayMoveInfo.visible = false
 	
-
+	battlePhase = battlePhases.SelectingPartyParticipator
+	
+	refreshPlayerSelectionInfo()
+	refreshPlayerSelectionHighlights()
+	
+	await optionSelected
+	
+	if optionStatus == true:
+		# turn should always end with selecting an enmy/player.
+		currentAttackPacket["ACTION"]["TARGET"] = getPlayerFromSelection()
+		emit_signal("actionDecided")
+	else:
+		basicSelection(memberName, memberFieldData) 
+	
 # util
 
 func getResourceNameFromFieldData(dataName, fData):
@@ -1459,7 +1572,7 @@ func resetSelectionHighlights(): #void
 func refreshEnemySelectionInfo(): # void 
 	
 	var displayEnemyInfo = $OptionsPanel/SubMenu/DisplayEnemyInfo
-	for panel in displayEnemyInfo .get_children():
+	for panel in displayEnemyInfo.get_children():
 		if panel.name != "SampleEnemyInfo":
 			displayEnemyInfo.remove_child(panel)
 			
@@ -1481,7 +1594,33 @@ func refreshEnemySelectionInfo(): # void
 		newInfo.set_meta("SelectionOrder", count)
 		newInfo.name = enemy
 		count += 1
+
+func refreshPlayerSelectionInfo(): # void
+	
+	var displayInfo = $OptionsPanel/SubMenu/DisplayEnemyInfo
+	for panel in displayInfo.get_children():
+		if panel.name != "SampleEnemyInfo":
+			displayInfo.remove_child(panel)
+	
+	var sample = $OptionsPanel/SubMenu/DisplayEnemyInfo/SampleEnemyInfo
+	
+	var count = 1
+	
+	for player in PartyStats.currentPartyMembers:
 		
+		var _playerData = fieldData[player] # just in case i wanna add more to the enemy display
+		
+		var newInfo = sample.duplicate()
+		displayInfo.add_child(newInfo)
+		var newInfoText = newInfo.get_child(0)
+		
+		newInfoText.text = player
+		newInfo.visible = true
+		
+		newInfo.set_meta("SelectionOrder", count)
+		newInfo.name = player
+		count += 1
+	
 func refreshEnemySelectionHighlights(): # void
 	var displayEnemyInfo = $OptionsPanel/SubMenu/DisplayEnemyInfo
 	for panel in displayEnemyInfo.get_children():
@@ -1493,6 +1632,19 @@ func refreshEnemySelectionHighlights(): # void
 				enemyFieldDisplayHighlight.color = Color(1, 1, 1, 0.5)
 			else:
 				enemyFieldDisplayHighlight.color = Color(1, 1, 1, 0)
+				panelText.text = panel.name
+				
+func refreshPlayerSelectionHighlights(): # void
+	var displayInfo = $OptionsPanel/SubMenu/DisplayEnemyInfo
+	for panel in displayInfo.get_children():
+		if panel.name != "SampleEnemyInfo":
+			var playerHighlight = fieldData[panel.name]["BATTLE_DISPLAY"]
+			var panelText = panel.get_child(0)
+			if panel.get_meta("SelectionOrder") == selectionTracker["PLAYER_SELECTION"]:
+				panelText.text = "[color=yellow]" + panel.name + "[/color]"
+				playerHighlight.color = Color(0.275, 1.0, 1.0, 0.918)
+			else:
+				playerHighlight.color = Color(1, 1, 1, 0)
 				panelText.text = panel.name
 
 func refreshSkillsetSelectionHighlights(skills = false):
@@ -1572,6 +1724,9 @@ func _process(_delta): # void
 			battlePhases.SelectingSkills:
 				optionStatus = false
 				emit_signal("optionSelected")
+			battlePhases.SelectingItems:
+				optionStatus = false
+				emit_signal("optionSelected")
 	# LEFT
 	elif Input.is_action_just_pressed("ui_left"):
 		match battlePhase:
@@ -1586,7 +1741,14 @@ func _process(_delta): # void
 					else:
 						minigameHasConfirmed = false
 						emit_signal("minigameConfirm")
-						
+			battlePhases.SelectingItems:
+				if maxItemSelectionVectorX[itemSelectionVector.y - 1] == 2:
+					$MenuMovement.play()
+					if itemSelectionVector.x - 1 < 1:
+						itemSelectionVector = Vector2(2, itemSelectionVector.y)
+					else:
+						itemSelectionVector += Vector2(-1, 0)
+				highlightCurrentItem()
 	# RIGHT
 	elif Input.is_action_just_pressed("ui_right"):
 		match battlePhase:
@@ -1601,6 +1763,14 @@ func _process(_delta): # void
 					else:
 						minigameHasConfirmed = false
 						emit_signal("minigameConfirm")
+			battlePhases.SelectingItems:
+				if maxItemSelectionVectorX[itemSelectionVector.y - 1] == 2:
+					$MenuMovement.play()
+					if itemSelectionVector.x + 1 > 2:
+						itemSelectionVector = Vector2(1, itemSelectionVector.y)
+					else:
+						itemSelectionVector += Vector2(1, 0)
+				highlightCurrentItem()
 	# UP
 	elif Input.is_action_just_pressed("ui_up"):
 		match battlePhase:
@@ -1633,6 +1803,14 @@ func _process(_delta): # void
 					else:
 						minigameHasConfirmed = false
 						emit_signal("minigameConfirm")
+			battlePhases.SelectingItems:
+				$MenuMovement.play()
+				if getItemFromVector(Vector2(itemSelectionVector.x, itemSelectionVector.y-1)) != $OptionsPanel/SubMenu/DisplayItems/SampleItemDisplay:
+					if itemSelectionVector.y - 1.0 >= 1:
+						itemSelectionVector += Vector2(0, -1)
+					else:
+						itemSelectionVector = Vector2(itemSelectionVector.x, maxItemSelectionVectorY)
+					highlightCurrentItem()
 	# DOWNzx
 	elif Input.is_action_just_pressed("ui_down"):
 		match battlePhase:
@@ -1665,6 +1843,14 @@ func _process(_delta): # void
 					else:
 						minigameHasConfirmed = false
 						emit_signal("minigameConfirm")
+			battlePhases.SelectingItems:
+				if getItemFromVector(Vector2(itemSelectionVector.x, itemSelectionVector.y+1)) != $OptionsPanel/SubMenu/DisplayItems/SampleItemDisplay:
+					$MenuMovement.play()
+					if itemSelectionVector.y + 1.0 <= maxItemSelectionVectorY:
+						itemSelectionVector += Vector2(0, 1)
+					else:
+						itemSelectionVector = Vector2(itemSelectionVector.x, 1)
+					highlightCurrentItem()
 	# Selection highlights
 	if battlePhase == battlePhases.SelectingBasics:
 		var boxCounter = 1

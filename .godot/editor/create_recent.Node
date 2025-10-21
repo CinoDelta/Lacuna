@@ -1,3 +1,5 @@
+GridContainer
+ItemList
 ColorRect
 Control
 HBoxContainer
@@ -11,5 +13,3 @@ AnimatedSprite2D
 Camera2D
 Sprite2D
 AudioStreamPlayer
-NinePatchRect
-CollisionShape2D

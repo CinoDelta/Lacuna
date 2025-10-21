@@ -1,6 +1,6 @@
 extends Node
 
-#TargetTypes = "Player" "Enemy" "AllPlayer" "AllEnemy" "Field"
+#TargetTypes = "OnePlayer" "OneEnemy" "AllPlayer" "AllEnemy" "Field"
 var SKILL_DATABASE = { 
 	"Swordsmanship" = {
 		"Icon" = preload("res://Assets/Sprites/Battle/DisplaySprites/Selections/SkillTypeGraphics/Swordsmanship.png"),
@@ -10,7 +10,7 @@ var SKILL_DATABASE = {
 			"AetherData" = [false, 20],
 			"Description" = "Cuts an opposing enemy with devastating force. Scales based on ATTACK. (Attack level 4)",
 			"AttackShout" = "%u excecutes an X-Slash!",
-			"TargetType" = "Enemy"
+			"TargetType" = "OneEnemy"
 		},
 		"Pierce the Veil" = {
 			"Levels" = false,
@@ -18,7 +18,7 @@ var SKILL_DATABASE = {
 			"AetherData" = [false, 10],
 			"Description" = "Repeatedly cuts an enemies weak spots, ignoring defense boosts. Basic attack, but reduces defense by one stage.",
 			"AttackShout" = "%u cuts the veil!",
-			"TargetType" = "Enemy"
+			"TargetType" = "OneEnemy"
 		},
 		"Disarm" = {
 			"Levels" = false,
@@ -26,7 +26,7 @@ var SKILL_DATABASE = {
 			"AetherData" = [false, 25],
 			"Description" = "Hits vital spots for attacking, lowering enemy attack by one stage.",
 			"AttackShout" = "%u disarms %t!",
-			"TargetType" = "Enemy"
+			"TargetType" = "OneEnemy"
 		},
 		"Flash Advance" = {
 			"Levels" = false,
@@ -34,7 +34,7 @@ var SKILL_DATABASE = {
 			"AetherData" = [false, 55],
 			"Description" = "Moves at blinding speeds, catching an enemy off gaurd. Increases speed by one and always critical hits.",
 			"AttackShout" = "%u splits the wind!",
-			"TargetType" = "Enemy"
+			"TargetType" = "OneEnemy"
 		},
 		"Sweeping Cut" = {
 			"Levels" = false,
@@ -54,7 +54,7 @@ var SKILL_DATABASE = {
 				"AetherData" = [true, 14],
 				"Description" = "Fire off a concentrated blast of Aether. Has a base damage of 7-10, and scales based off of MAGIC.",
 				"AttackShout" = "%u fires off a focus blast!",
-				"TargetType" = "Enemy"
+				"TargetType" = "OneEnemy"
 			}
 		}
 	}

@@ -64,7 +64,7 @@ var ITEM_DATABASE = {
 		"USE_TEXT" = "%u used the Power Bomb!",
 		"SPECIAL_DATA" = {
 			"Health_Removed" = 50,
-			"Target" = "AllEnemies"
+			"Target" = "OnePlayer"
 		}
 	},
 	

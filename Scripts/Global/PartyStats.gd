@@ -271,6 +271,14 @@ func purge_state(ids_that_start_with: String):
 	for key in to_erase:
 		states.erase(key)
 
+func _ready():
+	addItemToInv("POWER_BOMB")
+	addItemToInv("POWER_BOMB")
+	addItemToInv("POWER_BOMB")
+	addItemToInv("POWER_BOMB")
+	addItemToInv("POWER_BOMB")
+	print(inventory)
+
 func _process(_delta):
 	if Input.is_action_just_pressed("DebugLevelUp"):
 		for i in range(1, 101):
