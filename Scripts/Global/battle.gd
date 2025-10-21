@@ -373,17 +373,14 @@ func calculateOrder(refreshOrder, numOfTurns):
 	# pre calculation (Are there people that haven't moved for 5 turns
 	
 	var peopleWaitingTooLong = []
-	var turnThreshold = 5
+	var turnThreshold = fieldData.keys().size() + 1
 	
 	for i in range(0, numOfTurns):
-		# if there are ever more than 5 participants in the battle, threshold will be increased.
-		if fieldData.keys().size() > 5:
-			turnThreshold += fieldData.keys().size() - 5
 		
 		for participant in fieldData:
-			if fieldData[participant]["TURNS_WAITING"] >= 5:
-				peopleWaitingTooLong.append(participant)
-				fieldData[participant]["TURNS_WAITING"] = 0 
+			if fieldData[participant]["TURNS_WAITING"] >= turnThreshold:
+				peopleWaitingTooLong.append(participant) 
+				fieldData[participant]["TURNS_WAITING"] = 0
 				
 		if peopleWaitingTooLong.size() > 0:
 			var randomPerson = peopleWaitingTooLong.pick_random()
@@ -403,9 +400,9 @@ func calculateOrder(refreshOrder, numOfTurns):
 				
 				match fieldData[participant]["CONSECUTIVE_TURNS"]:
 					1:
-						secondSpeedAlter = 0.45
+						secondSpeedAlter = 0.40
 					2:
-						secondSpeedAlter = 0.20
+						secondSpeedAlter = 0.15
 				
 				secondSpeedAlter = 0 if fieldData[participant]["CONSECUTIVE_TURNS"] >= 3 else secondSpeedAlter
 				
