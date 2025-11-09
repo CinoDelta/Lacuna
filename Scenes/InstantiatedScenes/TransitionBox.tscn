@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://cynt76nq3macs"]
+
+[ext_resource type="Script" uid="uid://bfrt66ahifhu5" path="res://Scenes/InstantiatedScenes/transitionFade.gd" id="1_lsg6p"]
+
+[node name="TransitionBox" type="ColorRect"]
+offset_left = -44444.0
+offset_top = -4444.0
+offset_right = 55555.0
+offset_bottom = 95555.0
+color = Color(0, 0, 0, 0)
+script = ExtResource("1_lsg6p")

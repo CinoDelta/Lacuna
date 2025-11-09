@@ -12,5 +12,5 @@ func stopMusic():
 func playMusic():
 	play()
 
-func setVolume(decibels:int):
+func setVolume(decibels):
 	volume_db = decibels

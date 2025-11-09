@@ -1,6 +1,9 @@
+ColorRect
+CollisionShape2D
+Area2D
+TileMap
 GridContainer
 ItemList
-ColorRect
 Control
 HBoxContainer
 TextureRect
@@ -9,7 +12,3 @@ Panel
 VBoxContainer
 Label
 GPUParticles2D
-AnimatedSprite2D
-Camera2D
-Sprite2D
-AudioStreamPlayer

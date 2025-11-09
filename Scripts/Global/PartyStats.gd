@@ -129,6 +129,8 @@ var inBattle = false
 
 var debug = true
 
+var canTransition = true
+
 var states = {}
 
 func addItemToInv(itemName): #extends createNewItem
@@ -253,9 +255,7 @@ func levelUp(memberName):
 	partyDatabase[memberName]["CURRENT_EXP"] = 0
 	partyDatabase[memberName]["MAX_EXP"] = roundi(partyDatabase[memberName]["LEVEL"] ^ 2.4 + 23)
 	if oldLevel == 99:
-		print(statMessages)
-		print(statIncreases)
-		print(range(1, 101))
+		pass # debug
 	
 # these are for SCENE SPECIFIC saves, not game saves. do not use as game saves.
 
@@ -277,7 +277,7 @@ func _ready():
 	addItemToInv("POWER_BOMB")
 	addItemToInv("POWER_BOMB")
 	addItemToInv("POWER_BOMB")
-	print(inventory)
+	#print(inventory) debug
 
 func _process(_delta):
 	if Input.is_action_just_pressed("DebugLevelUp"):

@@ -1,6 +1,6 @@
 [gd_scene load_steps=23 format=3 uid="uid://cx8q1cb0wger4"]
 
-[ext_resource type="Script" path="res://Scripts/Player.gd" id="1_elbda"]
+[ext_resource type="Script" uid="uid://dspvuhb1r0h8i" path="res://Scripts/Player.gd" id="1_elbda"]
 [ext_resource type="SpriteFrames" uid="uid://defhw7jwsl3bp" path="res://Assets/Sprites/Player/OverworldSprites/NoNameYet.tres" id="2_7mdpw"]
 
 [sub_resource type="Animation" id="Animation_37pr0"]
@@ -229,14 +229,14 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_phgiq"]
 _data = {
-"Idle_Down": SubResource("Animation_37pr0"),
-"Idle_Left": SubResource("Animation_8bljx"),
-"Idle_Right": SubResource("Animation_8kvo2"),
-"Idle_Up": SubResource("Animation_uhmtp"),
-"Walk_Down": SubResource("Animation_of3e3"),
-"Walk_Left": SubResource("Animation_equ4r"),
-"Walk_Right": SubResource("Animation_0nujm"),
-"Walk_Up": SubResource("Animation_krwxg")
+&"Idle_Down": SubResource("Animation_37pr0"),
+&"Idle_Left": SubResource("Animation_8bljx"),
+&"Idle_Right": SubResource("Animation_8kvo2"),
+&"Idle_Up": SubResource("Animation_uhmtp"),
+&"Walk_Down": SubResource("Animation_of3e3"),
+&"Walk_Left": SubResource("Animation_equ4r"),
+&"Walk_Right": SubResource("Animation_0nujm"),
+&"Walk_Up": SubResource("Animation_krwxg")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5t6u3"]
@@ -291,14 +291,14 @@ metadata/Cutscene = false
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
-position = Vector2(536, 320)
+position = Vector2(0, 1)
 scale = Vector2(2, 2)
 sprite_frames = ExtResource("2_7mdpw")
 animation = &"Idle_Down"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_phgiq")
+&"": SubResource("AnimationLibrary_phgiq")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
@@ -306,9 +306,9 @@ tree_root = SubResource("AnimationNodeStateMachine_v1l10")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/idle = false
 parameters/conditions/walking = false
-parameters/Idle/blend_position = Vector2(-0.042114, 0.784431)
+parameters/Idle/blend_position = Vector2(-0.0015949011, -0.011210799)
 parameters/Walk/blend_position = Vector2(0, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(536, 381)
+position = Vector2(0, 62)
 shape = SubResource("RectangleShape2D_6yrj5")

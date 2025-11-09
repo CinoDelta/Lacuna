@@ -5,9 +5,13 @@ extends Node2D
 @onready var transitionCover = $TransitionBlack
 @onready var greenTransitionCover = $TransitionGreen
 
+var currentRoom
+var nextRoom
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	PartyStats.battleStart.connect(battleTransition)
+	roomManager.room_load_started.connect(freeRoom)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -28,3 +32,6 @@ func battleTransition(_id):
 	await get_tree().create_timer(1).timeout
 	var coverTransitionOutTween = get_tree().create_tween().tween_property(transitionCover, "color", Color(1, 1, 1, 0), .25).set_trans(Tween.TRANS_QUAD)
 	
+func freeRoom():
+	remove_child(player)
+	queue_free()

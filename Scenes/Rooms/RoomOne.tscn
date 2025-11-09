@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3 uid="uid://bxkh201peh7p3"]
+
+[ext_resource type="Script" uid="uid://ced8xg2kxrlni" path="res://Scripts/Overworld.gd" id="1_21mv3"]
+[ext_resource type="PackedScene" uid="uid://b0vvqbpnf1rvi" path="res://Scenes/Battle.tscn" id="2_p0o0j"]
+[ext_resource type="PackedScene" uid="uid://cx8q1cb0wger4" path="res://Scenes/Player.tscn" id="3_qug4f"]
+[ext_resource type="PackedScene" uid="uid://bh52jbhp3mk1u" path="res://Scenes/InstantiatedScenes/TransitionSpace.tscn" id="4_p0o0j"]
+[ext_resource type="PackedScene" uid="uid://cynt76nq3macs" path="res://Scenes/InstantiatedScenes/TransitionBox.tscn" id="5_qug4f"]
+
+[node name="Room1" type="Node2D"]
+script = ExtResource("1_21mv3")
+
+[node name="Battle" parent="." instance=ExtResource("2_p0o0j")]
+visible = false
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 5.0
+offset_top = 7.0
+offset_right = 1157.0
+offset_bottom = 655.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="OverworldCamera" type="Camera2D" parent="."]
+position = Vector2(583, 331)
+
+[node name="TestTiles" type="TileMap" parent="."]
+position = Vector2(-50960, -50040)
+format = 2
+
+[node name="TransitionBlack" type="ColorRect" parent="."]
+z_index = 25
+offset_left = -50000.0
+offset_top = -50000.0
+offset_right = 950000.0
+offset_bottom = 99950000.0
+color = Color(0, 0, 0, 0)
+
+[node name="TransitionGreen" type="ColorRect" parent="."]
+z_index = 20
+offset_left = -51664.0
+offset_top = -50320.0
+offset_right = 948336.0
+offset_bottom = 99949680.0
+color = Color(0.0941176, 0.666667, 0.298039, 0)
+
+[node name="TransitionSpace" parent="." instance=ExtResource("4_p0o0j")]
+position = Vector2(24, 376)
+scale = Vector2(1, 26.181032)
+boxSize = 10
+room = "uid://br215ld6un564"
+
+[node name="Player" parent="." instance=ExtResource("3_qug4f")]
+position = Vector2(528, 288)
+
+[node name="TransitionBox" parent="." instance=ExtResource("5_qug4f")]

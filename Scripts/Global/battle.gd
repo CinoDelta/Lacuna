@@ -7,7 +7,6 @@ signal textbox_ended
 # selections
 signal optionSelected # for basic options and stuff
 signal actionDecided # action is fully decided
-signal participatorSelected
 
 # battle
 signal attackedEnded
@@ -404,7 +403,7 @@ func calculateOrder(refreshOrder, numOfTurns):
 					2:
 						secondSpeedAlter = 0.15
 				
-				secondSpeedAlter = 0 if fieldData[participant]["CONSECUTIVE_TURNS"] >= 3 else secondSpeedAlter
+				secondSpeedAlter = 0.0 if fieldData[participant]["CONSECUTIVE_TURNS"] >= 3 else secondSpeedAlter
 				
 #				print("PARTICIPANT: " + str(participant))
 #				print("Consecutive turns is " + str(fieldData[participant]["CONSECUTIVE_TURNS"]))
@@ -492,7 +491,7 @@ func shakeAnimatedSprite(sprite:AnimatedSprite2D, intensity = 6, times = 20, fre
 	
 	sprite.position = originalPosition
 	
-func shakeCamera(intensity:float, times:int, frequency:int):
+func shakeCamera(intensity:float, times:int, frequency:float):
 	# the original position of the battle camera will always be 0 so...
 	
 	for i in range(0, times):
@@ -538,8 +537,6 @@ func attack(attacker, attackDataPacket):
 				# minigames 
 				
 				var specialWeapons = []
-				
-				var minigamePoints = 0
 				$PlayerAttacking.play()
 				
 				attackerSprite.play(StringName("AttackHold"))
@@ -615,14 +612,12 @@ func attack(attacker, attackDataPacket):
 								
 							
 							var i = 0
-							var swordMinigameCompleted = false
 							var lastJudgement = ""
 							
 							
 							var spawnSprite = func(sprite, index):
 								print("SPAWNING SPRITE")
 								minigameHasConfirmed = false
-								var hit = false
 								
 								
 								sprite.visible = true
@@ -666,7 +661,6 @@ func attack(attacker, attackDataPacket):
 								var tintSprite = get_node(str(sprite.get_path()) + "/Tint")
 								
 								if minigameHasConfirmed == true:
-									hit = true
 									for judgement in thresholds:
 										if currentSprite.position.x > thresholds[judgement]:
 											judgementDecided = judgement
