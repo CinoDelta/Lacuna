@@ -76,7 +76,7 @@ func apply_movement(accel):
 func set_walking(bol):
 	#animation_tree.set("parameters/conditions/idle", not bol)
 	#animation_tree.set("parameters/conditions/is_walking",  bol)
-	animation_tree["parameters/conditions/walking"] = bol
+	animation_tree["parameters/conditions/is_walking"] = bol
 	animation_tree["parameters/conditions/idle"] = not bol
 	
 	

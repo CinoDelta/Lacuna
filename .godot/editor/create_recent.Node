@@ -1,3 +1,6 @@
+AnimationTree
+AnimationPlayer
+AnimatedSprite2D
 ColorRect
 CollisionShape2D
 Area2D
@@ -10,5 +13,3 @@ TextureRect
 RichTextLabel
 Panel
 VBoxContainer
-Label
-GPUParticles2D
