@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://b0vvqbpnf1rvi"]
+[gd_scene load_steps=46 format=3 uid="uid://b0vvqbpnf1rvi"]
 
 [ext_resource type="Script" uid="uid://ba8u8140hxapf" path="res://Scripts/Global/battle.gd" id="1_s088x"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
@@ -36,21 +36,31 @@
 [ext_resource type="Texture2D" uid="uid://d3d4fb8x1vrop" path="res://Assets/Sprites/Battle/Minigames/Sword/Accuracy.png" id="27_pu18d"]
 [ext_resource type="AudioStream" uid="uid://ck5scagrf5ptq" path="res://Assets/Sounds/Sfx/EnemyAttacks.ogg" id="28_hjq1m"]
 
+[sub_resource type="Theme" id="Theme_gigvg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hqpwi"]
+bg_color = Color(0.03137255, 0.101960786, 0.101960786, 1)
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.24525392, 0.47639436, 0.47625852, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ahwwc"]
-bg_color = Color(0.180392, 0.0666667, 0.00392157, 1)
+bg_color = Color(0.0175, 0.07, 0.048999995, 1)
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.24705882, 0.4745098, 0.4745098, 1)
 
 [sub_resource type="Theme" id="Theme_ym350"]
 Panel/styles/panel = SubResource("StyleBoxFlat_ahwwc")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_io3f1"]
-bg_color = Color(0.6, 0.3372549, 0.6, 0.29411766)
+bg_color = Color(0.89411765, 0.75686276, 0.49411765, 1)
 border_width_top = 4
 border_width_bottom = 4
-border_color = Color(0.862745, 0.996078, 0.839216, 1)
+border_color = Color(1, 1, 0.4117647, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l2sq6"]
-bg_color = Color(0.87451, 0.866667, 0.776471, 1)
-draw_center = false
+bg_color = Color(0.69803923, 0.41568628, 0, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -95,11 +105,12 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="OptionsPanel" type="Panel" parent="."]
+visible = false
 z_index = 1
 layout_mode = 0
 offset_left = 5.0
-offset_top = 4.0
-offset_right = 465.0
+offset_top = 1.0
+offset_right = 467.0
 offset_bottom = 114.0
 theme = ExtResource("2_edys4")
 
@@ -107,9 +118,9 @@ theme = ExtResource("2_edys4")
 texture_filter = 1
 custom_minimum_size = Vector2(40, 48)
 layout_mode = 0
-offset_left = 144.0
+offset_left = 140.0
 offset_top = 33.0
-offset_right = 381.0
+offset_right = 377.0
 offset_bottom = 81.0
 scale = Vector2(2, 2)
 pivot_offset = Vector2(149, 27)
@@ -184,9 +195,11 @@ stretch_mode = 4
 z_index = 2
 clip_contents = true
 layout_mode = 0
-offset_top = 107.0
+offset_top = 108.0
 offset_right = 412.0
 offset_bottom = 311.0
+theme = SubResource("Theme_gigvg")
+theme_override_styles/panel = SubResource("StyleBoxFlat_hqpwi")
 
 [node name="DisplayEnemyInfo" type="VBoxContainer" parent="OptionsPanel/SubMenu"]
 custom_minimum_size = Vector2(0, 30)
@@ -311,9 +324,9 @@ stretch_mode = 1
 z_index = -1
 layout_mode = 0
 offset_left = 460.0
-offset_top = 7.0
-offset_right = 771.0
-offset_bottom = 83.0
+offset_top = -1.0
+offset_right = 820.0
+offset_bottom = 84.0
 theme = SubResource("Theme_ym350")
 
 [node name="SecondaryPanel" type="Panel" parent="OptionsPanel/OrderPanel"]
@@ -366,11 +379,12 @@ text = "1
 "
 
 [node name="BackTexture" type="TextureRect" parent="OptionsPanel/OrderPanel"]
+modulate = Color(1, 1, 0.91764706, 1)
 texture_filter = 1
 layout_mode = 0
-offset_left = 330.0
-offset_top = 4.00002
-offset_right = 370.0
+offset_left = 350.0
+offset_top = 4.0
+offset_right = 391.0
 offset_bottom = 184.0
 rotation = 1.5708
 scale = Vector2(2, 2)
@@ -384,6 +398,7 @@ offset_bottom = 80.0
 color = Color(1, 0.890196, 0.815686, 0)
 
 [node name="PlayerPanels" type="Panel" parent="."]
+visible = false
 layout_mode = 0
 offset_left = -12.0
 offset_top = 696.0
@@ -534,15 +549,17 @@ texture = ExtResource("13_wvbfm")
 metadata/_edit_lock_ = true
 
 [node name="PlayerDisplay" type="Panel" parent="."]
+visible = false
 layout_mode = 0
-offset_left = 280.0
+offset_left = -250.0
 offset_top = 304.0
-offset_right = 320.0
+offset_right = -210.0
 offset_bottom = 344.0
 theme = ExtResource("4_6af57")
 metadata/_edit_lock_ = true
 
 [node name="Sample" type="Panel" parent="PlayerDisplay"]
+visible = false
 layout_mode = 0
 offset_left = 32.0
 offset_top = 16.0
@@ -581,6 +598,7 @@ sprite_frames = ExtResource("14_gecb5")
 animation = &"Nothing"
 
 [node name="EnemyDisplay" type="Panel" parent="."]
+visible = false
 z_index = 1
 layout_mode = 0
 offset_left = 288.0
@@ -633,11 +651,12 @@ offset_bottom = 40.0
 theme = ExtResource("4_6af57")
 
 [node name="Background" type="NinePatchRect" parent="TextBoxPanel"]
+modulate = Color(0.6, 1, 0.5764706, 1)
 texture_filter = 1
 layout_mode = 0
 offset_top = 30.0
 offset_right = 576.0
-offset_bottom = 96.0
+offset_bottom = 130.0
 scale = Vector2(2, 2)
 pivot_offset = Vector2(0, 30)
 texture = ExtResource("9_bshqe")
@@ -674,6 +693,7 @@ offset_bottom = 1696.0
 color = Color(0, 0, 0, 0.639216)
 
 [node name="BackgroundOverlay" type="Panel" parent="."]
+visible = false
 z_index = -10
 layout_mode = 0
 offset_left = -88.0
@@ -709,7 +729,7 @@ offset_left = 79.0
 offset_top = 265.0
 offset_right = 1241.0
 offset_bottom = 625.0
-color = Color(0.3764706, 0.23137255, 0.3529412, 1)
+color = Color(0.80532444, 0.6397132, 0.77422154, 1)
 metadata/_edit_lock_ = true
 
 [node name="ColorRect2" type="ColorRect" parent="BackgroundOverlay/Debug"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://cx8q1cb0wger4"]
+[gd_scene load_steps=28 format=3 uid="uid://cx8q1cb0wger4"]
 
 [ext_resource type="Script" uid="uid://dspvuhb1r0h8i" path="res://Scripts/Player.gd" id="1_elbda"]
 [ext_resource type="SpriteFrames" uid="uid://defhw7jwsl3bp" path="res://Assets/Sprites/Player/OverworldSprites/Cassian.tres" id="2_7mdpw"]
@@ -265,6 +265,7 @@ blend_point_2/pos = Vector2(0, 1)
 blend_point_3/node = SubResource("AnimationNodeAnimation_o3h8g")
 blend_point_3/pos = Vector2(1, 0)
 triangles = PackedInt32Array(0, 1, 2, 1, 2, 3)
+blend_mode = 1
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kyqiw"]
 animation = &"Walk_Left"
@@ -287,6 +288,7 @@ blend_point_2/node = SubResource("AnimationNodeAnimation_dewec")
 blend_point_2/pos = Vector2(0, 1)
 blend_point_3/node = SubResource("AnimationNodeAnimation_5ixxa")
 blend_point_3/pos = Vector2(1, 0)
+blend_mode = 1
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lslt6"]
 advance_mode = 2
@@ -305,6 +307,10 @@ states/Idle/position = Vector2(366, 100)
 states/Walk/node = SubResource("AnimationNodeBlendSpace2D_arntx")
 states/Walk/position = Vector2(551, 92)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_lslt6"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_ulo2v"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_1iu4k")]
+graph_offset = Vector2(7.5044575, 0)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kyqiw"]
+size = Vector2(59, 63)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_elbda")
@@ -319,7 +325,7 @@ texture_filter = 1
 position = Vector2(0, -4)
 scale = Vector2(2, 2)
 sprite_frames = ExtResource("2_7mdpw")
-animation = &"Idle_Govn"
+animation = &"Idle_Right"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 deterministic = true
@@ -330,7 +336,17 @@ libraries = {
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeStateMachine_m0x7a")
 anim_player = NodePath("../AnimationPlayer")
-parameters/conditions/idle = false
+parameters/conditions/idle = true
 parameters/conditions/is_walking = false
-parameters/Idle/blend_position = Vector2(0.00077819824, 0.67713)
+parameters/Idle/blend_position = Vector2(0.30732632, 0.03139019)
 parameters/Walk/blend_position = Vector2(0, 0)
+
+[node name="InteractArea" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea"]
+position = Vector2(69, 0)
+shape = SubResource("RectangleShape2D_kyqiw")
+disabled = true
+debug_color = Color(0.9784995, 0, 0.39946595, 0.41960785)

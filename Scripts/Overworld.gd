@@ -1,5 +1,7 @@
 extends Node2D
 
+
+
 @onready var player = $Player
 @onready var camera = $OverworldCamera
 @onready var transitionCover = $TransitionBlack
@@ -12,6 +14,7 @@ var nextRoom
 func _ready():
 	PartyStats.battleStart.connect(battleTransition)
 	roomManager.room_load_started.connect(freeRoom)
+	PartyStats.interaction.connect(processInteraction)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -30,8 +33,16 @@ func battleTransition(_id):
 	player.visible = false
 	greenTransitionCover.color = Color(0.09, 0.67, 0.3, 0)
 	await get_tree().create_timer(1).timeout
-	var coverTransitionOutTween = get_tree().create_tween().tween_property(transitionCover, "color", Color(1, 1, 1, 0), .25).set_trans(Tween.TRANS_QUAD)
+	var coverTransitionOutTween = get_tree().create_tween().tween_property(transitionCover, "color", Color(1, 1, 1, 0), .2).set_trans(Tween.TRANS_QUAD)
 	
 func freeRoom():
 	remove_child(player)
 	queue_free()
+	
+func processInteraction(id):
+	# for these interactions it'll be the really general ones. 
+	# this includes dialogue, sound effects and stuff. other interactions can be processed in other places idk.
+	match id:
+		1:
+			$AudioStreamPlayer.stream = load("res://Assets/Sounds/Sfx/EnemyAttacks.ogg")
+			$AudioStreamPlayer.play()

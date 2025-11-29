@@ -1,26 +1,58 @@
 extends CharacterBody2D
 
-@export var MAX_SPEED = 250
-@export var MAX_RUNSPEED = 500
-@export var ACCELERATION = 1000000000
-@export var FRICTION = 1000000
+@onready var MAX_SPEED = 250
+@onready var MAX_RUNSPEED = 500
+@onready var ACCELERATION = 1000000000
+@onready var FRICTION = 1000000
 
 @onready var movementAxis = Vector2.ZERO
 @onready var animation_tree = $AnimationTree
 @onready var storedMovementAxis = Vector2.ZERO
-var x = 0
-#var SS_Sprites = [
-#	"res://Assets/Sprites/PlayerSprites/P_JumpIntobattleR"
-#]
+@onready var interactArea = $InteractArea
+
+var directionFacing = "Left"
+var bufferInteract = 5 
+
+var interactShapePositions = {
+	"Right" = Vector2(69, 0),
+	"Left" = Vector2(-69, 0),
+	"Down" = Vector2(0, 69),
+	"Up" = Vector2(0, -40)
+}
 
 func _process(delta):
+	print(interactArea.get_overlapping_areas())
+	if interactArea.get_overlapping_areas() != []:
+		print("We have interacted with something")
+		var interactionArea = interactArea.get_overlapping_areas()[0]
+		var interactionId = interactionArea.get_meta("INTERACTION_ID")
+		PartyStats.interaction.emit(interactionId)
+	bufferInteract -= 1
+	interactArea.get_child(0).disabled = true if bufferInteract <= 0 else false
+	
+	
+	if abs(storedMovementAxis.x) >= abs(storedMovementAxis.y):
+		if storedMovementAxis.x < 0:
+			directionFacing = "Left"
+		else:
+			directionFacing = "Right"
+	elif abs(storedMovementAxis.y) >= abs(storedMovementAxis.x):
+		if storedMovementAxis.y < 0:
+			directionFacing = "Up"
+		else:
+			directionFacing = "Down"
+			
+	# print("I'm facing.. " + str(directionFacing)) debug
+	
+	interactArea.get_child(0).position = interactShapePositions[directionFacing]
+	
 	update_blend_position()
 #	$Player/CollisionShapeDetector.disabled = get_meta("Cutscene")
 	if get_meta("Cutscene") == false:
 		move(delta)
-	#$AnimatedSprite2D.visible = not get_meta("SecondSprite")
-#	$SecondSprite.visible = get_meta("SecondSprite")
-#	$SecondSprite.play("Pinball")
+		if Input.is_action_just_pressed("Confirm"):
+			interactArea.get_child(0).disabled = false # lasts for exactly one frame lol
+			bufferInteract = 5
 func get_input_axis():
 	
 	if int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left")) == 0 and int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up")) == 0:
@@ -30,6 +62,7 @@ func get_input_axis():
 		movementAxis.y = int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up"))
 		
 		storedMovementAxis = movementAxis
+		
 		
 	return movementAxis.normalized()
 	
@@ -42,11 +75,10 @@ func move(delta):
 		if $AnimatedSprite2D.animation != lastAnimation:
 			lastAnimation = $AnimatedSprite2D.animation
 		lastPosition = global_position
-		PartyStats.playerPositionPacket.emit(global_position, $AnimatedSprite2D.animation)
+		#PartyStats.playerPositionPacket.emit(global_position, $AnimatedSprite2D.animation)
 	
 	movementAxis = get_input_axis()
 	
-	x += 1
 	if movementAxis == Vector2.ZERO:
 		set_walking(false)
 		apply_friction(FRICTION * delta)
@@ -72,16 +104,15 @@ func apply_movement(accel):
 	else:
 		velocity = velocity.limit_length(MAX_SPEED)
 	
-	
 func set_walking(bol):
-	#animation_tree.set("parameters/conditions/idle", not bol)
-	#animation_tree.set("parameters/conditions/is_walking",  bol)
 	animation_tree["parameters/conditions/is_walking"] = bol
 	animation_tree["parameters/conditions/idle"] = not bol
-	
 	
 func update_blend_position():
 	animation_tree["parameters/Idle/blend_position"] = storedMovementAxis
 	animation_tree["parameters/Walk/blend_position"] = movementAxis
 	
-	
+
+
+		
+		

@@ -269,18 +269,30 @@ var playerPanelsTween = [
 	Vector2(0,528)
 ]
 
+var playerDisplayTween = [
+	Vector2(100, 304),
+	Vector2(280,304)
+]
+
 func playSetupTweens(duration): # void
 	
 
 	$OptionsPanel.position = optionPanelTween[0]
+	$PlayerDisplay.position = playerDisplayTween[0]
 	$PlayerPanels.position = playerPanelsTween[0]
-
+	#$EnemyDisplay.position = 
+	
+	# options panel
 	var tweenOptionsPanel = get_tree().create_tween()
 	tweenOptionsPanel.tween_property($OptionsPanel, "position", optionPanelTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-
-	
+	#player info panel
 	var tweenPlayerInfo = get_tree().create_tween()
 	tweenPlayerInfo.tween_property($PlayerPanels, "position", playerPanelsTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+	#player display panel
+	var tweenPlayerDisplay = get_tree().create_tween()
+	tweenPlayerDisplay.tween_property($PlayerDisplay, "position", playerDisplayTween[1], duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+
+	
 	
 	await tweenOptionsPanel.finished
 	
@@ -314,7 +326,7 @@ func setUpBattle(_battleId): # void
 	
 	updateOrderPanel()
 	
-	await playSetupTweens(.5)
+	await playSetupTweens(.75)
 
 
 	
@@ -326,7 +338,7 @@ func setUpBattle(_battleId): # void
 	
 	
 	
-	await display_text(battleData["START_TEXT"], Vector2(576, 60), Vector2(0, 30))
+	await display_text(battleData["START_TEXT"], Vector2(576, 80), Vector2(0, 10))
 	
 # ui getters
 
@@ -1689,11 +1701,12 @@ func _process(_delta): # void
 	
 	# CONFIRM
 	if Input.is_action_just_pressed("Confirm"):
-		if PartyStats.inBattle == false and PartyStats.debug == true:
-			PartyStats.inBattle = true
-			PartyStats.battleStart.emit(1)
-			$Select.play()
-		elif $TextBoxPanel.visible == true:
+		#if PartyStats.inBattle == false and PartyStats.debug == true: <- DEBUG
+			#PartyStats.inBattle = true
+			#PartyStats.battleStart.emit(1)
+			#$Select.play()
+		#el
+		if $TextBoxPanel.visible == true:
 			emit_signal("textbox_continued")
 		$Select.play()
 		match battlePhase:

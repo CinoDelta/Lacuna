@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://coxyrdf5fuk7t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dkv5k"]
+size = Vector2(35.555595, 49.777786)
+
+[node name="TestInteraction" type="Area2D"]
+collision_layer = 32
+collision_mask = 32
+metadata/INTERACTION_ID = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1.7778168, 3.555542)
+shape = SubResource("RectangleShape2D_dkv5k")
+debug_color = Color(0.81771696, 0.40565455, 1.92523e-07, 0.41960785)

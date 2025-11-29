@@ -73,4 +73,6 @@ DebugLevelUp={
 
 [layer_names]
 
+2d_physics/layer_1="Default/Player"
 2d_physics/layer_5="Room transitions"
+2d_physics/layer_6="Interactions"

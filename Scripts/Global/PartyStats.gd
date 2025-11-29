@@ -3,6 +3,7 @@ extends Node
 signal battleStart(id)
 signal battleOver
 signal playerPositionPacket(currentPos, animation)
+signal interaction(id)
 
 # party members
 # stats are by no means final

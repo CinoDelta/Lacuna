@@ -1,16 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://bxkh201peh7p3"]
+[gd_scene load_steps=8 format=3 uid="uid://bxkh201peh7p3"]
 
 [ext_resource type="Script" uid="uid://ced8xg2kxrlni" path="res://Scripts/Overworld.gd" id="1_21mv3"]
 [ext_resource type="PackedScene" uid="uid://b0vvqbpnf1rvi" path="res://Scenes/Battle.tscn" id="2_p0o0j"]
 [ext_resource type="PackedScene" uid="uid://cx8q1cb0wger4" path="res://Scenes/Player.tscn" id="3_qug4f"]
 [ext_resource type="PackedScene" uid="uid://bh52jbhp3mk1u" path="res://Scenes/InstantiatedScenes/TransitionSpace.tscn" id="4_p0o0j"]
 [ext_resource type="PackedScene" uid="uid://cynt76nq3macs" path="res://Scenes/InstantiatedScenes/TransitionBox.tscn" id="5_qug4f"]
+[ext_resource type="Texture2D" uid="uid://b61m2dxslc2gl" path="res://Assets/Sprites/MiscSprites/PlaceholderEnemy.png" id="6_dkv5k"]
+[ext_resource type="PackedScene" uid="uid://coxyrdf5fuk7t" path="res://Scenes/InstantiatedScenes/BluepritntInteractionArea.tscn" id="7_llymf"]
 
 [node name="Room1" type="Node2D"]
 script = ExtResource("1_21mv3")
 
 [node name="Battle" parent="." instance=ExtResource("2_p0o0j")]
-visible = false
 anchors_preset = 0
 anchor_left = 0.0
 anchor_top = 0.0
@@ -57,12 +58,27 @@ position = Vector2(528, 288)
 
 [node name="TransitionBox" parent="." instance=ExtResource("5_qug4f")]
 offset_left = -44336.0
-offset_top = -4368.0
+offset_top = -4304.0
 offset_right = 55663.0
-offset_bottom = 95631.0
+offset_bottom = 95695.0
+metadata/_edit_lock_ = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
 show_behind_parent = true
 offset_right = 1200.0
 offset_bottom = 792.0
-color = Color(0.36862746, 0.94509804, 0, 1)
+color = Color(0.2969384, 0.69056505, 0, 1)
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(976, 296)
+scale = Vector2(4.5, 1.125)
+texture = ExtResource("6_dkv5k")
+
+[node name="TestInteraction" parent="Sprite2D" instance=ExtResource("7_llymf")]
+metadata/INTERACTION_ID = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[editable path="Sprite2D/TestInteraction"]
