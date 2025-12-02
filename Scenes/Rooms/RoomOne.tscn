@@ -10,6 +10,7 @@
 
 [node name="Room1" type="Node2D"]
 script = ExtResource("1_21mv3")
+metadata/_edit_horizontal_guides_ = [8.0]
 
 [node name="Battle" parent="." instance=ExtResource("2_p0o0j")]
 anchors_preset = 0
@@ -38,14 +39,16 @@ offset_top = -50000.0
 offset_right = 950000.0
 offset_bottom = 99950000.0
 color = Color(0, 0, 0, 0)
+metadata/_edit_lock_ = true
 
 [node name="TransitionGreen" type="ColorRect" parent="."]
 z_index = 20
-offset_left = -51664.0
-offset_top = -50320.0
-offset_right = 948336.0
-offset_bottom = 99949680.0
-color = Color(0.0941176, 0.666667, 0.298039, 0)
+offset_left = -51416.0
+offset_top = -49904.0
+offset_right = 948584.0
+offset_bottom = 99950096.0
+color = Color(0.09379999, 0.67, 0.2954701, 0)
+metadata/_edit_lock_ = true
 
 [node name="TransitionSpace" parent="." instance=ExtResource("4_p0o0j")]
 position = Vector2(24, 376)
@@ -80,5 +83,66 @@ texture = ExtResource("6_dkv5k")
 metadata/INTERACTION_ID = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="DialougePanel" type="Panel" parent="."]
+visible = false
+offset_left = 8.0
+offset_top = 472.0
+offset_right = 1160.0
+offset_bottom = 656.0
+
+[node name="RightDialogueImg" type="TextureRect" parent="DialougePanel"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 808.0
+offset_top = -304.0
+offset_right = 1144.0
+offset_bottom = 192.0
+stretch_mode = 4
+
+[node name="LeftDialogueImg" type="TextureRect" parent="DialougePanel"]
+texture_filter = 1
+layout_mode = 0
+offset_top = -312.0
+offset_right = 336.0
+offset_bottom = 184.0
+stretch_mode = 4
+
+[node name="DialougeText" type="RichTextLabel" parent="DialougePanel"]
+layout_mode = 0
+offset_left = 232.0
+offset_right = 888.0
+offset_bottom = 184.0
+text = "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum "
+
+[node name="PersonTwo" type="RichTextLabel" parent="DialougePanel"]
+layout_mode = 0
+offset_left = 48.0
+offset_right = 88.0
+offset_bottom = 32.0
+text = "Guy
+"
+
+[node name="PersonOne" type="RichTextLabel" parent="DialougePanel"]
+layout_mode = 0
+offset_left = 952.0
+offset_right = 992.0
+offset_bottom = 32.0
+text = "Guy
+"
+
+[node name="ChoiceContainer" type="VBoxContainer" parent="DialougePanel"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 0
+offset_left = 232.0
+offset_top = 64.0
+offset_right = 872.0
+offset_bottom = 168.0
+
+[node name="SampleChoice" type="RichTextLabel" parent="DialougePanel/ChoiceContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "Guy
+"
 
 [editable path="Sprite2D/TestInteraction"]
