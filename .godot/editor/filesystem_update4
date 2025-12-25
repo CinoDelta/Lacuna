@@ -7,3 +7,9 @@ res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres
 res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa.tres
 res://Assets/Sprites/Player/OverworldSprites/Cassian.tres
 res://Scenes/Battle.gdshader
+res://Scenes/Rooms/DialoguePanel.tscn
+res://Scripts/Global/dialogueScript.gd
+res://Scripts/Overworld.gd
+res://Scripts/Player.gd
+res://Assets/Themes/BasicBox.tres
+res://Scenes/Battle.tscn

@@ -1,12 +1,12 @@
+res://Scripts/Global
+res://Scenes/Rooms
 res://Scenes/InstantiatedScenes
 res://Assets/Sprites/Player/OverworldSprites/Cass
 res://Assets/Sprites/Player/OverworldSprites
 res://Scripts
-res://Scenes/Rooms
 res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa/Attack
 res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa/Idle
 res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations
-res://Scripts/Global
 res://Assets/Themes
 res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy/Death
 res://Assets/Sprites/Battle/DisplaySprites/Enemies/DebugBoy/Attack

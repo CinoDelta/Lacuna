@@ -4,14 +4,13 @@ extends CharacterBody2D
 @onready var MAX_RUNSPEED = 500
 @onready var ACCELERATION = 1000000000
 @onready var FRICTION = 1000000
-
 @onready var movementAxis = Vector2.ZERO
 @onready var animation_tree = $AnimationTree
 @onready var storedMovementAxis = Vector2.ZERO
 @onready var interactArea = $InteractArea
 
 var directionFacing = "Left"
-var bufferInteract = 5 
+var bufferInteract = 3
 
 var interactShapePositions = {
 	"Right" = Vector2(69, 0),
@@ -52,7 +51,7 @@ func _process(delta):
 		move(delta)
 		if Input.is_action_just_pressed("Confirm"):
 			interactArea.get_child(0).disabled = false # lasts for exactly one frame lol
-			bufferInteract = 5
+			bufferInteract = 3
 func get_input_axis():
 	
 	if int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left")) == 0 and int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up")) == 0:

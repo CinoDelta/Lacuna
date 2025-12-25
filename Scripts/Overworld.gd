@@ -40,9 +40,8 @@ func freeRoom():
 	queue_free()
 	
 func processInteraction(id):
-	# for these interactions it'll be the really general ones. 
-	# this includes dialogue, sound effects and stuff. other interactions can be processed in other places idk.
 	match id:
 		1:
-			$AudioStreamPlayer.stream = load("res://Assets/Sounds/Sfx/EnemyAttacks.ogg")
-			$AudioStreamPlayer.play()
+			pass
+			#$AudioStreamPlayer.stream = load("res://Assets/Sounds/Sfx/EnemyAttacks.ogg")
+			#$AudioStreamPlayer.play()

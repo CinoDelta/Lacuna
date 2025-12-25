@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bxkh201peh7p3"]
+[gd_scene load_steps=9 format=3 uid="uid://bxkh201peh7p3"]
 
 [ext_resource type="Script" uid="uid://ced8xg2kxrlni" path="res://Scripts/Overworld.gd" id="1_21mv3"]
 [ext_resource type="PackedScene" uid="uid://b0vvqbpnf1rvi" path="res://Scenes/Battle.tscn" id="2_p0o0j"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cynt76nq3macs" path="res://Scenes/InstantiatedScenes/TransitionBox.tscn" id="5_qug4f"]
 [ext_resource type="Texture2D" uid="uid://b61m2dxslc2gl" path="res://Assets/Sprites/MiscSprites/PlaceholderEnemy.png" id="6_dkv5k"]
 [ext_resource type="PackedScene" uid="uid://coxyrdf5fuk7t" path="res://Scenes/InstantiatedScenes/BluepritntInteractionArea.tscn" id="7_llymf"]
+[ext_resource type="PackedScene" uid="uid://htpiroo25j2c" path="res://Scenes/Rooms/DialoguePanel.tscn" id="8_ujrna"]
 
 [node name="Room1" type="Node2D"]
 script = ExtResource("1_21mv3")
@@ -84,65 +85,7 @@ metadata/INTERACTION_ID = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
-[node name="DialougePanel" type="Panel" parent="."]
+[node name="DialougePanel" parent="." instance=ExtResource("8_ujrna")]
 visible = false
-offset_left = 8.0
-offset_top = 472.0
-offset_right = 1160.0
-offset_bottom = 656.0
-
-[node name="RightDialogueImg" type="TextureRect" parent="DialougePanel"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 808.0
-offset_top = -304.0
-offset_right = 1144.0
-offset_bottom = 192.0
-stretch_mode = 4
-
-[node name="LeftDialogueImg" type="TextureRect" parent="DialougePanel"]
-texture_filter = 1
-layout_mode = 0
-offset_top = -312.0
-offset_right = 336.0
-offset_bottom = 184.0
-stretch_mode = 4
-
-[node name="DialougeText" type="RichTextLabel" parent="DialougePanel"]
-layout_mode = 0
-offset_left = 232.0
-offset_right = 888.0
-offset_bottom = 184.0
-text = "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum "
-
-[node name="PersonTwo" type="RichTextLabel" parent="DialougePanel"]
-layout_mode = 0
-offset_left = 48.0
-offset_right = 88.0
-offset_bottom = 32.0
-text = "Guy
-"
-
-[node name="PersonOne" type="RichTextLabel" parent="DialougePanel"]
-layout_mode = 0
-offset_left = 952.0
-offset_right = 992.0
-offset_bottom = 32.0
-text = "Guy
-"
-
-[node name="ChoiceContainer" type="VBoxContainer" parent="DialougePanel"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 0
-offset_left = 232.0
-offset_top = 64.0
-offset_right = 872.0
-offset_bottom = 168.0
-
-[node name="SampleChoice" type="RichTextLabel" parent="DialougePanel/ChoiceContainer"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-text = "Guy
-"
 
 [editable path="Sprite2D/TestInteraction"]
