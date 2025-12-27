@@ -150,6 +150,18 @@ func _ready():
 	self.visible = false
 	PartyStats.interaction.connect(processInteraction)
 
+func updateLabels():
+	for label in choiceCont.get_children():
+		if label.name != "SampleChoice":
+			print("Index: ")
+			print(cTexts.find(label.text)) 
+			print("current choice:")
+			print(currentChoice)
+			if cTexts.find(label.text) == currentChoice:
+				label.text = "[color=yellow]" + label.name + "[/color]"
+			else:
+				label.text = label.name
+
 func _process(_delta):
 	skipBuffer -= 1 if skipBuffer > 0 else 0
 	if Input.is_action_just_pressed("Confirm") and inDialogue:
@@ -164,20 +176,13 @@ func _process(_delta):
 			currentChoice += 1
 			if currentChoice == choiceNum:
 				currentChoice = 0
+			updateLabels()
 		elif Input.is_action_just_pressed("ui_up"):
 			currentChoice -= 1
 			if currentChoice < 0:
 				currentChoice = (choiceNum - 1)
-		for label in choiceCont.get_children():
-			if label.name != "SampleChoice":
-				print("Index: ")
-				print(cTexts.find(label.text)) 
-				print("current choice:")
-				print(currentChoice)
-				if cTexts.find(label.text) == currentChoice:
-					label.text = "[color=yellow]" + label.name + "[/color]"
-				else:
-					label.text = label.name
+			updateLabels()
+		
 func processInteraction(id):
 	var currentDSection = 0
 	var dData = dialogueData[str(id)]
