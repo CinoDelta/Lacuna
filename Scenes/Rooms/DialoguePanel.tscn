@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://htpiroo25j2c"]
+[gd_scene load_steps=7 format=3 uid="uid://htpiroo25j2c"]
 
 [ext_resource type="Script" uid="uid://cpc3a4bxiryqr" path="res://Scripts/Global/dialogueScript.gd" id="1_2cmx7"]
 [ext_resource type="Theme" uid="uid://bli24837s4wbp" path="res://Assets/Themes/Thamoiras.tres" id="1_ua0wt"]
+[ext_resource type="StyleBox" uid="uid://hc5f6lhhdi68" path="res://Assets/Themes/BasicBoxFourSide.tres" id="2_4idfm"]
 [ext_resource type="Theme" uid="uid://25nh0v5d7y1b" path="res://Assets/Themes/basicText.tres" id="3_i4tfi"]
+[ext_resource type="Texture2D" uid="uid://cyj761pab3w4h" path="res://Assets/Sprites/TalkSprites/Placeholder/Sad.png" id="3_ppdyj"]
+[ext_resource type="Texture2D" uid="uid://cju0v1koacn0" path="res://Assets/Sprites/TalkSprites/Placeholder2/Neutral.png" id="4_4idfm"]
 
 [node name="DialougePanel" type="Panel"]
 z_index = 1
@@ -11,26 +14,38 @@ offset_top = 472.0
 offset_right = 1160.0
 offset_bottom = 656.0
 theme = ExtResource("1_ua0wt")
+theme_override_styles/panel = ExtResource("2_4idfm")
 script = ExtResource("1_2cmx7")
 DIALOUGE_FRAME_DURATION = 3
 
 [node name="RightDialogueImg" type="TextureRect" parent="."]
 z_index = -1
 texture_filter = 1
-layout_mode = 0
-offset_left = 812.0
-offset_top = -272.0
-offset_right = 1144.0
-offset_bottom = 176.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.85200006
+anchor_top = 0.96700007
+anchor_right = 0.85200006
+anchor_bottom = 0.96700007
+offset_left = -169.50409
+offset_top = -519.928
+offset_right = 162.49591
+offset_bottom = 8.071991
+pivot_offset = Vector2(0, 530)
+texture = ExtResource("3_ppdyj")
+expand_mode = 4
 stretch_mode = 4
 
 [node name="LeftDialogueImg" type="TextureRect" parent="."]
 z_index = -1
 texture_filter = 1
 layout_mode = 0
-offset_top = -270.0
-offset_right = 332.0
-offset_bottom = 178.0
+offset_left = 12.0
+offset_top = -342.0
+offset_right = 344.0
+offset_bottom = 186.0
+texture = ExtResource("4_4idfm")
+expand_mode = 4
 stretch_mode = 4
 
 [node name="DialougeText" type="RichTextLabel" parent="."]
@@ -46,30 +61,44 @@ text = "How much kirk could perk hirk kirk if a perk hirk could hirk \"kirk!\"? 
 [node name="PersonTwo" type="RichTextLabel" parent="."]
 texture_filter = 1
 layout_mode = 0
-offset_left = 26.0
+offset_left = 12.0
 offset_top = 8.0
 offset_right = 204.0
-offset_bottom = 60.0
+offset_bottom = 108.0
 theme = ExtResource("3_i4tfi")
-text = "Chaos "
+text = "Placeholder"
+
+[node name="PressMe" type="RichTextLabel" parent="."]
+visible = false
+texture_filter = 1
+layout_mode = 0
+offset_left = 902.0
+offset_top = 118.0
+offset_right = 972.0
+offset_bottom = 158.0
+theme = ExtResource("3_i4tfi")
+theme_override_colors/default_color = Color(1, 0.5613483, 0.45137858, 1)
+theme_override_font_sizes/normal_font_size = 45
+text = "->
+"
 
 [node name="PersonOne" type="RichTextLabel" parent="."]
 texture_filter = 1
 layout_direction = 2
 layout_mode = 0
-offset_left = 952.0
+offset_left = 942.0
 offset_top = 8.0
 offset_right = 1130.0
-offset_bottom = 60.0
+offset_bottom = 138.0
 theme = ExtResource("3_i4tfi")
-text = "Chaos "
+text = "Lovebird"
 horizontal_alignment = 2
 
 [node name="ChoiceContainer" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 0
 offset_left = 232.0
-offset_top = 64.0
+offset_top = 18.0
 offset_right = 872.0
 offset_bottom = 168.0
 
@@ -77,5 +106,6 @@ offset_bottom = 168.0
 visible = false
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-text = "Guy
-"
+theme = ExtResource("3_i4tfi")
+bbcode_enabled = true
+text = "Kirkenuinely I dont give a Rat"

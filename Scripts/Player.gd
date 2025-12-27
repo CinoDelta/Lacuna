@@ -19,16 +19,14 @@ var interactShapePositions = {
 	"Up" = Vector2(0, -40)
 }
 
+func _ready():
+	PartyStats.setCutscene.connect(setCutscene)
+
+func setCutscene(val):
+	set_meta("Cutscene", val)
+
 func _process(delta):
-	print(interactArea.get_overlapping_areas())
-	if interactArea.get_overlapping_areas() != []:
-		print("We have interacted with something")
-		var interactionArea = interactArea.get_overlapping_areas()[0]
-		var interactionId = interactionArea.get_meta("INTERACTION_ID")
-		PartyStats.interaction.emit(interactionId)
-	bufferInteract -= 1
-	interactArea.get_child(0).disabled = true if bufferInteract <= 0 else false
-	
+
 	
 	if abs(storedMovementAxis.x) >= abs(storedMovementAxis.y):
 		if storedMovementAxis.x < 0:
@@ -52,6 +50,15 @@ func _process(delta):
 		if Input.is_action_just_pressed("Confirm"):
 			interactArea.get_child(0).disabled = false # lasts for exactly one frame lol
 			bufferInteract = 3
+			
+	bufferInteract -= 1
+	interactArea.get_child(0).disabled = true if bufferInteract <= 0 else false
+	
+	if interactArea.get_overlapping_areas() != []:
+		var interactionArea = interactArea.get_overlapping_areas()[0]
+		var interactionId = interactionArea.get_meta("INTERACTION_ID")
+		PartyStats.interaction.emit(interactionId)
+
 func get_input_axis():
 	
 	if int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left")) == 0 and int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up")) == 0:
