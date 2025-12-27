@@ -247,8 +247,7 @@ func processInteraction(id):
 			newCText.visible = true
 			newCText.name = possibleChoice
 			cTexts.insert(cTexts.size(), newCText.text)
-		print("CText")
-		print(cTexts)
+		updateLabels()
 		await dialougeCont
 		
 		for label in choiceCont.get_children():
