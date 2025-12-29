@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bxkh201peh7p3"]
+[gd_scene load_steps=10 format=3 uid="uid://bxkh201peh7p3"]
 
 [ext_resource type="Script" uid="uid://ced8xg2kxrlni" path="res://Scripts/Overworld.gd" id="1_21mv3"]
 [ext_resource type="PackedScene" uid="uid://b0vvqbpnf1rvi" path="res://Scenes/Battle.tscn" id="2_p0o0j"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://b61m2dxslc2gl" path="res://Assets/Sprites/MiscSprites/PlaceholderEnemy.png" id="6_dkv5k"]
 [ext_resource type="PackedScene" uid="uid://coxyrdf5fuk7t" path="res://Scenes/InstantiatedScenes/BluepritntInteractionArea.tscn" id="7_llymf"]
 [ext_resource type="PackedScene" uid="uid://htpiroo25j2c" path="res://Scenes/Rooms/DialoguePanel.tscn" id="8_ujrna"]
+[ext_resource type="PackedScene" uid="uid://dtp0ffgfb2e74" path="res://Scenes/InstantiatedScenes/sfx_loader.tscn" id="9_a61bl"]
 
 [node name="Room1" type="Node2D"]
 script = ExtResource("1_21mv3")
@@ -87,5 +88,7 @@ metadata/INTERACTION_ID = 1
 
 [node name="DialougePanel" parent="." instance=ExtResource("8_ujrna")]
 visible = false
+
+[node name="SFXLoader" parent="." instance=ExtResource("9_a61bl")]
 
 [editable path="Sprite2D/TestInteraction"]

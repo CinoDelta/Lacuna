@@ -10,10 +10,7 @@ func _ready():
 func loadMusic(path):
 	stream = load(path)
 	
-func loadSoundEffect(path, channel):
-	print("children: " + str(get_children()))
-	print("channel: " + str(sfxChannels))
-	sfxChannels[channel].stream = load(path)
+
 	
 func setMusic(resource):
 	stream = resource
@@ -23,9 +20,6 @@ func stopMusic():
 
 func playMusic():
 	play()
-	
-func playSoundEffectOnChannel(channel):
-	sfxChannels[channel-1].play()
 
 func setVolume(decibels):
 	volume_db = decibels

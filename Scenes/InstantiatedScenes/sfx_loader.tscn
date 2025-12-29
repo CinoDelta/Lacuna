@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://dtp0ffgfb2e74"]
+
+[ext_resource type="Script" uid="uid://b2c44idln076s" path="res://Scripts/Global/sfx_loader.gd" id="1_ns3tt"]
+
+[node name="SFXLoader" type="Panel"]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_ns3tt")
+
+[node name="Channel1" type="AudioStreamPlayer" parent="."]
+
+[node name="Channel2" type="AudioStreamPlayer" parent="."]
+
+[node name="Channel3" type="AudioStreamPlayer" parent="."]
+
+[node name="Channel4" type="AudioStreamPlayer" parent="."]
+
+[node name="Channel5" type="AudioStreamPlayer" parent="."]
+
+[node name="Channel6" type="AudioStreamPlayer" parent="."]
+
+[node name="Channel7" type="AudioStreamPlayer" parent="."]
+
+[node name="Channel8" type="AudioStreamPlayer" parent="."]
+
+[node name="Channel9" type="AudioStreamPlayer" parent="."]
+
+[node name="Channel10" type="AudioStreamPlayer" parent="."]

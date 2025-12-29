@@ -17,9 +17,9 @@ func _ready():
 	PartyStats.interaction.connect(processInteraction)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+## Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+	#pass
 
 func battleTransition(_id):
 	
@@ -33,7 +33,8 @@ func battleTransition(_id):
 	player.visible = false
 	greenTransitionCover.color = Color(0.09, 0.67, 0.3, 0)
 	await get_tree().create_timer(1).timeout
-	var coverTransitionOutTween = get_tree().create_tween().tween_property(transitionCover, "color", Color(1, 1, 1, 0), .2).set_trans(Tween.TRANS_QUAD)
+	var _coverTransitionOutTween = get_tree().create_tween().tween_property(transitionCover, "color", Color(1, 1, 1, 0), .2).set_trans(Tween.TRANS_QUAD)
+	
 	
 func freeRoom():
 	remove_child(player)

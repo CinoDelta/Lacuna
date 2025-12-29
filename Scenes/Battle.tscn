@@ -1,6 +1,7 @@
-[gd_scene load_steps=46 format=3 uid="uid://b0vvqbpnf1rvi"]
+[gd_scene load_steps=47 format=3 uid="uid://b0vvqbpnf1rvi"]
 
 [ext_resource type="Script" uid="uid://ba8u8140hxapf" path="res://Scripts/Global/battle.gd" id="1_s088x"]
+[ext_resource type="PackedScene" uid="uid://dtp0ffgfb2e74" path="res://Scenes/InstantiatedScenes/sfx_loader.tscn" id="2_0gu8g"]
 [ext_resource type="Texture2D" uid="uid://chwry8w5riibi" path="res://Assets/Sprites/MiscSprites/PlaceholderPlayerP.png" id="2_b0yqc"]
 [ext_resource type="Theme" uid="uid://bli24837s4wbp" path="res://Assets/Themes/Thamoiras.tres" id="2_edys4"]
 [ext_resource type="Theme" uid="uid://25nh0v5d7y1b" path="res://Assets/Themes/basicText.tres" id="3_7ko0y"]
@@ -54,13 +55,13 @@ border_color = Color(0.24705882, 0.4745098, 0.4745098, 1)
 Panel/styles/panel = SubResource("StyleBoxFlat_ahwwc")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_io3f1"]
-bg_color = Color(0.89411765, 0.75686276, 0.49411765, 1)
+bg_color = Color(0.0142752165, 0.014275218, 0.014275218, 1)
 border_width_top = 4
 border_width_bottom = 4
-border_color = Color(1, 1, 0.4117647, 1)
+border_color = Color(0.41000003, 1, 0.9409999, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l2sq6"]
-bg_color = Color(0.69803923, 0.41568628, 0, 1)
+bg_color = Color(0.27865723, 0.15355209, 1.6845763e-07, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -98,6 +99,11 @@ script = ExtResource("1_s088x")
 metadata/battleId = 1
 metadata/_edit_horizontal_guides_ = [-144.0]
 metadata/_edit_lock_ = true
+
+[node name="SFXLoader" parent="." instance=ExtResource("2_0gu8g")]
+layout_mode = 0
+offset_left = 10.0
+offset_right = 50.0
 
 [node name="--- MAIN PANELS ---" type="Control" parent="."]
 anchors_preset = 0
@@ -549,7 +555,6 @@ texture = ExtResource("13_wvbfm")
 metadata/_edit_lock_ = true
 
 [node name="PlayerDisplay" type="Panel" parent="."]
-visible = false
 layout_mode = 0
 offset_left = -250.0
 offset_top = 304.0
@@ -693,7 +698,6 @@ offset_bottom = 1696.0
 color = Color(0, 0, 0, 0.639216)
 
 [node name="BackgroundOverlay" type="Panel" parent="."]
-visible = false
 z_index = -10
 layout_mode = 0
 offset_left = -88.0
@@ -729,7 +733,7 @@ offset_left = 79.0
 offset_top = 265.0
 offset_right = 1241.0
 offset_bottom = 625.0
-color = Color(0.80532444, 0.6397132, 0.77422154, 1)
+color = Color(0.087032504, 0.00011250563, 0.17560485, 1)
 metadata/_edit_lock_ = true
 
 [node name="ColorRect2" type="ColorRect" parent="BackgroundOverlay/Debug"]

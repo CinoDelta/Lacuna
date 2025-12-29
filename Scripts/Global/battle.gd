@@ -270,7 +270,7 @@ var playerPanelsTween = [
 ]
 
 var playerDisplayTween = [
-	Vector2(100, 304),
+	Vector2(50, 304),
 	Vector2(280,304)
 ]
 
@@ -326,14 +326,14 @@ func setUpBattle(_battleId): # void
 	
 	updateOrderPanel()
 	
-	await playSetupTweens(.75)
+	await playSetupTweens(.6)
 
 
 	
 	
 	
-	MusicManager.loadMusic("res://Assets/Sounds/WallowingWisps.ogg")
-	MusicManager.setVolume(0.3)
+	MusicManager.loadMusic("res://Assets/Sounds/DeadzoneIsherWIP.ogg")
+	MusicManager.setVolume(0.8)
 	MusicManager.play()
 	
 	
@@ -549,7 +549,9 @@ func attack(attacker, attackDataPacket):
 				# minigames 
 				
 				var specialWeapons = []
-				$PlayerAttacking.play()
+				
+				$SFXLoader.loadSoundEffect("res://Assets/Sounds/Sfx/PlayerAttacks.ogg", 1, 24)
+				$SFXLoader.playSoundEffectOnChannel(1)
 				
 				attackerSprite.play(StringName("AttackHold"))
 				
@@ -1699,13 +1701,16 @@ func _process(_delta): # void
 					emit_signal("minigameConfirm")
 	# keys
 	
+	#DEBUG BATTLE (Shift + Right bracket)
+	if Input.is_action_just_pressed("DebugBattleStart"):
+		if PartyStats.inBattle == false and PartyStats.debug == true:
+			PartyStats.inBattle = true
+			PartyStats.battleStart.emit(1)
+			$Select.play()
+	
 	# CONFIRM
 	if Input.is_action_just_pressed("Confirm"):
-		#if PartyStats.inBattle == false and PartyStats.debug == true: <- DEBUG
-			#PartyStats.inBattle = true
-			#PartyStats.battleStart.emit(1)
-			#$Select.play()
-		#el
+		
 		if $TextBoxPanel.visible == true:
 			emit_signal("textbox_continued")
 		$Select.play()

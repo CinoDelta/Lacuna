@@ -27,6 +27,7 @@ MusicManager="*res://Scripts/Global/music_manager.gd"
 SkillDatabase="*res://Scripts/Global/skill_database.gd"
 roomManager="*res://Scripts/Global/room_manager.gd"
 playerManager="*res://Scripts/player_manager.gd"
+SfxLoader="*res://Scripts/Global/sfx_loader.gd"
 
 [display]
 
@@ -68,6 +69,11 @@ Menu={
 DebugLevelUp={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":92,"key_label":0,"unicode":92,"location":0,"echo":false,"script":null)
+]
+}
+DebugBattleStart={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":true,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":93,"key_label":0,"unicode":125,"location":0,"echo":false,"script":null)
 ]
 }
 

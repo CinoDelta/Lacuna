@@ -1,7 +1,8 @@
+AudioStreamPlayer      - Matches the "sound" keyword.
+Panel
 VBoxContainer
 RichTextLabel
 TextureRect
-Panel
 AudioStreamPlayer
 Area2D
 CollisionShape2D
@@ -12,4 +13,3 @@ AnimatedSprite2D
 ColorRect
 TileMap
 GridContainer
-ItemList

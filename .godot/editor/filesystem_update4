@@ -1,4 +1,4 @@
-res://Scenes/Player.tscn
+res://Scenes/Battle.tscn
 res://Assets/Themes/Thamoiras.tres
 res://Assets/Themes/basicText.tres
 res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.gdshader
@@ -7,10 +7,10 @@ res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres
 res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa.tres
 res://Assets/Sprites/Player/OverworldSprites/Cassian.tres
 res://Scenes/Battle.gdshader
-res://Scripts/Global/PartyStats.gd
-res://Scripts/Player.gd
-res://Scripts/Global/dialogueScript.gd
-res://Scenes/Rooms/DialoguePanel.tscn
+res://Scripts/Global/battle.gd
+res://Scripts/Overworld.gd
+res://Scenes/InstantiatedScenes/sfx_loader.tscn
+res://Scripts/Global/music_manager.gd
+res://Scenes/Rooms/sfx_loader.gd
+res://Scripts/Global/sfx_loader.gd
 res://Scenes/Rooms/RoomOne.tscn
-res://Assets/Themes/BasicBox.tres
-res://Assets/Themes/BasicBoxFourSide.tres
