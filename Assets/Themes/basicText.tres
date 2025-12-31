@@ -1,11 +1,11 @@
 [gd_resource type="Theme" load_steps=3 format=3 uid="uid://25nh0v5d7y1b"]
 
-[ext_resource type="FontFile" uid="uid://bqeob0dobcq1t" path="res://Assets/Fonts/Tiny5-Regular.ttf" id="1_3mdso"]
+[ext_resource type="FontFile" uid="uid://cwb2m5rx2p3gw" path="res://Assets/Fonts/BoldPixels.otf" id="1_1dbgq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eo3o8"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [resource]
 RichTextLabel/font_sizes/normal_font_size = 36
-RichTextLabel/fonts/normal_font = ExtResource("1_3mdso")
+RichTextLabel/fonts/normal_font = ExtResource("1_1dbgq")
 VScrollBar/styles/grabber = SubResource("StyleBoxFlat_eo3o8")

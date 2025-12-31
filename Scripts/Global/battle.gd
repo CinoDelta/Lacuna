@@ -127,8 +127,9 @@ var currentMinigameData = {}
 #pre-load nodes
 
 @onready var battleCamera = $BattleCamera
-var battleFont = preload("res://Assets/Fonts/Tiny5-Regular.ttf")
-var winMusic = preload("res://Assets/Sounds/BattleComplete.ogg")
+var battleFont = preload("res://Assets/Fonts/BoldPixels.otf")
+var winMusic = preload("res://Assets/Sounds/Winner!.ogg")
+var winningLoop = preload("res://Assets/Sounds/Winner!Loop.ogg")
 
 # built ins
 
@@ -332,7 +333,7 @@ func setUpBattle(_battleId): # void
 	
 	
 	
-	MusicManager.loadMusic("res://Assets/Sounds/DeadzoneIsherWIP.ogg")
+	MusicManager.loadMusic("res://Assets/Sounds/DeadzoneIsherWIPInBattle.ogg")
 	MusicManager.setVolume(0.8)
 	MusicManager.play()
 	
@@ -512,7 +513,13 @@ func shakeCamera(intensity:float, times:int, frequency:float):
 		await get_tree().create_timer(frequency).timeout
 	
 	battleCamera.offset = Vector2(0,0)
-	
+
+func flashSprite(sprite, times = 3, interval:float = .12):
+	for i in range(0, times):
+		sprite.modulate = Color.from_hsv(1, 0, 1, 0.5)
+		await get_tree().create_timer(interval).timeout
+		sprite.modulate = Color.from_hsv(1, 0, 1, 1)
+		await get_tree().create_timer(interval).timeout
 
 func attack(attacker, attackDataPacket):
 	
@@ -630,7 +637,6 @@ func attack(attacker, attackDataPacket):
 							
 							
 							var spawnSprite = func(sprite, index):
-								print("SPAWNING SPRITE")
 								minigameHasConfirmed = false
 								
 								
@@ -639,7 +645,7 @@ func attack(attacker, attackDataPacket):
 								
 								
 								var scaleTween = get_tree().create_tween()
-								scaleTween.tween_property(sprite, "scale", Vector2(2, 2), 0.3 * comboSpeedMulti).set_delay(.1)
+								scaleTween.tween_property(sprite, "scale", Vector2(2, 2), 0.4 * comboSpeedMulti).set_delay(.1)
 								
 								var positionTween = get_tree().create_tween()
 								positionTween.tween_property(sprite, "position", Vector2(475, 48), 0.8 * comboSpeedMulti).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
@@ -665,10 +671,29 @@ func attack(attacker, attackDataPacket):
 								randomCombo[index] = ""
 								
 								var scaleTween2 = get_tree().create_tween()
-								scaleTween2.tween_property(currentSprite, "scale", Vector2(4, 4), 0.3).set_trans(Tween.TRANS_QUAD)
+								scaleTween2.tween_property(currentSprite, "scale", Vector2(4, 4), 0.2).set_trans(Tween.TRANS_QUAD)
 								
 								var transparencyTween = get_tree().create_tween()
 								transparencyTween.tween_property(currentSprite, "modulate", Color(1, 1, 1, 0), 0.5).set_trans(Tween.TRANS_QUAD)
+								
+								var newFlash = $MinigamePanel/SampleFlash.duplicate()
+								
+								$MinigamePanel.add_child(newFlash)
+								
+								newFlash.position = sprite.position
+								newFlash.visible = true
+								
+								var flashSample = func():
+									var scaleTweenThree = get_tree().create_tween()
+									scaleTweenThree.tween_property(newFlash, "scale", Vector2(4, 4), 0.2).set_trans(Tween.TRANS_QUAD)
+									for j in range(1, 4):
+										newFlash.modulate = Color.from_hsv(1, 1, 1, .4 - (.4 / 3) * j)
+										await get_tree().create_timer(.2).timeout
+										newFlash.modulate = Color.from_hsv(1, 0, 1, .7 - (.7 / 3) * j)
+										await get_tree().create_timer(.2).timeout
+										$MinigamePanel.remove_child(newFlash)
+								
+								flashSample.call()
 								
 								var pointsGained = 0
 								var judgementDecided = "Miss"
@@ -700,8 +725,10 @@ func attack(attacker, attackDataPacket):
 									"Miss" = Color(0.97, 0, 0, 0.5),
 									"Okay" = Color(0.97, 0.94, 0, 1),
 									"Good" = Color(0, 0.92, 0.25, 1),
-									"Perfect" = Color(0.32, 1, 0.92, 0.5)
+									"Perfect" = Color(0.32, 1, 0.92, 1)
 								}
+								
+								displayStatus(judgementDecided.to_upper(), sprite.global_position, "judgement", 1, false, judgementToColor[judgementDecided], .5)
 								
 								print(tintSprite.color)
 								var tintTween = get_tree().create_tween()
@@ -760,6 +787,7 @@ func attack(attacker, attackDataPacket):
 
 							currentEnemies[target]["HP"] -= damageInfo[0]
 							displayStatus(damageInfo[0], targetDisplay.global_position, "damage", 1, (damageInfo[1] == 2))
+							flashSprite(targetSprite)
 							
 							if damageInfo[1] == 2: # critical attacks
 								pass
@@ -800,6 +828,7 @@ func attack(attacker, attackDataPacket):
 				$SlashHit.play()
 				shakeCamera(6, 20, 0.02)
 				targetSprite.play("Hurt")
+				flashSprite(targetSprite)
 				shakeAnimatedSprite(targetSprite, 6, 20, 0.02)
 				
 				# attack damage 
@@ -1206,16 +1235,17 @@ func displayStatus(value, numPosition: Vector2, status = "nothing", statusDirect
 			
 			var newNumberTween = get_tree().create_tween()
 			var randXOffset = randi_range(-30, 30)
+			var randYOffset = randi_range(80, 130)
 
 			newNumberTween.tween_property(
-				number, "position", Vector2(number.position.x + randXOffset, number.position.y - 80), 0.25
-			).set_ease(Tween.EASE_OUT)
+				number, "position", Vector2(number.position.x + randXOffset, number.position.y - randXOffset), 0.2
+			).set_ease(Tween.EASE_IN_OUT)
+			#newNumberTween.tween_property(
+				#number, "position", Vector2(number.position.x + randXOffset * 1.5, number.position.y), 1
+			#).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BOUNCE)
 			newNumberTween.tween_property(
-				number, "position", Vector2(number.position.x + randXOffset * 1.5, number.position.y), 1
-			).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BOUNCE)
-			newNumberTween.tween_property(
-				number, "scale", Vector2(0, 1), 0.2
-			).set_ease(Tween.EASE_IN)
+				number, "scale", Vector2(0, 1),.2
+			).set_ease(Tween.EASE_IN).set_delay(.5)
 		"moveStatus":
 			number.text = value
 			number.label_settings.font_color = baseColor
@@ -1241,7 +1271,28 @@ func displayStatus(value, numPosition: Vector2, status = "nothing", statusDirect
 			secondNumberTween.parallel().tween_property(
 				number.label_settings, "outline_color", Color(1, 1, 1, 0), 0.2
 			)
+		"judgement":
+			number.text = str(value)
+			number.label_settings.font_size = 40
 			
+			var color = baseColor
+				
+			number.label_settings.outline_size = 0
+			number.label_settings.font_color = color
+			
+			add_child(number)
+			
+			var newNumberTween = get_tree().create_tween()
+
+			newNumberTween.tween_property(
+				number, "position", Vector2(number.position.x, number.position.y - 100), 0.35
+			).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+			#newNumberTween.tween_property(
+				#number, "position", Vector2(number.position.x + randXOffset * 1.5, number.position.y), 1
+			#).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BOUNCE)
+			newNumberTween.tween_property(
+				number, "modulate", Color.from_hsv(1, 0, 1, 0),.3
+			).set_ease(Tween.EASE_IN).set_delay(lifetime -.1)
 			
 			
 	
@@ -1334,7 +1385,6 @@ func battleStarted(id): # void, main battle loop as well.
 		# At the start of each loop, figure out which person is supposed to move based on calculate order.
 		
 		if !isFirstTurn:
-			print("WE UPDATED THE TURN ORDER!!!")
 			calculateOrder(false, 1)
 			
 		#Update order panel
@@ -1346,12 +1396,8 @@ func battleStarted(id): # void, main battle loop as well.
 		
 		var attackerFieldData = fieldData[currentAttacker] # for getting. for setting, just get index normally.
 		
-		
-		print("ittsss " + currentAttacker + "'s turn!")
-		
 		if !attackerFieldData["IS_ENEMY"]:
 			# run the code for it being a player.
-			print("player attack")
 			basicSelection(currentAttacker, attackerFieldData)
 			
 			await actionDecided
@@ -1421,18 +1467,44 @@ func battleStarted(id): # void, main battle loop as well.
 		$DarknessOverlay.visible = true
 		for player in PartyStats.currentPartyMembers:
 			get_node(str(fieldData[player]["BATTLE_DISPLAY"].get_path()) + "/PSprite").play("Win") 
+		
+		$TextBoxPanel.visible = true
+		$TextBoxPanel/Background/TexboxText.text = "[rainbow][center][font_size=60]YOU WIN!"
+		
 		MusicManager.stopMusic()
-		$"YouDidIt!".play()
-		
-		await get_tree().create_timer(6.25).timeout
-		
 		MusicManager.setMusic(winMusic)
+		MusicManager.setVolume(1.4)
 		MusicManager.playMusic()
 		
+		await get_tree().create_timer(6.5).timeout
 		
+		MusicManager.setMusic(winningLoop)
+		MusicManager.playMusic()
+		
+		# Award exp ACTUA
+		
+		
+		var expEarned = battleData["EXP"] / PartyStats.currentPartyMembers.size()
+		
+		awardExp(expEarned)
+		
+		if PartyStats.currentPartyMembers.size() == 1:	
+			display_text([PartyStats.currentPartyMembers[0] + " was awarded " + expEarned + " exp! They also earned "])
+		else:
+			display_text([
+				"Everyone in " + PartyStats.currentPartyMembers[0] + "'s party earned " + str(expEarned) + " exp!",
+				"They also earned"
+				])
 		
 	else:
 		pass
+
+#awarding functions
+
+func awardExp(amount):
+	for member in PartyStats.currentPartyMembers:
+		PartyStats.partyDatabase[member]["CURRENT_EXP"] += amount
+
 # ui functions
 
 var firstOrderUpdate = true 
@@ -1531,7 +1603,7 @@ func updateOrderPanel(delay = 0, refresh = false):
 #			panel.visible = true
 	
 
-func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):
+func display_text(textArray:Array, boxSize:Vector2 = Vector2(576, 80), boxPosition:Vector2 = Vector2(0, 10), instant = false):
 	
 	var totalText = textArray.size()
 	var textBackground = $TextBoxPanel/Background
@@ -1552,28 +1624,37 @@ func display_text(textArray:Array, boxSize:Vector2, boxPosition:Vector2):
 
 	$TextBoxPanel/Background/TexboxText.show()
 	
-	for i in range(0, totalText):
-		$TextBoxPanel/Background/TexboxText.text = textArray[i]
-		print(textBoxText.text)
+	if not instant:
+		
+		for i in range(0, totalText):
+			$TextBoxPanel/Background/TexboxText.text = textArray[i]
+			print(textBoxText.text)
+			
+			var allCharacters = $TextBoxPanel/Background/TexboxText.get_total_character_count()
+			
+			for v in range(0, allCharacters + 1):
+				$TextBoxPanel/Background/TexboxText.visible_characters = v
+
+				if $TextBoxPanel/Background/TexboxText.text[v-1] == "." or $TextBoxPanel/Background/TexboxText.text[v-1] == ",":
+					for j in range(0, 6):
+						await physics
+						await physics
+				else:
+					await physics
+					await physics
+				
+				$TextBoxPanel/Background/TexboxText/textBox.play()
+			await textbox_continued
+		
+			$Select.play()
+			$TextBoxPanel.hide()
+	else:
+		$TextBoxPanel/Background/TexboxText.text = textArray[0]
 		
 		var allCharacters = $TextBoxPanel/Background/TexboxText.get_total_character_count()
 		
-		for v in range(0, allCharacters + 1):
-			$TextBoxPanel/Background/TexboxText.visible_characters = v
-
-			if $TextBoxPanel/Background/TexboxText.text[v-1] == "." or $TextBoxPanel/Background/TexboxText.text[v-1] == ",":
-				for j in range(0, 10):
-					await physics
-					await physics
-			else:
-				await physics
-				await physics
-			
-			$TextBoxPanel/Background/TexboxText/textBox.play()
-		await textbox_continued
-	
-		$Select.play()
-	$TextBoxPanel.hide()
+		$TextBoxPanel/Background/TexboxText.visible_characters = allCharacters
+		
 	emit_signal("textbox_ended")
 	
 func resetSelectionHighlights(): #void
