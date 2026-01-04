@@ -146,6 +146,7 @@ func _ready(): # void
 	
 func _physics_process(_delta):
 	emit_signal("physics")
+	textboxDebounce -= 1
 	match battlePhase:
 		battlePhases.SwordMinigame:
 			currentMinigameData["framesSinceMiss"] += 1
@@ -162,7 +163,6 @@ func playerSetup(): #I'll add aniamtion when i feel like it. void.
 	for member in PartyStats.currentPartyMembers:
 		if PartyStats.partyDatabase[member]["CURRENT_PARTY_POSITION"] != "NONE":
 			var newDisplay = $PlayerDisplay/Sample.duplicate()
-			
 			newDisplay.visible = true
 			newDisplay.name = member 
 			
@@ -239,7 +239,17 @@ func enemySetup(): # void
 		
 		count += 1
 	
-	
+
+func undoSetups():
+	for child in $PlayerDisplay.get_children():
+		if child.name != "Sample":
+			$PlayerDisplay.remove_child(child)
+	for child in $EnemyDisplay.get_children():
+		if child.name != "Sample":
+			$EnemyDisplay.remove_child(child)
+	for child in $PlayerPanels/PlayerPanelsContainer.get_children():
+		if child.name != "SampleMember":
+			$PlayerPanels/PlayerPanelsContainer.remove_child(child)
 func createNewFieldData(participant, isEnemy:bool, battleDisplay:Panel): # void
 	fieldData[participant] = {
 		"CONDITIONS" = { 
@@ -309,7 +319,7 @@ func tweenOptions(goIn, duration):
 	
 func setUpBattle(_battleId): # void
 	
-	
+	visible = true
 	$OptionsPanel/SubMenu.visible = false
 	battleData = BattleDatabase.battleIdInfo[str(get_meta("battleId"))]
 	
@@ -1488,15 +1498,21 @@ func battleStarted(id): # void, main battle loop as well.
 		
 		awardExp(expEarned)
 		
-		if PartyStats.currentPartyMembers.size() == 1:	
-			display_text([PartyStats.currentPartyMembers[0] + " was awarded " + expEarned + " exp! They also earned "])
+		if PartyStats.currentPartyMembers.size() == 1:
+			await display_text([PartyStats.currentPartyMembers[0] + " was awarded " + str(expEarned) + " exp!",  "They also earned " + str(battleData["GOLD"]) + " gold."])
 		else:
-			display_text([
+			await display_text([
 				"Everyone in " + PartyStats.currentPartyMembers[0] + "'s party earned " + str(expEarned) + " exp!",
-				"They also earned"
+				"Earned " + str(battleData["GOLD"]) + " gold."
 				])
-		
+		MusicManager.stopMusic()
+		PartyStats.inBattle = false
+		PartyStats.emit_signal("battleOver")
+		await get_tree().create_timer(1).timeout
+		visible = false
+		undoSetups()
 	else:
+		# lost battle, needs assets will not be done lmao
 		pass
 
 #awarding functions
@@ -1647,7 +1663,7 @@ func display_text(textArray:Array, boxSize:Vector2 = Vector2(576, 80), boxPositi
 			await textbox_continued
 		
 			$Select.play()
-			$TextBoxPanel.hide()
+			
 	else:
 		$TextBoxPanel/Background/TexboxText.text = textArray[0]
 		
@@ -1655,6 +1671,7 @@ func display_text(textArray:Array, boxSize:Vector2 = Vector2(576, 80), boxPositi
 		
 		$TextBoxPanel/Background/TexboxText.visible_characters = allCharacters
 		
+	$TextBoxPanel.hide()
 	emit_signal("textbox_ended")
 	
 func resetSelectionHighlights(): #void
@@ -1770,6 +1787,7 @@ func clearEnemyHighlights():
 
 # Minigame constants yipee
 var missCoyoteFrames = 45
+var textboxDebounce = 0
 		
 func _process(_delta): # void 
 	
@@ -1792,8 +1810,9 @@ func _process(_delta): # void
 	# CONFIRM
 	if Input.is_action_just_pressed("Confirm"):
 		
-		if $TextBoxPanel.visible == true:
+		if $TextBoxPanel.visible == true and textboxDebounce <= 0:
 			emit_signal("textbox_continued")
+			textboxDebounce = 10
 		$Select.play()
 		match battlePhase:
 			battlePhases.Starting:

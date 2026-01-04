@@ -8,4 +8,4 @@ res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres
 res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa.tres
 res://Assets/Sprites/Player/OverworldSprites/Cassian.tres
 res://Scenes/Battle.gdshader
-res://Scenes/MainMusicChannel.tscn
+res://Scripts/Overworld.gd
