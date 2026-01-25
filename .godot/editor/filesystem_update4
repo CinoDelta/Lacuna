@@ -1,5 +1,3 @@
-res://Scripts/Global/battle.gd
-res://Scenes/Battle.tscn
 res://Assets/Themes/Thamoiras.tres
 res://Assets/Themes/basicText.tres
 res://Assets/Sprites/Battle/Backgrounds/Shaders/Debug.gdshader
@@ -8,4 +6,4 @@ res://Assets/Sprites/Battle/Effects/OneTargetEffects.tres
 res://Assets/Sprites/Battle/DisplaySprites/PartySpriteAnimations/Isa.tres
 res://Assets/Sprites/Player/OverworldSprites/Cassian.tres
 res://Scenes/Battle.gdshader
-res://Scripts/Overworld.gd
+res://Scenes/StatMenu.tscn
