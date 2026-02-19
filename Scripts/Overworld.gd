@@ -6,9 +6,12 @@ extends Node2D
 @onready var camera = $OverworldCamera
 @onready var transitionCover = $TransitionBlack
 @onready var greenTransitionCover = $TransitionGreen
+@onready var infoMenu = $StatMenu
 
 var currentRoom
 var nextRoom
+var menuOpen = false
+var menuTransitioning = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -16,11 +19,25 @@ func _ready():
 	PartyStats.battleOver.connect(transitionOut)
 	roomManager.room_load_started.connect(freeRoom)
 	PartyStats.interaction.connect(processInteraction)
+	infoMenu.position = Vector2(70, -500) # starting position
 
 
 ## Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-	#pass
+func _process(_delta):
+	if Input.is_action_just_pressed("Menu") and !menuTransitioning:
+		menuTransitioning = true
+		player.set_meta("Cutscene", !menuOpen)
+		if menuOpen: # Already open.
+			var transitionTween = get_tree().create_tween().tween_property(infoMenu, "position", Vector2(70, -500), .4).set_trans(Tween.TRANS_QUAD)
+			await transitionTween.finished
+			await get_tree().create_timer(.15).timeout
+		else:
+			var transitionTween = get_tree().create_tween().tween_property(infoMenu, "position", Vector2(70, 100), .4).set_trans(Tween.TRANS_QUAD)
+			await transitionTween.finished
+			await get_tree().create_timer(.15).timeout
+		
+		menuTransitioning = false
+		menuOpen = !menuOpen
 
 func battleTransition(_id):
 	

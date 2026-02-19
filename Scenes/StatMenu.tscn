@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bbuvccr15p5wt"]
+[gd_scene load_steps=6 format=3 uid="uid://bbuvccr15p5wt"]
 
+[ext_resource type="Script" uid="uid://2vj7idm4rnfy" path="res://Scripts/InfoMenu.gd" id="1_55fr6"]
+[ext_resource type="Theme" uid="uid://fsamsxj3kkdt" path="res://Assets/Themes/StatMenuModes.tres" id="1_ftc43"]
 [ext_resource type="Theme" uid="uid://bli24837s4wbp" path="res://Assets/Themes/Thamoiras.tres" id="1_hk237"]
-[ext_resource type="Texture2D" uid="uid://cju0v1koacn0" path="res://Assets/Sprites/TalkSprites/Placeholder/Neutral.png" id="2_ftc43"]
+[ext_resource type="Texture2D" uid="uid://cju0v1koacn0" path="res://Assets/Sprites/TalkSprites/Placeholder2/Neutral.png" id="2_ftc43"]
 [ext_resource type="Theme" uid="uid://25nh0v5d7y1b" path="res://Assets/Themes/basicText.tres" id="3_55fr6"]
 
 [node name="StatMenu" type="Panel"]
@@ -10,29 +12,79 @@ offset_left = 70.0
 offset_top = 80.0
 offset_right = 1080.0
 offset_bottom = 560.0
+script = ExtResource("1_55fr6")
 
 [node name="Stats" type="Panel" parent="."]
 layout_mode = 0
 offset_top = -50.0
 offset_right = 170.0
+theme = ExtResource("1_ftc43")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Stats"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 40.0
+offset_top = 10.0
+offset_right = 150.0
+offset_bottom = 40.0
+theme = ExtResource("3_55fr6")
+bbcode_enabled = true
+text = "Stats"
 
 [node name="Equipment" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 340.0
+offset_left = 360.0
 offset_top = -50.0
-offset_right = 510.0
+offset_right = 530.0
+theme = ExtResource("1_ftc43")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Equipment"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 40.0
+offset_top = 10.0
+offset_right = 150.0
+offset_bottom = 51.0
+theme = ExtResource("3_55fr6")
+bbcode_enabled = true
+text = "Equip"
 
 [node name="Items" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 510.0
+offset_left = 540.0
 offset_top = -50.0
-offset_right = 680.0
+offset_right = 710.0
+theme = ExtResource("1_ftc43")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Items"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 40.0
+offset_top = 10.0
+offset_right = 150.0
+offset_bottom = 40.0
+theme = ExtResource("3_55fr6")
+bbcode_enabled = true
+text = "Items"
 
 [node name="Skills" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 170.0
+offset_left = 180.0
 offset_top = -50.0
-offset_right = 340.0
+offset_right = 350.0
+theme = ExtResource("1_ftc43")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Skills"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 33.0
+offset_top = 10.0
+offset_right = 143.0
+offset_bottom = 40.0
+theme = ExtResource("3_55fr6")
+bbcode_enabled = true
+text = "Skills
+"
 
 [node name="StatsPage" type="Panel" parent="."]
 layout_mode = 0
@@ -45,8 +97,9 @@ z_index = 1
 layout_mode = 0
 offset_left = 60.0
 offset_top = 40.0
-offset_right = 300.0
-offset_bottom = 360.0
+offset_right = 179.0
+offset_bottom = 200.0
+scale = Vector2(2, 2)
 theme = ExtResource("1_hk237")
 texture = ExtResource("2_ftc43")
 expand_mode = 1
@@ -58,16 +111,6 @@ offset_top = 40.0
 offset_right = 300.0
 offset_bottom = 360.0
 theme = ExtResource("1_hk237")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="StatsPage"]
-layout_mode = 0
-offset_left = 60.0
-offset_top = 370.0
-offset_right = 300.0
-offset_bottom = 410.0
-theme = ExtResource("3_55fr6")
-bbcode_enabled = true
-text = "[center]Cassian"
 
 [node name="Attack" type="Panel" parent="StatsPage"]
 layout_mode = 0

@@ -38,10 +38,10 @@ color = Color(0, 0, 0, 0)
 
 [node name="TransitionGreen" type="ColorRect" parent="."]
 z_index = 20
-offset_left = -51664.0
-offset_top = -50320.0
-offset_right = 948336.0
-offset_bottom = 99949680.0
+offset_left = -51730.0
+offset_top = -50310.0
+offset_right = 948270.0
+offset_bottom = 99949690.0
 color = Color(0.0941176, 0.666667, 0.298039, 0)
 
 [node name="Player" parent="." instance=ExtResource("3_a6si2")]

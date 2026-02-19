@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bxkh201peh7p3"]
+[gd_scene load_steps=11 format=3 uid="uid://bxkh201peh7p3"]
 
 [ext_resource type="Script" uid="uid://ced8xg2kxrlni" path="res://Scripts/Overworld.gd" id="1_21mv3"]
 [ext_resource type="PackedScene" uid="uid://b0vvqbpnf1rvi" path="res://Scenes/Battle.tscn" id="2_p0o0j"]
@@ -9,12 +9,14 @@
 [ext_resource type="PackedScene" uid="uid://coxyrdf5fuk7t" path="res://Scenes/InstantiatedScenes/BluepritntInteractionArea.tscn" id="7_llymf"]
 [ext_resource type="PackedScene" uid="uid://htpiroo25j2c" path="res://Scenes/Rooms/DialoguePanel.tscn" id="8_ujrna"]
 [ext_resource type="PackedScene" uid="uid://dtp0ffgfb2e74" path="res://Scenes/InstantiatedScenes/sfx_loader.tscn" id="9_a61bl"]
+[ext_resource type="PackedScene" uid="uid://bbuvccr15p5wt" path="res://Scenes/StatMenu.tscn" id="10_j6v3l"]
 
 [node name="Room1" type="Node2D"]
 script = ExtResource("1_21mv3")
 metadata/_edit_horizontal_guides_ = [8.0]
 
 [node name="Battle" parent="." instance=ExtResource("2_p0o0j")]
+visible = false
 anchors_preset = 0
 anchor_left = 0.0
 anchor_top = 0.0
@@ -90,5 +92,10 @@ metadata/INTERACTION_ID = 1
 visible = false
 
 [node name="SFXLoader" parent="." instance=ExtResource("9_a61bl")]
+
+[node name="StatMenu" parent="." instance=ExtResource("10_j6v3l")]
+modulate = Color(1, 1, 1, 0.91764706)
+offset_top = -500.0
+offset_bottom = -20.0
 
 [editable path="Sprite2D/TestInteraction"]
